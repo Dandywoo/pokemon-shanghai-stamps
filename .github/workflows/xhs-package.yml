@@ -23,10 +23,14 @@ jobs:
           cp xhs/index.html dist-xhs/index.html
           node -e "require('esbuild').buildSync({entryPoints:['xhs/app.source.js'],outfile:'dist-xhs/app.js',target:['es2017','chrome61'],format:'iife',bundle:false,legalComments:'none'})"
           node -e "const fs=require('fs');const h=fs.readFileSync('dist-xhs/index.html','utf8'),j=fs.readFileSync('dist-xhs/app.js','utf8');require('acorn').parse(j,{ecmaVersion:2017});if(h.includes('<script>')||h.includes('onclick=')||h.includes('_blank')||['navigator.clipboard','localStorage','document.execCommand','raw.githubusercontent.com'].some(x=>j.includes(x)))throw Error('Forbidden capability'); console.log('ES2017 and offline checks passed')"
-          cd dist-xhs && zip -q ../shanghai-dex-xhs-preview.zip index.html app.js
-          cd .. && unzip -t shanghai-dex-xhs-preview.zip
+          python -m pip install Pillow==11.3.0
+          python xhs/build_variants.py
+          node -e "require('acorn').parse(require('fs').readFileSync('dist-silhouette/app.js','utf8'),{ecmaVersion:2017})"
       - uses: actions/upload-artifact@v4
         with:
           name: shanghai-dex-xhs-preview
-          path: shanghai-dex-xhs-preview.zip
+          path: |
+            shanghai-dex-xhs-number-verified.zip
+            shanghai-dex-xhs-silhouette.zip
+            dex-verification.csv
           retention-days: 30
