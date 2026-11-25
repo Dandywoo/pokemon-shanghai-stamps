@@ -1,0 +1,19 @@
+name: Export latest silhouette source
+on:
+  push:
+    branches: [xiaohongshu]
+    paths: ['.github/workflows/export-silhouette-latest.yml']
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/upload-artifact@v4
+        with:
+          name: silhouette-latest-source
+          path: silhouette/index.html
+          retention-days: 1
