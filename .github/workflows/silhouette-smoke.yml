@@ -71,7 +71,7 @@ jobs:
             await page.locator('#tabDates').click();
             await page.locator('#timelineView').click();
             await page.locator('#scheduleView [data-calendar-stamp="s5-1"]').first().click();
-            assert.match(await page.locator('#pocketDetail').innerText(),/皮卡丘/);
+            assert.equal(await page.locator('#pocketDetail .dex-detail-hero .dex-id').innerText(),'#0025');
             await page.locator('#pocketDetail [data-close-pocket]').click();
             await page.locator('#tabHome').click();
             await page.clock.setFixedTime(new Date('2026-11-25T05:00:00Z'));
@@ -121,6 +121,13 @@ jobs:
             await page.locator('#tabList').click();
             assert.equal(await page.locator('#pocketGrid .dex-tile').count(),30);
             assert.equal(await page.locator('#pocketGrid .dex-art img').count(),30);
+            await page.locator('#pocketGrid .dex-art img').evaluateAll(imgs=>imgs.forEach(im=>im.loading='eager'));
+            await page.waitForFunction(()=>Array.from(document.querySelectorAll('#pocketGrid .dex-art img')).every(im=>im.complete&&im.naturalWidth===96&&im.naturalHeight===96));
+            assert.equal(await page.locator('#pocketGrid .tile-check strong').count(),0);
+            assert.equal(await page.locator('#pocketGrid .dex-id').count(),30);
+            assert.ok(await page.locator('#pocketGrid .dex-art img').evaluateAll(imgs=>imgs.every(im=>getComputedStyle(im).filter==='none')));
+            assert.ok(await page.locator('#pocketGrid .dex-art img').evaluateAll(imgs=>imgs.every(im=>{const c=document.createElement('canvas');c.width=c.height=96;const x=c.getContext('2d');x.drawImage(im,0,0);const a=x.getImageData(0,0,96,96).data,levels=new Set();for(let i=0;i<a.length;i+=4){if(a[i+3]===0)continue;if(a[i]!==a[i+1]||a[i]!==a[i+2])return false;levels.add(a[i]);}return levels.size>3})));
+
             assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),true);
             assert.equal(await page.locator('#pocketGrid .dex-tile').first().evaluate(e=>e.getBoundingClientRect().top<600),true);
             await page.screenshot({path:'visual-check/dex.png'});
