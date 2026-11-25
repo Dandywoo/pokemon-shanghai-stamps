@@ -28,7 +28,14 @@ jobs:
             await page.locator('#tabList').waitFor({state:'visible'});
             await page.waitForFunction(()=>!document.querySelector('#tabList').disabled);
             assert.equal(await page.locator('#home [data-open-series]').count(),0);
+            const fs=require('node:fs');fs.mkdirSync('visual-check',{recursive:true});
+            await page.screenshot({path:'visual-check/home.png'});
             await page.locator('#tabList').click();
+            assert.equal(await page.locator('#pocketGrid .dex-tile').count(),30);
+            assert.equal(await page.locator('#pocketGrid .dex-art img').count(),30);
+            assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),true);
+            assert.equal(await page.locator('#pocketGrid .dex-tile').first().evaluate(e=>e.getBoundingClientRect().top<600),true);
+            await page.screenshot({path:'visual-check/dex.png'});
             await page.locator('#list [data-open-series]').click();
             await page.waitForFunction(()=>document.querySelector('#seriesPanel').open);
             assert.equal(await page.locator('#seriesGrid .series-row').count(),6);
@@ -42,6 +49,7 @@ jobs:
             assert.equal(await page.locator('#seriesGrid .series-earned').count(),1);
             assert.match(await page.locator('#seriesGrid .series-earned').innerText(),/三圣鸟/);
             assert.match(await page.locator('#collectToast .achievement-unlocked').innerText(),/三圣鸟/);
+            await page.screenshot({path:'visual-check/unlock.png'});
             await page.locator('[data-pocket="s3-2"]').click();
             await page.locator('[data-pocket="s3-2"]').click();
             assert.equal(await page.locator('#collectToast .achievement-unlocked').count(),0);
@@ -53,6 +61,7 @@ jobs:
             await page.locator('#posterDownload').click();
             const d=await downloadPromise;assert.equal(d.suggestedFilename(),'shanghai-collection.png');
             assert.equal(await d.failure(),null);
+            await d.saveAs('visual-check/poster.png');
             await page.reload();
             await page.waitForFunction(()=>!document.querySelector('#tabList').disabled);
             await page.locator('#tabList').click();
@@ -63,3 +72,9 @@ jobs:
             await browser.close();
           })().catch(e=>{console.error(e);process.exit(1)});
           JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: silhouette-v4-visual-check
+          path: visual-check/
+          retention-days: 7
