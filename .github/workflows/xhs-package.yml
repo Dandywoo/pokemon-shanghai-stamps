@@ -1,4 +1,4 @@
-name: Build Xiaohongshu native V5.6.22
+name: Build Xiaohongshu native V5.6.23
 on:
   push:
     branches: [xiaohongshu]
@@ -25,7 +25,7 @@ jobs:
           from pathlib import Path
           import zipfile
           folder=Path('dist-native')
-          out=Path('shanghai-dex-xhs-v5.6.22.zip')
+          out=Path('shanghai-dex-xhs-v5.6.23.zip')
           with zipfile.ZipFile(out,'w',zipfile.ZIP_DEFLATED) as z:
               for p in sorted(folder.rglob('*')):
                   if p.is_file(): z.write(p,p.relative_to(folder))
@@ -60,6 +60,19 @@ jobs:
             await page.waitForFunction(()=>!document.querySelector('#tabList').disabled,{timeout:30000});
             assert.match(await page.locator('#count').innerText(),/1\s*\/\s*30/);
             await page.locator('#tabPlan').click();
+            assert.match(await page.locator('#districtCandidates').innerText(),/黄浦—静安跨区连游/);
+            await page.locator('#quickBookingPanel').evaluate(e=>e.open=true);
+            await page.locator('#quickBookId').selectOption('s5-1');
+            await page.locator('#quickBookTime').fill('13:00');
+            await page.locator('#quickBookDuration').fill('30');
+            await page.locator('#quickBookSave').click();
+            await page.waitForFunction(()=>!document.querySelector('#compute').disabled&&!!document.querySelector('#route [data-route-stamp="s5-1"]'),{timeout:30000});
+            assert.match(await page.locator('#quickBookingCount').innerText(),/1 项已登记/);
+            assert.equal(await page.locator('#useSlots').isChecked(),true);
+            assert.match(await page.locator('#route .route-stop').filter({has:page.locator('[data-route-stamp="s5-1"]')}).innerText(),/13:00/);
+            await page.locator('[data-quick-book-remove="s5-1"]').click();
+            await page.waitForFunction(()=>!document.querySelector('#compute').disabled&&!!document.querySelector('#routeGoalResult'),{timeout:30000});
+            assert.equal(await page.locator('#route [data-route-stamp="s5-1"]').count(),0);
             await page.locator('#goalMode [data-target-mode="new"]').click();
             await page.locator('#goalOptions [data-goal="6"]').click();
             await page.locator('#compute').click();
@@ -93,6 +106,6 @@ jobs:
           JS
       - uses: actions/upload-artifact@v4
         with:
-          name: shanghai-dex-xhs-v5.6.22
-          path: shanghai-dex-xhs-v5.6.22.zip
+          name: shanghai-dex-xhs-v5.6.23
+          path: shanghai-dex-xhs-v5.6.23.zip
           retention-days: 30
