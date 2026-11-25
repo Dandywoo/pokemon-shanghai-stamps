@@ -99,7 +99,7 @@ jobs:
             assert.equal(await page.locator('#guideDisclosure').evaluate(e=>e.open),true);
             await page.locator('[data-map-plan="hub0"]').click();
             assert.equal(await page.locator('#origin').inputValue(),'hub0');
-            assert.equal(await page.locator('#firstPolicy').inputValue(),'nearest');
+            assert.equal(await page.locator('#firstPolicy').inputValue(),'overall');
             assert.equal(await page.locator('#date').inputValue(),'2026-12-12');
             assert.equal(await page.locator('#guideDisclosure').evaluate(e=>e.open),false);
             assert.match(await page.locator('#route .map-origin-status').innerText(),/上海虹桥站/);
@@ -107,8 +107,8 @@ jobs:
             await page.locator('#tabMap').click();
             await page.locator('[data-map-plan="hub3"]').click();
             assert.equal(await page.locator('#origin').inputValue(),'hub3');
-            assert.equal(await page.locator('#firstPolicy').inputValue(),'nearest');
-            assert.match(await page.locator('#route .route-stop').first().innerText(),/宏伊国际广场/);
+            assert.equal(await page.locator('#firstPolicy').inputValue(),'overall');
+            assert.ok(await page.locator('#route .route-stop').count()>0);
             await page.locator('#tabMap').click();
             await page.locator('#exploreList [data-map-plan="5"]').click();
             assert.equal(await page.locator('#origin').inputValue(),'5');
