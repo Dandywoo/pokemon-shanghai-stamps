@@ -263,8 +263,8 @@ button{background:#f1f1eb;border-color:#dcded6;color:#3c5060}button.primary,#com
       let a = new Set(state.done), before = a.size, was = a.has(id), prior=new Set(a);
       checked ? a.add(id) : a.delete(id);
       state.done = [...a];
-      const unlocked=checked&&!was?SERIES.filter(g=>seriesStat(g,a).complete&&!seriesStat(g,prior).complete&&!(state.seenSeries||[]).includes(g.name)).map(g=>g.name):[];
-      state.seenSeries=[...new Set([...(state.seenSeries||[]),...unlocked])];
+      const unlocked=checked&&!was?SERIES.filter(g=>seriesStat(g,a).complete&&!seriesStat(g,prior).complete).map(g=>g.name):[];
+      state.seenSeries=SERIES.filter(g=>seriesStat(g,a).complete).map(g=>g.name);
       save();
       refreshProgress();
       renderList();
@@ -1448,16 +1448,18 @@ button{background:#f1f1eb;border-color:#dcded6;color:#3c5060}button.primary,#com
       if (!e.target.closest("#undoCollect") || !undoStamp) return;
       let { id, checked,unlocked=[] } = undoStamp;
       undoStamp = null;
-      let a = new Set(state.done);
+      let a = new Set(state.done), prior=new Set(a);
       checked ? a.delete(id) : a.add(id);
       state.done = [...a];
-      state.seenSeries=(state.seenSeries||[]).filter(name=>!unlocked.includes(name)||SERIES.some(g=>g.name===name&&seriesStat(g,a).complete));
+      const restored=SERIES.filter(g=>seriesStat(g,a).complete&&!seriesStat(g,prior).complete).map(g=>g.name);
+      state.seenSeries=SERIES.filter(g=>seriesStat(g,a).complete).map(g=>g.name);
       save();
       refreshProgress();
       renderList();
       renderDates();
       invalidate();
       $("collectToast").hidden = true;
+      if(restored.length)openAchievement(restored);
     });
     $("keyDates").innerHTML = [["11/28", "\u76DB\u5178\u5F00\u59CB"], ["12/01", "\u661F\u5DF4\u514B\u5370\u7AE0\u5F00\u653E"], ["12/05", "\u90E8\u5206\u4E3B\u9898\u7A7A\u95F4\u4E0E\u5DE5\u574A\u5F00\u653E"], ["12/09", "\u4E2D\u5C71\u516C\u56ED\u4E3B\u9898\u7A7A\u95F4\u4E0E\u5C0F\u953B\u5320\u5F00\u653E"], ["12/18", "\u9996\u671F\u7B51\u68A6\u5DE5\u574A\u6700\u540E\u4E00\u5929"], ["12/19", "\u51AC\u65E5\u5E86\u5178\u5F00\u59CB"], ["12/20", "\u9996\u671F\u5361\u724C\u8D5B\u4E8B\u6700\u540E\u4E00\u5929"], ["12/21", "\u51AC\u65E5\u53CC\u4EBA\u8D5B\u5F00\u59CB"], ["12/26", "\u51AC\u65E5\u53CC\u4EBA\u8D5B\u6700\u540E\u4E00\u5929"], ["12/27", "\u63D2\u753B\u5C55\u4E0E\u661F\u5DF4\u514B\u6700\u540E\u4E00\u5929"], ["01/03", "\u76DB\u5178\u6700\u540E\u4E00\u5929"]].map(([d, t]) => '<div class="key-date"><strong>' + d + "</strong><span>" + t + "</span></div>").join("");
     $("dexDate").value = date();
@@ -1594,7 +1596,7 @@ button{background:#f1f1eb;border-color:#dcded6;color:#3c5060}button.primary,#com
     document.body.classList.remove('booting');
 
 
-    // V5.2 — personal achievement cards.
+    // V5.2.1 — personal achievement cards.
     const achievementNames={'最初的伙伴传承':'最初伙伴的传承','跨越七个世代':'七世代巡礼','普通打卡全收录':'免预约打卡全收录','冬日庆典':'冬日庆典·工坊篇'};
     function achievementMembers(g){
       const owned=new Set(state.done);
