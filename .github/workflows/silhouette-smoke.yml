@@ -27,10 +27,13 @@ jobs:
             await page.goto('http://127.0.0.1:8765/silhouette/');
             await page.locator('#tabList').waitFor({state:'visible'});
             await page.waitForFunction(()=>!document.querySelector('#tabList').disabled);
-            assert.match(await page.locator('#homeSeriesPreview').innerText(),/三圣鸟/);
-            await page.locator('#home [data-open-series]').click();
+            assert.equal(await page.locator('#home [data-open-series]').count(),0);
+            await page.locator('#tabList').click();
+            await page.locator('#list [data-open-series]').click();
             await page.waitForFunction(()=>document.querySelector('#seriesPanel').open);
-            assert.equal(await page.locator('#seriesGrid .series-row').count(),7);
+            assert.equal(await page.locator('#seriesGrid .series-row').count(),6);
+            assert.equal(await page.locator('#seriesTabs button').count(),4);
+            assert.equal(await page.locator('#dexSeriesCount').innerText(),'0/31');
             await page.locator('[data-pocket="s1-2"]').click();
             await page.locator('[data-pocket="s2-2"]').click();
             await page.locator('[data-pocket="s3-2"]').click();
@@ -46,9 +49,11 @@ jobs:
             assert.equal(await d.failure(),null);
             await page.reload();
             await page.waitForFunction(()=>!document.querySelector('#tabList').disabled);
-            assert.match(await page.locator('#homeSeriesPreview').innerText(),/三圣鸟[\s\S]*?已集齐/);
+            await page.locator('#tabList').click();
+            await page.locator('#list [data-open-series]').click();
+            assert.match(await page.locator('#seriesGrid .series-earned').innerText(),/三圣鸟/);
             assert.deepEqual(errors,[]);
-            console.log('PASS: seven series, legendary birds unlock, 1080x1440 PNG, download, reload persistence');
+            console.log('PASS: four achievement categories, legendary birds unlock, 1080x1440 PNG, download, reload persistence');
             await browser.close();
           })().catch(e=>{console.error(e);process.exit(1)});
           JS
