@@ -1,10 +1,8 @@
-name: Build Xiaohongshu preview package
+name: Build Xiaohongshu native V5.6.19
 on:
   push:
     branches: [xiaohongshu]
-    paths:
-      - 'xhs/**'
-      - '.github/workflows/xhs-package.yml'
+    paths: ['xhs/**', '.github/workflows/xhs-package.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -16,21 +14,84 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Compile and validate offline package
+      - name: Build offline native package
         run: |
-          npm install --no-save --ignore-scripts esbuild@0.25.12 acorn@8.15.0
-          mkdir -p dist-xhs
-          cp xhs/index.html dist-xhs/index.html
-          node -e "require('esbuild').buildSync({entryPoints:['xhs/app.source.js'],outfile:'dist-xhs/app.js',target:['es2017','chrome61'],format:'iife',bundle:false,legalComments:'none'})"
-          node -e "const fs=require('fs');const h=fs.readFileSync('dist-xhs/index.html','utf8'),j=fs.readFileSync('dist-xhs/app.js','utf8');require('acorn').parse(j,{ecmaVersion:2017});if(h.includes('<script>')||h.includes('onclick=')||h.includes('_blank')||['navigator.clipboard','localStorage','document.execCommand','raw.githubusercontent.com'].some(x=>j.includes(x)))throw Error('Forbidden capability'); console.log('ES2017 and offline checks passed')"
-          python -m pip install Pillow==11.3.0
-          python xhs/build_variants.py
-          node -e "require('acorn').parse(require('fs').readFileSync('dist-silhouette/app.js','utf8'),{ecmaVersion:2017})"
+          npm install --no-save --ignore-scripts esbuild@0.25.12 acorn@8.15.0 playwright@1.56.1
+          python3 xhs/package_native.py
+          node -e "require('esbuild').buildSync({entryPoints:['dist-native/app.source.js'],outfile:'dist-native/app.js',target:['es2017','chrome61'],format:'iife',bundle:false,legalComments:'none'})"
+          node -e "require('acorn').parse(require('fs').readFileSync('dist-native/app.js','utf8'),{ecmaVersion:2017});console.log('ES2017 syntax passed')"
+          rm dist-native/app.source.js
+          python3 - <<'PY'
+          from pathlib import Path
+          import zipfile
+          folder=Path('dist-native')
+          out=Path('shanghai-dex-xhs-v5.6.19.zip')
+          with zipfile.ZipFile(out,'w',zipfile.ZIP_DEFLATED) as z:
+              for p in sorted(folder.rglob('*')):
+                  if p.is_file(): z.write(p,p.relative_to(folder))
+          with zipfile.ZipFile(out) as z:
+              assert z.testzip() is None
+              assert len(z.namelist())==33
+              assert 'index.html' in z.namelist() and 'app.js' in z.namelist()
+          print('ZIP verified:',out.stat().st_size,'bytes')
+          PY
+      - name: Native container mock and route tests
+        run: |
+          python3 -m http.server 8765 > /tmp/xhs-http.log 2>&1 &
+          node <<'JS'
+          const {chromium}=require('playwright');
+          const assert=require('node:assert/strict');
+          (async()=>{
+            const browser=await chromium.launch({channel:'chrome',headless:true,args:['--no-sandbox']});
+            const page=await browser.newPage({viewport:{width:390,height:844},isMobile:true});
+            const errors=[],external=[];page.on('pageerror',e=>errors.push(e.message));
+            await page.route('**/*',r=>{if(!r.request().url().startsWith('http://127.0.0.1:8765/')){external.push(r.request().url());return r.abort()}return r.continue()});
+            await page.addInitScript(()=>{
+              window.xhs={launchOptions:{miniToolEnv:{buildVersion:9490000}},miniTool:{
+                getStorage:async()=>({errMsg:'getStorage:ok',data:JSON.stringify({done:['s7-1'],slots:{}})}),
+                setStorage:async({key,data})=>{window.__saved=JSON.parse(data);window.__key=key;return {errMsg:'setStorage:ok'}},
+                getLocation:async()=>({errMsg:'getLocation:ok',latitude:31.2344,longitude:121.47052,accuracy:20}),
+                saveImageToPhotosAlbum:async({filePath})=>{window.__album=filePath;return {errMsg:'saveImageToPhotosAlbum:ok'}},
+                writeTempFile:async({data})=>{window.__image=data;return {errMsg:'writeTempFile:ok',filePath:'mock://poster.png'}}
+              }};
+            });
+            await page.clock.setFixedTime(new Date('2026-11-25T05:00:00Z'));
+            await page.goto('http://127.0.0.1:8765/dist-native/');
+            await page.waitForFunction(()=>!document.querySelector('#tabList').disabled,{timeout:30000});
+            assert.match(await page.locator('#count').innerText(),/1\s*\/\s*30/);
+            await page.locator('#tabPlan').click();
+            await page.locator('#goalMode [data-target-mode="new"]').click();
+            await page.locator('#goalOptions [data-goal="6"]').click();
+            await page.locator('#compute').click();
+            await page.waitForFunction(()=>!document.querySelector('#compute').disabled&&!!document.querySelector('#routeGoalResult'),{timeout:30000});
+            assert.match(await page.locator('#districtCandidates').innerText(),/外滩连游/);
+            assert.match(await page.locator('#route .district-result').innerText(),/片区连游/);
+            const names=await page.locator('#route .route-stop h3').allTextContents();
+            assert.equal(names[0],'宏伊国际广场');assert.equal(names[1],'BFC外滩金融中心');
+            await page.locator('#route a[href^="#leg-"]').first().click();
+            assert.match(await page.locator('#nativeTitle').innerText(),/本段交通/);
+            await page.locator('#nativeClose').click();
+            await page.locator('#districtCandidates [data-district-pair="9,10"]').click();
+            await page.waitForFunction(()=>window.__saved&&window.__saved.must.includes('s10-1')&&window.__saved.must.includes('s11-1'));
+            assert.equal(await page.evaluate(()=>window.__key),'sh-pokemon-stamps-v1');
+            await page.waitForFunction(()=>!document.querySelector('#compute').disabled);
+            await page.locator('#routeDetails').evaluate(e=>e.open=true);
+            await page.locator('#locateOnce').click();
+            await page.waitForFunction(()=>document.querySelectorAll('#gpsDistances .distance-row').length>0);
+            await page.locator('#clearGps').click();
+            await page.locator('#tabList').click();
+            await page.locator('#list [data-open-poster]').click();
+            await page.locator('#posterDownload').waitFor({state:'visible',timeout:30000});
+            await page.locator('#posterDownload').click();
+            await page.waitForFunction(()=>!!window.__album);
+            assert.match(await page.locator('#posterHint').innerText(),/已保存/);
+            assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
+            console.log('PASS: native storage, district pair, routing, transport detail, GPS and album mock, no external requests');
+            await browser.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
       - uses: actions/upload-artifact@v4
         with:
-          name: shanghai-dex-xhs-preview
-          path: |
-            shanghai-dex-xhs-number-verified.zip
-            shanghai-dex-xhs-silhouette.zip
-            dex-verification.csv
+          name: shanghai-dex-xhs-v5.6.19
+          path: shanghai-dex-xhs-v5.6.19.zip
           retention-days: 30

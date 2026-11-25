@@ -1,162 +1,1791 @@
-if(!Array.prototype.flatMap){Object.defineProperty(Array.prototype,'flatMap',{configurable:true,writable:true,value:function(fn,ctx){return Array.prototype.concat.apply([],this.map(fn,ctx))}})};if(!String.prototype.replaceAll){Object.defineProperty(String.prototype,'replaceAll',{configurable:true,writable:true,value:function(a,b){return this.split(a).join(b)}})};
-(async function(){
+(() => {
+  var __defProp = Object.defineProperty;
+  var __defProps = Object.defineProperties;
+  var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
+  var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+  var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __propIsEnum = Object.prototype.propertyIsEnumerable;
+  var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+  var __spreadValues = (a, b) => {
+    for (var prop in b || (b = {}))
+      if (__hasOwnProp.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    if (__getOwnPropSymbols)
+      for (var prop of __getOwnPropSymbols(b)) {
+        if (__propIsEnum.call(b, prop))
+          __defNormalProp(a, prop, b[prop]);
+      }
+    return a;
+  };
+  var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
+  if (!Array.prototype.flatMap) {
+    Object.defineProperty(Array.prototype, "flatMap", { configurable: true, writable: true, value: function(fn, ctx) {
+      return Array.prototype.concat.apply([], this.map(fn, ctx));
+    } });
+  }
+  if (!String.prototype.replaceAll) {
+    Object.defineProperty(String.prototype, "replaceAll", { configurable: true, writable: true, value: function(a, b) {
+      return this.split(a).join(b);
+    } });
+  }
+  if(!Array.prototype.flat)Object.defineProperty(Array.prototype,'flat',{configurable:true,writable:true,value:function(depth){depth=depth===undefined?1:depth;return depth>0?this.reduce((out,x)=>out.concat(Array.isArray(x)?x.flat(depth-1):[x]),[]):this.slice();}});
+  (async function() {
+    "use strict";
+    const V = [{"id":0,"name":"中山公园龙之梦","district":"长宁区","address":"长宁路1018号 · 龙之梦城市生活中心","lon":121.41203,"lat":31.22093,"items":[{"id":"s1-1","stamp":"古月鸟","activity":"官方卡牌道馆 · 红中庭3层3058–3066室","start":"2026-11-28","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false},{"id":"s1-2","stamp":"急冻鸟","activity":"官方卡牌道馆 · 红中庭3层3058–3066室 · 宝可梦30周年上海盛典卡牌赛事","start":"2026-11-28","end":"2026-12-20","kind":"card","uncertain":false,"dateUncertain":false},{"id":"s1-3","stamp":"巨牙鲨","activity":"巨牙鲨的跃动空间 · 一楼红中庭","start":"2026-12-09","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false},{"id":"s1-4","stamp":"小锻匠","activity":"巨牙鲨的跃动空间 · 一楼红中庭 · 筑梦工坊","start":"2026-12-09","end":"2026-12-18","kind":"workshop","uncertain":false,"dateUncertain":false},{"id":"s1-5","stamp":"信使鸟","activity":"巨牙鲨的跃动空间 · 一楼红中庭 · 筑梦工坊（冬日庆典）","start":"2026-12-19","end":"2027-01-03","kind":"workshop","uncertain":false,"dateUncertain":false},{"id":"s1-6","stamp":"海豹球","activity":"官方卡牌道馆 · 红中庭3层3058–3066室 · 冬日双人赛","start":"2026-12-21","end":"2026-12-26","kind":"card","uncertain":false,"dateUncertain":false}]},{"id":1,"name":"五角场万达广场","district":"杨浦区","address":"淞沪路77号 · 五角场万达广场","lon":121.50919,"lat":31.30336,"items":[{"id":"s2-1","stamp":"轻身鳕","activity":"官方卡牌道馆 · B1层A馆","start":"2026-11-28","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false},{"id":"s2-2","stamp":"火焰鸟","activity":"官方卡牌道馆 · B1层A馆 · 宝可梦30周年上海盛典卡牌赛事","start":"2026-11-28","end":"2026-12-20","kind":"card","uncertain":false,"dateUncertain":false},{"id":"s2-3","stamp":"大舌贝","activity":"大舌贝的流光庭园 · B1中庭影子公园","start":"2026-12-05","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false},{"id":"s2-4","stamp":"巧锻匠","activity":"大舌贝的流光庭园 · B1中庭影子公园 · 筑梦工坊","start":"2026-12-05","end":"2026-12-18","kind":"workshop","uncertain":false,"dateUncertain":false},{"id":"s2-5","stamp":"盆才怪","activity":"大舌贝的流光庭园 · B1中庭影子公园 · 筑梦工坊（冬日庆典）","start":"2026-12-19","end":"2027-01-03","kind":"workshop","uncertain":false,"dateUncertain":false},{"id":"s2-6","stamp":"一对鼠","activity":"官方卡牌道馆 · B1层A馆 · 冬日双人赛","start":"2026-12-21","end":"2026-12-26","kind":"card","uncertain":false,"dateUncertain":false}]},{"id":2,"name":"南翔印象城MEGA","district":"嘉定区","address":"陈翔公路2299号 · 上海南翔印象城MEGA","lon":121.30155,"lat":31.30691,"items":[{"id":"s3-1","stamp":"蚊香君","activity":"官方卡牌道馆 · MEGA 2层","start":"2026-11-28","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false},{"id":"s3-2","stamp":"闪电鸟","activity":"官方卡牌道馆 · MEGA 2层 · 宝可梦30周年上海盛典卡牌赛事","start":"2026-11-28","end":"2026-12-20","kind":"card","uncertain":false,"dateUncertain":false},{"id":"s3-3","stamp":"小锯鳄","activity":"小锯鳄的星光乐园 · L1鹤舞中庭","start":"2026-12-05","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false},{"id":"s3-4","stamp":"巨锻匠","activity":"小锯鳄的星光乐园 · L1鹤舞中庭 · 筑梦工坊","start":"2026-12-05","end":"2026-12-18","kind":"workshop","uncertain":false,"dateUncertain":false},{"id":"s3-5","stamp":"惊角鹿","activity":"小锯鳄的星光乐园 · L1鹤舞中庭 · 筑梦工坊（冬日庆典）","start":"2026-12-19","end":"2027-01-03","kind":"workshop","uncertain":false,"dateUncertain":false},{"id":"s3-6","stamp":"雪吞虫","activity":"官方卡牌道馆 · MEGA 2层 · 冬日双人赛","start":"2026-12-21","end":"2026-12-26","kind":"card","uncertain":false,"dateUncertain":false}]},{"id":3,"name":"虹桥南丰城","district":"长宁区","address":"遵义路100号 · 虹桥南丰城南区3楼L310","lon":121.406,"lat":31.212,"items":[{"id":"s4-1","stamp":"快龙","activity":"官方慢闪店 · 打卡集章","start":"2026-11-28","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false},{"id":"s4-2","stamp":"图图犬","activity":"官方慢闪店 · 筑梦工坊","start":"2026-12-05","end":"2026-12-18","kind":"workshop","uncertain":false,"dateUncertain":false},{"id":"s4-3","stamp":"啃果虫","activity":"官方慢闪店 · 筑梦工坊（冬日庆典）","start":"2026-12-19","end":"2027-01-03","kind":"workshop","uncertain":false,"dateUncertain":false}]},{"id":4,"name":"拉法耶文化艺术中心","district":"黄浦区","address":"复兴中路323号 · 拉法耶文化艺术中心","lon":121.47151,"lat":31.21825,"items":[{"id":"s5-1","stamp":"皮卡丘","activity":"宝可梦卡牌艺术插画展（预约入场）","start":"2026-11-28","end":"2026-12-27","kind":"exhibition","uncertain":false,"dateUncertain":false}]},{"id":5,"name":"环球港","district":"普陀区","address":"中山北路3300号 · 上海月星环球港B2100","lon":121.40795,"lat":31.23509,"items":[{"id":"s6-1","stamp":"喵喵","activity":"官方慢闪店 · 打卡集章","start":"2026-11-28","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false}]},{"id":6,"name":"美罗城","district":"徐汇区","address":"肇嘉浜路1111号 · 美罗城[A]段第[二]层[2-4A、2-4B]单元","lon":121.4352,"lat":31.1949,"items":[{"id":"s7-1","stamp":"蚊香蝌蚪","activity":"官方慢闪店 · 打卡集章","start":"2026-11-28","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false}]},{"id":7,"name":"上海荟聚","district":"长宁区","address":"金钟路788号 · 荟聚B1C05B商铺","lon":121.35251,"lat":31.22436,"items":[{"id":"s8-1","stamp":"霜奶仙","activity":"官方慢闪店 · 打卡集章","start":"2026-11-28","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false}]},{"id":8,"name":"华润时代广场","district":"浦东新区","address":"张杨路500号 · 华润时代广场","lon":121.5132,"lat":31.2291,"items":[{"id":"s9-1","stamp":"妙蛙种子","activity":"官方慢闪店 · 打卡集章","start":"2026-11-28","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false}]},{"id":9,"name":"宏伊国际广场","district":"黄浦区","address":"南京东路299号 · 宏伊国际广场一层S-115","lon":121.48015,"lat":31.24025,"items":[{"id":"s10-1","stamp":"杰尼龟","activity":"官方慢闪店 · 打卡集章","start":"2026-11-28","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false}]},{"id":10,"name":"BFC外滩金融中心","district":"黄浦区","address":"中山东二路600号 · 上海BFC外滩金融中心南区1FS108","lon":121.49364,"lat":31.22754,"items":[{"id":"s11-1","stamp":"小火龙","activity":"官方慢闪店 · 打卡集章","start":"2026-11-28","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false}]},{"id":11,"name":"静安大悦城","district":"静安区","address":"西藏北路166号 · 静安大悦城南座2F-03、2F-04室（KKV店）","lon":121.46769,"lat":31.24496,"items":[{"id":"s12-1","stamp":"百变怪","activity":"KKV店 · 打卡集章","start":"2026-11-28","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false}]},{"id":12,"name":"长宁来福士","district":"长宁区","address":"长宁路1191号 · 长宁来福士西区一楼01-03铺位","lon":121.41053,"lat":31.21853,"items":[{"id":"starbucks","stamp":"西狮海壬","activity":"星巴克上海长宁来福士1F店 · 三家门店同款印章","start":"2026-12-01","end":"2026-12-27","kind":"walk","uncertain":false,"dateUncertain":false}]},{"id":13,"name":"湖滨道","district":"黄浦区","address":"湖滨路150号 · L1-E05单元","lon":121.47439,"lat":31.22296,"items":[{"id":"starbucks","stamp":"西狮海壬","activity":"星巴克臻选湖滨道店 · 同款印章","start":"2026-12-01","end":"2026-12-27","kind":"walk","uncertain":false,"dateUncertain":false}]},{"id":14,"name":"上海广场","district":"黄浦区","address":"淮海中路138号 · 地上一层110单元","lon":121.47336,"lat":31.22722,"items":[{"id":"starbucks","stamp":"西狮海壬","activity":"星巴克臻选上海广场店 · 同款印章","start":"2026-12-01","end":"2026-12-27","kind":"walk","uncertain":false,"dateUncertain":false}]}];
+    const kinds = { walk: "\u666E\u901A\u6253\u5361", workshop: "\u7B51\u68A6\u5DE5\u574A", card: "\u5361\u724C\u6D3B\u52A8", exhibition: "\u9884\u7EA6\u5165\u573A" };
+    const REWARDS = [[3, "\u5F69\u5F71\u6302\u4EF6", "\u5B9E\u7269"], [6, "\u7EAA\u5FF5\u5FBD\u7AE0", "\u5B9E\u7269"], [10, "\u96C6\u7AE0\u65B0\u661F", "\u79F0\u53F7"], [20, "\u96C6\u7AE0\u8FBE\u4EBA", "\u79F0\u53F7"], [30, "\u96C6\u7AE0\u5927\u5E08", "\u79F0\u53F7"]];
+    const IDS = new Set(V.flatMap((v) => v.items.map((s) => s.id)));
+    const KEY = "sh-pokemon-stamps-v1";
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+    const DEX = { "s1-1": 845, "s1-2": 144, "s1-3": 319, "s1-4": 957, "s1-5": 225, "s1-6": 363, "s2-1": 976, "s2-2": 146, "s2-3": 90, "s2-4": 958, "s2-5": 438, "s2-6": 924, "s3-1": 61, "s3-2": 145, "s3-3": 158, "s3-4": 959, "s3-5": 234, "s3-6": 872, "s4-1": 149, "s4-2": 235, "s4-3": 840, "s5-1": 25, "s6-1": 52, "s7-1": 60, "s8-1": 869, "s9-1": 1, "s10-1": 7, "s11-1": 4, "s12-1": 132, "starbucks": 730 };
+    let state = { done: [], slots: {} };
+    let firstRender = true;
+    let storageReady = false, storageQueue = Promise.resolve(), clientVersion = null, mini = null;
+    await initStorage();
+    setupLayout();
+    function validate(a) {
+      if (!a || !Array.isArray(a.done)) throw Error("\u65E0\u6548\u8FDB\u5EA6");
+      let slots = {};
+      for (const [k, v] of Object.entries(a.slots || {})) {
+        let [id, date2] = k.split("@");
+        if (IDS.has(id) && /^202[67]-\d\d-\d\d$/.test(date2) && v && /^\d\d:\d\d$/.test(v.time) && Number(v.duration) >= 5 && Number(v.duration) <= 720) slots[k] = { time: v.time, duration: Number(v.duration) };
+      }
+      return __spreadProps(__spreadValues({ done: [...new Set(a.done.filter((x) => IDS.has(x)))], slots }, validateTrips(a)), { must: [...new Set((Array.isArray(a.must) ? a.must : []).filter((x) => IDS.has(x)))], claimed: [...new Set((Array.isArray(a.claimed) ? a.claimed : []).filter((x) => x === 3 || x === 6))], seenSeries:[...new Set((Array.isArray(a.seenSeries)?a.seenSeries:[]).filter(x=>typeof x==="string"&&x.length<=40).slice(0,100))] });
+    }
+    function save(){
+      if(state.saved)state.trips=Object.assign({},state.trips||{},{[state.saved.day]:state.saved});
+      if(!storageReady){storageStatus('本次修改仅暂存在内存，未保存');return;}
+      const snapshot=JSON.stringify(state);storageStatus('正在保存…');
+      storageQueue=storageQueue.then(async()=>{if(!storageReady)return;try{const r=await timed(mini.setStorage({key:KEY,data:snapshot}),5000);if(!r||r.errMsg!=='setStorage:ok')throw Error('未确认写入');storageStatus('进度已保存');}catch(e){storageReady=false;storageStatus('保存未确认，请查看备份文本');}});
+    }
+    function inDate(s, d) {
+      return s.start <= d && d <= s.end;
+    }
+    function has(s) {
+      return state.done.includes(s.id);
+    }
+    function date() {
+      return $("date").value;
+    }
+    function slot(s, d) {
+      return state.slots[s.id + "@" + d];
+    }
+    function time(t) {
+      let [h, m] = String(t).split(":").map(Number);
+      return h * 60 + m;
+    }
+    function clock(m) {
+      return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(Math.round(m % 60)).padStart(2, "0");
+    }
+    function fmt(d) {
+      return d.slice(5).replace("-", "/");
+    }
+    function mapLink(v){return "#venue-"+v.id;}
+    function refreshProgress() {
+      let n = state.done.length;
+      $("count").innerHTML = n + "<span> / 30</span>";
+      $("progress").style.width = n / 30 * 100 + "%";
+      $("rewardTrack").setAttribute("aria-valuenow", String(n));
+      $("rewardPercent").textContent = Math.round(n / 30 * 100) + "%";
+      let r = REWARDS.find((r2) => r2[0] > n);
+      $("nextReward").textContent = r ? "\u8DDD\u79BB" + r[1] + "\u8FD8\u5DEE " + (r[0] - n) + " \u679A" : "30\u679A\u5370\u7AE0\u5DF2\u96C6\u9F50\uFF01";
+      $("milestones").innerHTML = REWARDS.map(([need]) => '<span class="milestone ' + (n >= need ? "reached" : "") + '" style="left:' + need / 30 * 100 + '%"><b></b>' + need + "</span>").join("");
+      const rewardRow = ([need, name, type]) => {
+        let reached = n >= need, desc = need === 3 ? "\u7EAA\u5FF5\u5F69\u5F71\u6302\u4EF61\u4E2A \xB7 \u517110\u4E07\u4E2A" : need === 6 ? "\u7EAA\u5FF5\u5FBD\u7AE01\u679A \xB7 \u51716\u4E07\u679A" : "\u5B9D\u53EF\u68A6\u5361\u724C\u4F1A\u5458\u5C0F\u7A0B\u5E8F\u79F0\u53F7";
+        return '<article class="reward-item ' + (reached ? "reached" : "") + '"><div class="reward-item-head"><div class="reward-number">' + need + '<small>\u679A</small></div><div class="reward-item-info"><strong>' + name + "</strong><small>" + desc + '</small></div><span class="reward-status">' + (reached ? "\u2713 \u5DF2\u8FBE\u6807" : "\u8FD8\u5DEE " + (need - n) + " \u679A") + '</span></div><div class="reward-mini"><div class="reward-mini-track" role="progressbar" aria-label="' + name + '\u8FDB\u5EA6" aria-valuemin="0" aria-valuemax="' + need + '" aria-valuenow="' + Math.min(n, need) + '"><i style="width:' + Math.min(100, n / need * 100) + '%"></i></div><span>' + Math.min(n, need) + " / " + need + "</span></div></article>";
+      };
+      $("achievements").innerHTML = '<div class="reward-group"><h3>\u5B9E\u7269\u5956\u52B1 <small>\u9650\u91CF \xB7 \u5148\u5230\u5148\u5F97</small></h3>' + REWARDS.filter((r2) => r2[2] === "\u5B9E\u7269").map(rewardRow).join("") + '</div><div class="reward-group"><h3>\u79F0\u53F7\u5956\u52B1 </h3>' + REWARDS.filter((r2) => r2[2] === "\u79F0\u53F7").map(rewardRow).join("") + "</div>";
+      refreshGoal();
+      renderReminders();
+      clearMulti();
+      if(!firstRender) renderPocket();
+      renderQuickDates();
+      if(!firstRender) renderBookings();
+      renderSaved();
+      renderHome();
+      renderMust();
+      if(!firstRender) renderExplore();
+      renderClaims();
 
-'use strict';
-const V=[{"id":0,"name":"中山公园龙之梦","district":"长宁区","address":"长宁路1018号 · 龙之梦城市生活中心","lon":121.417,"lat":31.219,"items":[{"id":"s1-1","stamp":"古月鸟","activity":"官方卡牌道馆 · 红中庭3层3058–3066室","start":"2026-11-28","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false},{"id":"s1-2","stamp":"急冻鸟","activity":"官方卡牌道馆 · 红中庭3层3058–3066室 · 宝可梦30周年上海盛典卡牌赛事","start":"2026-11-28","end":"2026-12-20","kind":"card","uncertain":false,"dateUncertain":false},{"id":"s1-3","stamp":"巨牙鲨","activity":"巨牙鲨的跃动空间 · 一楼红中庭","start":"2026-12-09","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false},{"id":"s1-4","stamp":"小锻匠","activity":"巨牙鲨的跃动空间 · 一楼红中庭 · 筑梦工坊","start":"2026-12-09","end":"2026-12-18","kind":"workshop","uncertain":false,"dateUncertain":false},{"id":"s1-5","stamp":"信使鸟","activity":"巨牙鲨的跃动空间 · 一楼红中庭 · 筑梦工坊（冬日庆典）","start":"2026-12-19","end":"2027-01-03","kind":"workshop","uncertain":false,"dateUncertain":false},{"id":"s1-6","stamp":"海豹球","activity":"官方卡牌道馆 · 红中庭3层3058–3066室 · 冬日双人赛","start":"2026-12-21","end":"2026-12-26","kind":"card","uncertain":false,"dateUncertain":false}]},{"id":1,"name":"五角场万达广场","district":"杨浦区","address":"淞沪路77号 · 五角场万达广场","lon":121.514,"lat":31.301,"items":[{"id":"s2-1","stamp":"轻身鳕","activity":"官方卡牌道馆 · B1层A馆","start":"2026-11-28","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false},{"id":"s2-2","stamp":"火焰鸟","activity":"官方卡牌道馆 · B1层A馆 · 宝可梦30周年上海盛典卡牌赛事","start":"2026-11-28","end":"2026-12-20","kind":"card","uncertain":false,"dateUncertain":false},{"id":"s2-3","stamp":"大舌贝","activity":"大舌贝的流光庭园 · B1中庭影子公园","start":"2026-12-05","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false},{"id":"s2-4","stamp":"巧锻匠","activity":"大舌贝的流光庭园 · B1中庭影子公园 · 筑梦工坊","start":"2026-12-05","end":"2026-12-18","kind":"workshop","uncertain":false,"dateUncertain":false},{"id":"s2-5","stamp":"盆才怪","activity":"大舌贝的流光庭园 · B1中庭影子公园 · 筑梦工坊（冬日庆典）","start":"2026-12-19","end":"2027-01-03","kind":"workshop","uncertain":false,"dateUncertain":false},{"id":"s2-6","stamp":"一对鼠","activity":"官方卡牌道馆 · B1层A馆 · 冬日双人赛","start":"2026-12-21","end":"2026-12-26","kind":"card","uncertain":false,"dateUncertain":false}]},{"id":2,"name":"南翔印象城MEGA","district":"嘉定区","address":"陈翔公路2299号 · 上海南翔印象城MEGA","lon":121.329,"lat":31.303,"items":[{"id":"s3-1","stamp":"蚊香君","activity":"官方卡牌道馆 · MEGA 2层","start":"2026-11-28","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false},{"id":"s3-2","stamp":"闪电鸟","activity":"官方卡牌道馆 · MEGA 2层 · 宝可梦30周年上海盛典卡牌赛事","start":"2026-11-28","end":"2026-12-20","kind":"card","uncertain":false,"dateUncertain":false},{"id":"s3-3","stamp":"小锯鳄","activity":"小锯鳄的星光乐园 · L1鹤舞中庭","start":"2026-12-05","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false},{"id":"s3-4","stamp":"巨锻匠","activity":"小锯鳄的星光乐园 · L1鹤舞中庭 · 筑梦工坊","start":"2026-12-05","end":"2026-12-18","kind":"workshop","uncertain":false,"dateUncertain":false},{"id":"s3-5","stamp":"惊角鹿","activity":"小锯鳄的星光乐园 · L1鹤舞中庭 · 筑梦工坊（冬日庆典）","start":"2026-12-19","end":"2027-01-03","kind":"workshop","uncertain":false,"dateUncertain":false},{"id":"s3-6","stamp":"雪吞虫","activity":"官方卡牌道馆 · MEGA 2层 · 冬日双人赛","start":"2026-12-21","end":"2026-12-26","kind":"card","uncertain":false,"dateUncertain":false}]},{"id":3,"name":"虹桥南丰城","district":"长宁区","address":"遵义路100号 · 虹桥南丰城南区3楼L310","lon":121.406,"lat":31.212,"items":[{"id":"s4-1","stamp":"快龙","activity":"官方慢闪店 · 打卡集章","start":"2026-11-28","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false},{"id":"s4-2","stamp":"图图犬","activity":"官方慢闪店 · 筑梦工坊","start":"2026-12-05","end":"2026-12-18","kind":"workshop","uncertain":false,"dateUncertain":false},{"id":"s4-3","stamp":"啃果虫","activity":"官方慢闪店 · 筑梦工坊（冬日庆典）","start":"2026-12-19","end":"2027-01-03","kind":"workshop","uncertain":false,"dateUncertain":false}]},{"id":4,"name":"拉法耶文化艺术中心","district":"黄浦区","address":"复兴中路323号 · 拉法耶文化艺术中心","lon":121.47,"lat":31.214,"items":[{"id":"s5-1","stamp":"皮卡丘","activity":"宝可梦卡牌艺术插画展（预约入场）","start":"2026-11-28","end":"2026-12-27","kind":"exhibition","uncertain":false,"dateUncertain":false}]},{"id":5,"name":"环球港","district":"普陀区","address":"中山北路3300号 · 上海月星环球港B2100","lon":121.412,"lat":31.234,"items":[{"id":"s6-1","stamp":"喵喵","activity":"官方慢闪店 · 打卡集章","start":"2026-11-28","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false}]},{"id":6,"name":"美罗城","district":"徐汇区","address":"肇嘉浜路1111号 · 美罗城[A]段第[二]层[2-4A、2-4B]单元","lon":121.437,"lat":31.196,"items":[{"id":"s7-1","stamp":"蚊香蝌蚪","activity":"官方慢闪店 · 打卡集章","start":"2026-11-28","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false}]},{"id":7,"name":"上海荟聚","district":"长宁区","address":"金钟路788号 · 荟聚B1C05B商铺","lon":121.362,"lat":31.224,"items":[{"id":"s8-1","stamp":"霜奶仙","activity":"官方慢闪店 · 打卡集章","start":"2026-11-28","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false}]},{"id":8,"name":"华润时代广场","district":"浦东新区","address":"张杨路500号 · 华润时代广场","lon":121.52,"lat":31.23,"items":[{"id":"s9-1","stamp":"妙蛙种子","activity":"官方慢闪店 · 打卡集章","start":"2026-11-28","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false}]},{"id":9,"name":"宏伊国际广场","district":"黄浦区","address":"南京东路299号 · 宏伊国际广场一层S-115","lon":121.49,"lat":31.239,"items":[{"id":"s10-1","stamp":"杰尼龟","activity":"官方慢闪店 · 打卡集章","start":"2026-11-28","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false}]},{"id":10,"name":"BFC外滩金融中心","district":"黄浦区","address":"中山东二路600号 · 上海BFC外滩金融中心南区1FS108","lon":121.496,"lat":31.225,"items":[{"id":"s11-1","stamp":"小火龙","activity":"官方慢闪店 · 打卡集章","start":"2026-11-28","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false}]},{"id":11,"name":"静安大悦城","district":"静安区","address":"西藏北路166号 · 静安大悦城南座2F-03、2F-04室（KKV店）","lon":121.47,"lat":31.251,"items":[{"id":"s12-1","stamp":"百变怪","activity":"KKV店 · 打卡集章","start":"2026-11-28","end":"2027-01-03","kind":"walk","uncertain":false,"dateUncertain":false}]},{"id":12,"name":"长宁来福士","district":"长宁区","address":"长宁路1191号 · 长宁来福士西区一楼01-03铺位","lon":121.412,"lat":31.218,"items":[{"id":"starbucks","stamp":"西狮海壬","activity":"星巴克上海长宁来福士1F店 · 三家门店同款印章","start":"2026-12-01","end":"2026-12-27","kind":"walk","uncertain":false,"dateUncertain":false}]},{"id":13,"name":"湖滨道","district":"黄浦区","address":"湖滨路150号 · L1-E05单元","lon":121.477,"lat":31.222,"items":[{"id":"starbucks","stamp":"西狮海壬","activity":"星巴克臻选湖滨道店 · 同款印章","start":"2026-12-01","end":"2026-12-27","kind":"walk","uncertain":false,"dateUncertain":false}]},{"id":14,"name":"上海广场","district":"黄浦区","address":"淮海中路138号 · 地上一层110单元","lon":121.475,"lat":31.222,"items":[{"id":"starbucks","stamp":"西狮海壬","activity":"星巴克臻选上海广场店 · 同款印章","start":"2026-12-01","end":"2026-12-27","kind":"walk","uncertain":false,"dateUncertain":false}]}];
-const kinds={walk:'普通打卡',workshop:'筑梦工坊',card:'卡牌活动',exhibition:'预约入场'};
-const REWARDS=[[3,'彩影挂件','实物'],[6,'纪念徽章','实物'],[10,'集章新星','称号'],[20,'集章达人','称号'],[30,'集章大师','称号']];
-const IDS=new Set(V.flatMap(v=>v.items.map(s=>s.id)));const KEY='sh-pokemon-stamps-v1';
-const $=id=>document.getElementById(id);const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const DEX={"s1-1":845,"s1-2":144,"s1-3":319,"s1-4":957,"s1-5":225,"s1-6":363,"s2-1":976,"s2-2":146,"s2-3":90,"s2-4":958,"s2-5":438,"s2-6":924,"s3-1":61,"s3-2":145,"s3-3":158,"s3-4":959,"s3-5":234,"s3-6":872,"s4-1":149,"s4-2":235,"s4-3":840,"s5-1":25,"s6-1":52,"s7-1":60,"s8-1":869,"s9-1":1,"s10-1":7,"s11-1":4,"s12-1":132,"starbucks":730};
-let state={done:[],slots:{}};let storageReady=false,storageQueue=Promise.resolve(),clientVersion=null,mini=null;await initStorage();
-function validate(a){if(!a||!Array.isArray(a.done))throw Error('无效进度');let slots={};for(const [k,v] of Object.entries(a.slots||{})){let [id,date]=k.split('@');if(IDS.has(id)&&/^202[67]-\d\d-\d\d$/.test(date)&&v&&/^\d\d:\d\d$/.test(v.time)&&Number(v.duration)>=5&&Number(v.duration)<=720)slots[k]={time:v.time,duration:Number(v.duration)}}return {done:[...new Set(a.done.filter(x=>IDS.has(x)))],slots,...validateTrips(a),must:[...new Set((Array.isArray(a.must)?a.must:[]).filter(x=>IDS.has(x)))],claimed:[...new Set((Array.isArray(a.claimed)?a.claimed:[]).filter(x=>x===3||x===6))]}}
-function save(){if(state.saved)state.trips=Object.assign({},state.trips||{},{[state.saved.day]:state.saved});if(!storageReady){storageStatus('本次修改仅暂存在内存，未保存');return}let snapshot=JSON.stringify(state);storageStatus('正在保存…');storageQueue=storageQueue.then(async()=>{try{let r=await mini.setStorage({key:KEY,data:snapshot});if(!r||r.errMsg!=='setStorage:ok')throw Error('未确认写入');storageStatus('进度已保存')}catch(e){storageStatus('保存未确认，请查看备份文本')}})}
-function inDate(s,d){return s.start<=d&&d<=s.end}function has(s){return state.done.includes(s.id)}function date(){return $('date').value}function slot(s,d){return state.slots[s.id+'@'+d]}function time(t){let [h,m]=String(t).split(':').map(Number);return h*60+m}function clock(m){return String(Math.floor(m/60)).padStart(2,'0')+':'+String(Math.round(m%60)).padStart(2,'0')}function fmt(d){return d.slice(5).replace('-','/')}function mapLink(v){return '#venue-'+v.id}
-function refreshProgress(){let n=state.done.length; $('count').innerHTML=n+'<span> / 30</span>';$('progress').style.width=(n/30*100)+'%';$('rewardTrack').setAttribute('aria-valuenow',String(n));$('rewardPercent').textContent=Math.round(n/30*100)+'%';let r=REWARDS.find(r=>r[0]>n);$('nextReward').textContent=r?'距离'+r[1]+'还差 '+(r[0]-n)+' 枚':'30枚印章已集齐！';$('milestones').innerHTML=REWARDS.map(([need])=>'<span class="milestone '+(n>=need?'reached':'')+'" style="left:'+need/30*100+'%"><b></b>'+need+'</span>').join('');const rewardRow=([need,name,type])=>{let reached=n>=need,desc=need===3?'纪念彩影挂件1个 · 共10万个':need===6?'纪念徽章1枚 · 共6万枚':'宝可梦卡牌会员小程序称号';return '<article class="reward-item '+(reached?'reached':'')+'"><div class="reward-item-head"><div class="reward-number">'+need+'<small>枚</small></div><div class="reward-item-info"><strong>'+name+'</strong><small>'+desc+'</small></div><span class="reward-status">'+(reached?'✓ 已达标':'还差 '+(need-n)+' 枚')+'</span></div><div class="reward-mini"><div class="reward-mini-track" role="progressbar" aria-label="'+name+'进度" aria-valuemin="0" aria-valuemax="'+need+'" aria-valuenow="'+Math.min(n,need)+'"><i style="width:'+Math.min(100,n/need*100)+'%"></i></div><span>'+Math.min(n,need)+' / '+need+'</span></div></article>'};$('achievements').innerHTML='<div class="reward-group"><h3>实物奖励 <small>限量 · 先到先得</small></h3>'+REWARDS.filter(r=>r[2]==='实物').map(rewardRow).join('')+'</div><div class="reward-group"><h3>称号奖励 </h3>'+REWARDS.filter(r=>r[2]==='称号').map(rewardRow).join('')+'</div>';refreshGoal();renderReminders();clearMulti();renderPocket();renderQuickDates();renderBookings();renderSaved();renderHome();renderMust();renderExplore();renderClaims();renderDexShare();renderSeries();renderTripShelf();renderDashboard()}
-function toggle(id,checked,preserveRoute=false){if(!IDS.has(id))return;let a=new Set(state.done),before=a.size,was=a.has(id);checked?a.add(id):a.delete(id);state.done=[...a];save();refreshProgress();renderList();renderDates();if(!preserveRoute)invalidate();if(checked!==was)notifyCollect(id,before,checked)}
-function invalidate(){lastPlan=null;$('route').innerHTML='<p class="status">行程有变，点击「生成推荐路线」更新。</p>'}
-function switchTab(id){document.body.classList.toggle('compact-head',id!=='home');for(let x of ['home','map','plan','list','dates','bookings','rewards']){$(x).classList.toggle('hidden',x!==id);let b=$('tab'+x[0].toUpperCase()+x.slice(1));if(b){b.classList.toggle('primary',x===id);if(x===id)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')}}if(id==='list'){renderList();renderPocket()}if(id==='dates'){renderDates();renderTimeline()}if(id==='bookings')renderBookings();if(id==='map')renderExplore();if(id==='plan'){renderSaved();if(!lastPlan)showPlan()}if(id==='home')renderHome();document.documentElement.scrollTop=0;document.body.scrollTop=0}
-function renderList(){let q=$('query').value.trim().toLowerCase(),only=$('listDate').value==='selected',rem=$('remaining').checked,d=date();let html='';for(let v of V){let base=(v.name+v.district+v.address).toLowerCase();let arr=v.items.filter(s=>(!$('listKind').value||s.kind===$('listKind').value)&&(!only||inDate(s,d))&&(!rem||!has(s))&&(!q||base.includes(q)||(s.stamp+s.activity).toLowerCase().includes(q)));if(!arr.length)continue;let active=v.items.filter(s=>inDate(s,d)&&!has(s));html+='<div class="venue"><div class="venue-head"><div class="flex"><h3>'+esc(v.name)+'</h3><span class="pill">'+active.length+'枚当日未集</span></div><small>'+esc(v.district+' · '+v.address)+'</small><br><a class="action" href="'+mapLink(v)+'">查看地址</a></div>';for(let s of arr){let done=has(s),a=inDate(s,d),ss=slot(s,d);html+='<div class="stamp '+(done?'checked':'')+'"><input aria-label="完成'+esc(s.stamp)+'" type="checkbox" data-stamp="'+s.id+'" '+(done?'checked':'')+'><div><strong>'+esc(s.stamp==='待辨认'?'印章待辨认':s.stamp)+'</strong> '+(s.uncertain?'<span class="warn" style="font-size:11px">待核</span>':'')+' <span class="pill '+(s.kind!=='walk'?'reserve':'')+'">'+kinds[s.kind]+'</span><p>'+esc(s.activity)+'<br>'+fmt(s.start)+'—'+fmt(s.end)+' · 10:00–22:00 '+(a?'':' · 当天未开放')+(s.dateUncertain?' <span class="warn">日期待核</span>':'')+'</p>';
-if(s.kind!=='walk'&&a&&!done){html+='<div class="slot"><label>预约时间<input type="time" data-slot="'+s.id+'" data-field="time" value="'+esc(ss?.time||'')+'"></label><label>耗时（分钟）<input type="number" min="5" max="720" data-slot="'+s.id+'" data-field="duration" value="'+(ss?.duration|| (s.kind==='card'?90:s.kind==='workshop'?45:30))+'"></label><button data-clear="'+s.id+'" style="font-size:11px;padding:6px">清除预约</button></div>'}html+='</div></div>'}html+='</div>'}$('venues').innerHTML=html||'<div class="empty">没有找到符合条件的集章点</div>'}
-$('venues').addEventListener('change',e=>{let t=e.target;if(t.dataset.stamp){toggle(t.dataset.stamp,t.checked);return}if(t.dataset.slot){let id=t.dataset.slot,k=id+'@'+date(),p=t.closest('.slot'),tm=p.querySelector('[data-field=time]').value,du=Number(p.querySelector('[data-field=duration]').value);if(tm&&du>=5&&du<=720)state.slots[k]={time:tm,duration:du};else delete state.slots[k];save();invalidate();clearMulti()}});$('venues').addEventListener('click',e=>{if(e.target.dataset.clear){delete state.slots[e.target.dataset.clear+'@'+date()];save();renderList();invalidate();clearMulti()}});
-function daily(d){let a=new Map();for(let v of V)for(let s of v.items)if(inDate(s,d)&&!has(s))a.set(s.id,s);let normal=0,reserve=0,uncertain=0;for(let s of a.values()){if(s.dateUncertain)uncertain++;else if(s.kind==='walk')normal++;else reserve++}return {normal,reserve,booked:[...a.values()].filter(it=>it.kind!=='walk'&&slot(it,d)).length,uncertain,total:a.size}}
-function renderDates(){let k=$('calendarKind').value,mode=$('calendarDays').value,html='';for(let day of eventDays('2026-11-28','2027-01-03',mode)){let a=new Map();for(let v of V)for(let it of v.items)if(inDate(it,day)&&!has(it)&&(!k||it.kind===k))a.set(it.id,it);let counts=['walk','exhibition','workshop','card'].map(kind=>[kind,[...a.values()].filter(x=>x.kind===kind).length]);let active=day===date();html+='<button class="calendar-row '+(active?'selected':'')+'" data-day="'+day+'"><span class="calendar-day">'+fmt(day)+' <small>'+weekdayName(day)+'</small></span><span class="calendar-bar">'+counts.map(([kind,n])=>'<i class="k-'+kind+'" style="width:'+n/30*100+'%"></i>').join('')+'</span><strong>'+a.size+'枚<small>'+[...a.values()].filter(it=>it.kind==='walk').length+'直接集 · '+[...a.values()].filter(it=>it.kind!=='walk'&&slot(it,day)).length+'已登记</small></strong></button>'}$('dateChart').innerHTML=html||'<p class="empty">没有符合条件的日期</p>';renderTimeline()}
-$('dateChart').addEventListener('click',e=>{let b=e.target.closest('button[data-day]');if(b){$('date').value=b.dataset.day;renderList();renderDates();renderReminders();renderQuickDates();clearMulti();switchTab('plan');showPlan();$('tabPlan').scrollIntoView({block:'nearest'})}});
-// Approximate inter-site travel: straight-line geographic distance, then a conservative transit overhead.
-function km(a,b){let dx=(a.lon-b.lon)*95,dy=(a.lat-b.lat)*111;return Math.hypot(dx,dy)}
-function transfer(a,b,mode){if(!a||a.id===b.id)return 0;let d=km(a,b);if(d<0.85)return Math.max(8,Math.ceil(d*16+4));return Math.ceil(mode==='taxi'?12+d*3.5:18+d*3.2)}
-function eligible(v,d,use,excluded=new Set(state.done)){return v.items.filter(s=>inDate(s,d)&&!excluded.has(s.id)&&(s.kind==='walk'&&!s.dateUncertain||use&&s.kind!=='walk'&&slot(s,d)))}
-// Enumerate subsets of fixed appointments; add ordinary stamps if not yet collected.
-function visitOptions(v,arrive,mask,available,d,limit,dwell,idBit){let normal=available.filter(s=>s.kind==='walk'&&!(mask&idBit[s.id])),reserved=available.filter(s=>s.kind!=='walk'&&!(mask&idBit[s.id]));let result=[];for(let k=0;k<(1<<reserved.length);k++){let fixed=reserved.filter((_,i)=>k&(1<<i)).map(s=>({s,t:time(slot(s,d).time),duration:slot(s,d).duration})).sort((a,b)=>a.t-b.t);let now=Math.max(arrive,600),picked=[],blocks=[];let cost=normal.length?dwell+5*(normal.length-1):0,normalPending=normal.length>0,valid=true;for(let r of fixed){if(normalPending&&now+cost<=r.t){blocks.push({start:now,end:now+cost,items:normal});picked.push(...normal);now+=cost;normalPending=false}if(now>r.t||r.t<600||r.t+r.duration>1320){valid=false;break}blocks.push({start:r.t,end:r.t+r.duration,items:[r.s]});picked.push(r.s);now=r.t+r.duration}if(!valid)continue;if(normalPending){blocks.push({start:now,end:now+cost,items:normal});picked.push(...normal);now+=cost}if(!picked.length||now>limit)continue;let bits=picked.reduce((m,s)=>m|idBit[s.id],0);result.push({end:now,mask:mask|bits,gain:picked.length,items:picked,blocks,arrival:Math.max(arrive,600)})}return result}
-function plan(opts={}){let d=opts.day||date(),st=Math.max(600,time($('start').value)),finish=Math.min(1320,time($('end').value)),dwell=Number($('dwell').value),buffer=Number($('buffer').value),limit=finish-buffer,mode=$('mode').value,region=$('region').value,use=$('useSlots').checked;if(!d||d<'2026-11-28'||d>'2027-01-03'||!Number.isFinite(st+finish+dwell+buffer)||dwell<5||dwell>90||buffer<0||limit<=st)return {error:'请检查日期、出发及结束时间，确保留有足够的打卡时间。'};
-let idBit={};[...IDS].forEach((id,i)=>idBit[id]=1<<i);let available=V.map(v=>eligible(v,d,use,opts.excluded||new Set(state.done))),venues=V.filter(v=>(!region||v.district===region)&&available[v.id].length),origin=$('origin').value==='any'?null:V[Number($('origin').value)];let states=[{last:origin,mask:0,visited:0,t:st,count:0,steps:[],travel:0}],best=states[0];const goal=opts.goal??Number($('goal').value),needed=goal?Math.max(0,goal-(opts.excluded?.size??state.done.length)):Infinity;const style=$('routeStyle').value||'fast',claim=goal>0&&goal<=6&&$('claimLast').checked;const must=(state.must||[]).filter(id=>!(opts.excluded||new Set(state.done)).has(id)),mustMask=must.reduce((m,id)=>m|idBit[id],0),bitCount=m=>{let n=0;while(m){m&=m-1;n++}return n};const rank=(a,b)=>{let md=bitCount(b.mask&mustMask)-bitCount(a.mask&mustMask);if(md)return md;let aa=a.count>=needed,bb=b.count>=needed;if(aa!==bb)return aa?-1:1;if(aa&&bb){let c=claim?(Number(canClaim(b))-Number(canClaim(a))):0;if(c)return c;if(style==='few')return a.steps.length-b.steps.length||a.t-b.t||a.travel-b.travel||b.count-a.count;if(style==='max')return b.count-a.count||a.t-b.t||a.travel-b.travel;return a.t-b.t||a.travel-b.travel||b.count-a.count}let urgent=q=>q.steps.flatMap(st=>st.items).filter(it=>it.kind!=='walk'&&(Date.parse(it.end)-Date.parse(d))/86400000<=7).length;return (opts.deadline?urgent(b)-urgent(a):0)||b.count-a.count||a.t-b.t||a.travel-b.travel};if(needed===0&&!must.length)return {best,d,st,finish,buffer,limit,mode,origin,candidates:venues.length,target:goal};
-for(let depth=0;depth<venues.length;depth++){let next=new Map();for(let p of states){for(let v of venues){if(p.visited&(1<<v.id))continue;let tr=transfer(p.last,v,mode);for(let op of visitOptions(v,p.t+tr,p.mask,available[v.id],d,limit,dwell,idBit)){let n={last:v,mask:op.mask,visited:p.visited|(1<<v.id),t:op.end,count:p.count+op.gain,travel:p.travel+tr,steps:[...p.steps,{v,tr,...op}]};let key=n.last.id+'|'+n.mask+'|'+n.visited,old=next.get(key);if(!old||rank(n,old)<0)next.set(key,n);if(rank(n,best)<0)best=n}}}if(!next.size)break;states=[...next.values()].sort(rank).slice(0,opts.beam||350)}return {best,d,st,finish,buffer,limit,mode,origin,candidates:venues.length,target:goal}}
-function svgRoute(steps){if(!steps.length)return '';let x=v=>30+(v.lon-121.30)/.245*310,y=v=>230-(v.lat-31.17)/.16*205;let poly=steps.map(s=>x(s.v)+','+y(s.v)).join(' ');return '<div class="map"><div class="map-heading"><strong>路线示意图</strong><small>点编号查看行程</small></div><svg viewBox="0 0 370 255" role="img" aria-label="集章路线示意图"><rect width="370" height="255" fill="#edf5f7"/><path d="M265 0 Q225 75 292 130 Q323 190 275 255" stroke="#bcdfe9" stroke-width="18" fill="none"/><g font-size="10" fill="#68839b"><text x="11" y="17">北 ↑</text><text x="14" y="244">路线示意（非实际道路）</text></g><polyline points="'+poly+'" stroke="#176bb0" stroke-width="2.5" fill="none" stroke-linejoin="round"/>'+steps.map((s,i)=>'<g class="route-pin" role="button" tabindex="0" data-stop="'+(i+1)+'" aria-label="第'+(i+1)+'站 '+esc(s.v.name)+'"><circle cx="'+x(s.v)+'" cy="'+y(s.v)+'" r="9" fill="#176bb0" stroke="white" stroke-width="1.5"/><text x="'+x(s.v)+'" y="'+(y(s.v)+3.5)+'" fill="white" text-anchor="middle" font-size="10">'+(i+1)+'</text></g>').join('')+'</svg></div>'}
-$('route').addEventListener('change',e=>{let id=e.target.dataset.routeStamp;if(!IDS.has(id))return;toggle(id,e.target.checked,true);let m=$('routeUpdated');if(m)m.textContent='已记录。需要调整行程时，可重新生成路线。'});
-let lastPlan=null;function showPlan(){renderPlan(plan())}function renderPlan(p){lastPlan=p;if(p.error){$('route').innerHTML='<p class="warn">'+p.error+'</p>';return}let b=p.best; if(p.target&&state.done.length>=p.target&&!(state.must||[]).some(id=>!state.done.includes(id))){$('route').innerHTML='<div class="empty">已达到所选目标，可换一个更高的目标继续集章。</div>';return}if(!b.steps.length){$('route').innerHTML='<div class="empty">没有可安排的未集印章，试试其他日期或延长行程。</div>'+planWarnings(p);return}let html=(p.target?'<p class="target-result">目标 '+p.target+' 枚 · '+(state.done.length+b.count>=p.target?'预计当天达标':'当天预计还差 '+(p.target-state.done.length-b.count)+' 枚')+'</p>':'')+'<div class="metrics"><div class="metric"><strong>'+b.count+'</strong>预计可集</div><div class="metric"><strong>'+b.steps.length+'</strong>打卡地点</div><div class="metric"><strong>'+Math.round(b.travel)+'</strong>交通约需（分钟）</div></div><p class="muted">'+p.d+' · '+clock(p.st)+' 出发 · '+clock(b.t)+' 预计结束 · 剩余 '+(p.finish-b.t)+' 分钟（含预留 '+p.buffer+' 分钟）。'+(p.origin?' 出发地点：'+esc(p.origin.name)+'（已计入首站交通）。':' 未包含出发至首站时间。')+'</p>'+(p.target>0&&p.target<=6&&state.done.length+b.count>=p.target?'<p class="claim-route">'+(canClaim(b)?'最后一站可前往指定集章处核验领奖（库存以现场为准）。':'最后一站不是指定领奖点，请另安排领奖。')+'</p>':'')+'<div id="routeFeasibility">'+planWarnings(p)+'</div><button type="button" class="primary save-trip-button" id="saveTrip">保存行程 · 开始集章</button><details class="edit-route"><summary>调整路线</summary><p class="muted">调整站点后重新检查时间与预约，失败时保留原路线。</p><div id="editStops">'+editControls(p)+'</div><label class="field">添加集章点<select id="addVenue"><option value="">请选择</option>'+V.filter(v=>!b.steps.some(st=>st.v.id===v.id)&&eligible(v,p.d,$('useSlots').checked).length).map(v=>'<option value="'+v.id+'">'+esc(v.name)+'</option>').join('')+'</select></label><button type="button" data-add-venue>添加到末站</button><p id="editError" class="warn" aria-live="polite"></p></details>'+svgRoute(b.steps);let total=0;for(let [i,s] of b.steps.entries()){total+=s.gain;html+='<div class="route-stop" id="stop-'+(i+1)+'" tabindex="-1" data-n="'+(i+1)+'"><div class="flex"><span class="time">'+clock(s.arrival)+'–'+clock(s.end)+'</span><span class="pill">+'+s.gain+' · 累计'+total+'</span></div><h3>'+esc(s.v.name)+'</h3><small>'+esc(s.v.district+' '+s.v.address)+' · 前往此处约'+s.tr+'分钟</small><div class="chips">'+s.items.map(it=>'<label style="display:flex;gap:3px;align-items:center;background:#edf3f9;padding:3px 5px;border-radius:5px;font-size:11px"><input style="width:17px;height:17px;margin:0" type="checkbox" data-route-stamp="'+it.id+'" '+(has(it)?'checked':'')+'>'+esc(it.stamp)+(it.kind!=='walk'?'（预约）':'')+'</label>').join('')+'</div>'+s.blocks.filter(x=>x.items[0].kind!=='walk').map(x=>'<p class="muted">预约 '+clock(x.start)+'–'+clock(x.end)+' '+esc(x.items[0].activity)+'</p>').join('')+'<a class="action" href="'+mapLink(s.v)+'">查看地址</a></div>'}html+='<p class="status" id="routeUpdated" aria-live="polite"></p><button id="copyRoute" style="width:100%;margin-top:12px">查看路线文字</button><p class="muted">交通时间为估算，请预留排队时间。活动变动及签到要求以现场为准。</p>';$('route').innerHTML=html;$('copyRoute').onclick=()=>copy(routeText(p));$('saveTrip').onclick=()=>{saveOneTrip(p)}}
-function routeText(p){return '沪上集章计划 '+p.d+'\n预计新增 '+p.best.count+' 枚（交通时间仅供参考，请核对预约）\n'+p.best.steps.map((s,i)=>(i+1)+'. '+clock(s.arrival)+'–'+clock(s.end)+' '+s.v.name+'（'+s.v.address+'） +'+s.gain+'枚').join('\n')}
-function copy(t){showText('查看文字',t,false,'可在页面选中文字；容器不支持一键复制。')}
-$('compute').onclick=showPlan;for(let id of ['date','region','start','end','origin','mode','dwell','buffer','useSlots','routeStyle','claimLast'])$(id).addEventListener('change',()=>{invalidate();renderList();renderDates();renderReminders();renderQuickDates();clearMulti();if(id==='origin')showPlan()});for(let id of ['query','listDate','remaining','listKind'])$(id).addEventListener(id==='query'?'input':'change',renderList);
-$('share').onclick=()=>copy('宝可梦30周年上海盛典｜已集 '+state.done.length+'/30 枚\n'+REWARDS.map(r=>(state.done.length>=r[0]?'✓ ':'○ ')+r[0]+'枚 '+r[1]).join('\n')+'\n个人集章记录');$('backup').onclick=()=>showText('备份文本',JSON.stringify(state),false,'请保留完整文本。如需转移记录，可在其他环境手动选取文字。');$('restore').onclick=()=>showText('恢复备份','',true,'输入完整备份文本。恢复会替换现有本机记录。');$('reset').onclick=()=>{if(confirm('确定清空本设备全部集章、预约和行程记录？')){state={done:[],slots:{}};save();refreshProgress();renderList();renderDates();invalidate()}};
+      renderSeries();
+      renderTripShelf();
+      renderDashboard();
+      renderDistanceRanks();
+    }
+    function toggle(id, checked, preserveRoute = false) {
+      if (!IDS.has(id)) return;
+      let a = new Set(state.done), before = a.size, was = a.has(id), prior=new Set(a);
+      checked ? a.add(id) : a.delete(id);
+      state.done = [...a];
+      const unlocked=checked&&!was?SERIES.filter(g=>seriesStat(g,a).complete&&!seriesStat(g,prior).complete).map(g=>g.name):[];
+      state.seenSeries=SERIES.filter(g=>seriesStat(g,a).complete).map(g=>g.name);
+      save();
+      refreshProgress();
+      renderList();
+      renderDates();
+      if (!preserveRoute) invalidate();
+      if (checked !== was) {notifyCollect(id, before, checked,unlocked);if(unlocked.length)openAchievement(unlocked);if(checked){const tile=document.querySelector('[data-pocket="'+id+'"]');if(tile){const card=tile.closest(".dex-tile");if(card)card.classList.add("just-collected");}}}
+    }
+    function invalidate() {
+      computeGeneration++;$("compute").disabled=false;$("compute").textContent="生成推荐路线";
+      lastPlan = null;
+      clearRouteChoices();
+      renderDistrictCandidates();
+      $("route").innerHTML = '<p class="status">\u884C\u7A0B\u6709\u53D8\uFF0C\u70B9\u51FB\u300C\u751F\u6210\u63A8\u8350\u8DEF\u7EBF\u300D\u66F4\u65B0\u3002</p>';
+    }
+    function switchTab(id) {
+      $("guideDisclosure").open = false;
+      document.body.classList.toggle("compact-head", id !== "home");
+      for (let x of ["home", "map", "plan", "list", "dates", "bookings", "rewards"]) {
+        $(x).classList.toggle("hidden", x !== id);
+        let b = $("tab" + x[0].toUpperCase() + x.slice(1));
+        if (b) {
+          b.classList.toggle("primary", x === id);
+          if (x === id) b.setAttribute("aria-current", "page");
+          else b.removeAttribute("aria-current");
+        }
+      }
+      if (id === "list") {
+        renderList();
+        renderPocket();
+      }
+      if (id === "dates") {
+        renderDates();
+        renderTimeline();
+      }
+      if (id === "bookings") renderBookings();
+      if (id === "map") { $("mapDate").value=date();$("mapRegion").value=$("region").value;renderExplore();refreshGoal(); }
+      if (id === "plan") {
+        refreshGoal();refreshSettingsSummary();
+        renderDistanceRanks();
+        renderSaved();
+        if (!lastPlan) showPlan();
+      }
+      if (id === "home") renderHome();
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }
+    function renderList() {
+      let q = $("query").value.trim().toLowerCase(), only = $("listDate").value === "selected", rem = $("remaining").checked, d = date();
+      let html = "";
+      for (let v of V) {
+        let base = (v.name + v.district + v.address).toLowerCase();
+        let arr = v.items.filter((s) => (!$("listKind").value || s.kind === $("listKind").value) && (!only || inDate(s, d)) && (!rem || !has(s)) && (!q || base.includes(q) || (s.stamp + s.activity).toLowerCase().includes(q)));
+        if (!arr.length) continue;
+        let active = v.items.filter((s) => inDate(s, d) && !has(s));
+        html += '<div class="venue"><div class="venue-head"><div class="flex"><h3>' + esc(v.name) + '</h3><span class="pill">' + active.length + "\u679A\u5F53\u65E5\u672A\u96C6</span></div><small>" + esc(v.district + " \xB7 " + v.address) + '</small><br><a class="action" href="' + mapLink(v) + '">\u67E5\u770B\u5730\u5740</a></div>';
+        for (let s of arr) {
+          let done = has(s), a = inDate(s, d), ss = slot(s, d);
+          html += '<div class="stamp ' + (done ? "checked" : "") + '"><input aria-label="\u5B8C\u6210' + esc(s.stamp) + '" type="checkbox" data-stamp="' + s.id + '" ' + (done ? "checked" : "") + "><div><strong>" + esc(s.stamp === "\u5F85\u8FA8\u8BA4" ? "\u5370\u7AE0\u5F85\u8FA8\u8BA4" : s.stamp) + "</strong> " + (s.uncertain ? '<span class="warn" style="font-size:11px">\u5F85\u6838</span>' : "") + ' <span class="pill ' + (s.kind !== "walk" ? "reserve" : "") + '">' + kinds[s.kind] + "</span><p>" + esc(s.activity) + "<br>" + fmt(s.start) + "\u2014" + fmt(s.end) + " \xB7 10:00\u201322:00 " + (a ? "" : " \xB7 \u5F53\u5929\u672A\u5F00\u653E") + (s.dateUncertain ? ' <span class="warn">\u65E5\u671F\u5F85\u6838</span>' : "") + "</p>";
+          if (s.kind !== "walk" && a && !done) {
+            html += '<div class="slot"><label>\u9884\u7EA6\u65F6\u95F4<input type="time" data-slot="' + s.id + '" data-field="time" value="' + esc((ss == null ? void 0 : ss.time) || "") + '"></label><label>\u8017\u65F6\uFF08\u5206\u949F\uFF09<input type="number" min="5" max="720" data-slot="' + s.id + '" data-field="duration" value="' + ((ss == null ? void 0 : ss.duration) || (s.kind === "card" ? 90 : s.kind === "workshop" ? 45 : 30)) + '"></label><button data-clear="' + s.id + '" style="font-size:11px;padding:6px">\u6E05\u9664\u9884\u7EA6</button></div>';
+          }
+          html += "</div></div>";
+        }
+        html += "</div>";
+      }
+      $("venues").innerHTML = html || '<div class="empty">\u6CA1\u6709\u627E\u5230\u7B26\u5408\u6761\u4EF6\u7684\u96C6\u7AE0\u70B9</div>';
+    }
+    $("venues").addEventListener("change", (e) => {
+      let t = e.target;
+      if (t.dataset.stamp) {
+        toggle(t.dataset.stamp, t.checked);
+        return;
+      }
+      if (t.dataset.slot) {
+        let id = t.dataset.slot, k = id + "@" + date(), p = t.closest(".slot"), tm = p.querySelector("[data-field=time]").value, du = Number(p.querySelector("[data-field=duration]").value);
+        if (tm && du >= 5 && du <= 720) state.slots[k] = { time: tm, duration: du };
+        else delete state.slots[k];
+        save();
+        invalidate();
+        clearMulti();
+      }
+    });
+    $("venues").addEventListener("click", (e) => {
+      if (e.target.dataset.clear) {
+        delete state.slots[e.target.dataset.clear + "@" + date()];
+        save();
+        renderList();
+        invalidate();
+        clearMulti();
+      }
+    });
+    function daily(d) {
+      let a = /* @__PURE__ */ new Map();
+      for (let v of V) for (let s of v.items) if (inDate(s, d) && !has(s)) a.set(s.id, s);
+      let normal = 0, reserve = 0, uncertain = 0;
+      for (let s of a.values()) {
+        if (s.dateUncertain) uncertain++;
+        else if (s.kind === "walk") normal++;
+        else reserve++;
+      }
+      return { normal, reserve, booked: [...a.values()].filter((it) => it.kind !== "walk" && slot(it, d)).length, uncertain, total: a.size };
+    }
+    function renderDates() {
+      let k = $("calendarKind").value, mode = $("calendarDays").value, html = "";
+      for (let day of eventDays("2026-11-28", "2027-01-03", mode)) {
+        let a = /* @__PURE__ */ new Map();
+        for (let v of V) for (let it of v.items) if (inDate(it, day) && !has(it) && (!k || it.kind === k)) a.set(it.id, it);
+        let counts = ["walk", "exhibition", "workshop", "card"].map((kind) => [kind, [...a.values()].filter((x) => x.kind === kind).length]);
+        let active = day === date();
+        html += '<button class="calendar-row ' + (active ? "selected" : "") + '" data-day="' + day + '"><span class="calendar-day">' + fmt(day) + " <small>" + weekdayName(day) + '</small></span><span class="calendar-bar">' + counts.map(([kind, n]) => '<i class="k-' + kind + '" style="width:' + n / 30 * 100 + '%"></i>').join("") + "</span><strong>" + a.size + "\u679A<small>" + [...a.values()].filter((it) => it.kind === "walk").length + "\u76F4\u63A5\u96C6 \xB7 " + [...a.values()].filter((it) => it.kind !== "walk" && slot(it, day)).length + "\u5DF2\u767B\u8BB0</small></strong></button>";
+      }
+      $("dateChart").innerHTML = html || '<p class="empty">\u6CA1\u6709\u7B26\u5408\u6761\u4EF6\u7684\u65E5\u671F</p>';
+      renderTimeline();
+    }
+    $("dateChart").addEventListener("click", (e) => {
+      let b = e.target.closest("button[data-day]");
+      if (b) {
+        $("date").value = b.dataset.day;
+        renderList();
+        renderDates();
+        renderReminders();
+        renderQuickDates();
+        clearMulti();
+        switchTab("plan");
+        showPlan();
+        $("tabPlan").scrollIntoView({ block: "nearest" });
+      }
+    });
+    // Approximate station-centre reference points (OpenStreetMap via Mapcarta), offline only.
+    const ROUTE_ANCHORS=[{id:'hub0',name:'上海虹桥站',lat:31.19603,lon:121.31620},{id:'hub1',name:'上海站',lat:31.25156,lon:121.45117},{id:'hub2',name:'上海南站',lat:31.15496,lon:121.42599},{id:'hub3',name:'人民广场地铁站',lat:31.23440,lon:121.47052},{id:'hub4',name:'静安寺地铁站',lat:31.22492,lon:121.44392},{id:'hub5',name:'陆家嘴地铁站',lat:31.24017,lon:121.49795},{id:'hub6',name:'徐家汇地铁站',lat:31.19508,lon:121.43390}];
+    let currentPosition=null, locationBusy=false;
+    const venuePickers=[];
+    function manualOrigin(){const value=$("origin").value;return value==='any'?null:ROUTE_ANCHORS.find(v=>v.id===value)||V[Number(value)]||null;}
+    function routeOrigin(){return $("originSource").value==='gps'?currentPosition:manualOrigin();}
+    function updateFirstControls(){ $("firstVenueField").hidden=$("firstPolicy").value!=='fixed';renderDistanceRanks();syncVenuePickers(); }
+    function originChanged(){invalidate();clearMulti();updateFirstControls();}
+    function renderDistanceRanks(){
+      const day=date(),mode=$("mode").value,region=$("region").value,use=$("useSlots").checked,only=$("nearbyScope").value==='available';
+      const draw=(origin,source)=>{
+        if(!origin)return '<p class="muted">'+(source==='gps'?'授权定位后查看附近场馆。':'选择常用车站或集章地点后查看距离。')+'</p>';
+        const far=km(origin,{lat:31.23,lon:121.47})>80;let a=V.map(v=>({v,d:km(origin,v),t:far?null:transfer(origin,v,mode),n:eligible(v,day,use).length})).filter(x=>(!region||x.v.district===region)&&(!only||x.n>0)).sort((a,b)=>(a.t??Infinity)-(b.t??Infinity)||a.d-b.d||a.v.id-b.v.id);
+        return '<p class="distance-label">'+esc(origin.name)+' · '+a.length+'处场馆</p>'+ (a.length?a.map((x,i)=>'<div class="distance-row"><span class="distance-order">'+(i+1)+'</span><div><strong>'+esc(x.v.name)+'</strong><small>'+x.n+'款当天可安排'+(x.t===null?' · 跨城交通不估算':' · 交通约'+x.t+'分钟')+'</small></div><div class="distance-end"><b>'+ (x.d<1?Math.round(x.d*1000)+' m':x.d.toFixed(1)+' km')+'</b><button type="button" data-distance-first="'+x.v.id+'" data-distance-source="'+source+'" '+(x.n&&!far?'':'disabled')+'>设为首站</button></div></div>').join(''):'<p class="muted">所选范围内没有符合条件的场馆。</p>');
+      };
+      $("manualDistances").innerHTML=draw(manualOrigin(),'manual');$("gpsDistances").innerHTML=draw(currentPosition,'gps');
+      $("originGpsOption").disabled=!currentPosition;$("clearGps").hidden=!currentPosition;
+    }
+    async function locateOnce(){
+      if(locationBusy)return;locationBusy=true;$("locateOnce").disabled=true;$("locationStatus").textContent='正在获取定位…';
+      try{
+        const api=window.xhs&&window.xhs.miniTool;
+        if(!api||typeof api.getLocation!=='function'||clientVersion===null||clientVersion<9490)throw Error('当前小红书客户端不支持定位，请升级至9.49或使用手动出发地。');
+        const p=await timed(api.getLocation({type:'wgs84'}),20000);
+        if(!p||p.errMsg!=='getLocation:ok'||!Number.isFinite(p.latitude)||!Number.isFinite(p.longitude)||Math.abs(p.latitude)>90||Math.abs(p.longitude)>180)throw Error('未取得有效定位，请检查权限后重试。');
+        currentPosition={id:'gps',name:'当前位置',lat:p.latitude,lon:p.longitude};
+        $("locationStatus").textContent='已更新 '+new Date().toLocaleTimeString()+(Number.isFinite(p.accuracy)&&p.accuracy>0?' · 定位精度约'+Math.round(p.accuracy)+'米':'')+((Math.abs(p.latitude-31.23)>0.9||Math.abs(p.longitude-121.47)>0.9)?' · 当前不在上海市区，建议使用手动出发地':'');
+        originChanged();
+      }catch(e){$("locationStatus").textContent='定位未更新。'+(e instanceof Error&&/^(当前|未取得)/.test(e.message)?e.message:'请检查授权或系统定位，亦可继续手动选择。');}
+      finally{locationBusy=false;$("locateOnce").disabled=false;}
+    }
+    $("locateOnce").addEventListener('click',locateOnce);
+    $("clearGps").addEventListener('click',()=>{currentPosition=null;if($("originSource").value==='gps')$("originSource").value='manual';$("locationStatus").textContent='已清除定位。';originChanged();});
+    $("originSource").addEventListener('change',originChanged);
+    $("nearbyScope").addEventListener('change',renderDistanceRanks);
+    $("distancePanel").addEventListener('click',e=>{const b=e.target.closest('[data-distance-first]');if(!b||b.disabled)return;$("originSource").value=b.dataset.distanceSource;$("firstPolicy").value='fixed';$("firstVenue").value=b.dataset.distanceFirst;originChanged();showPlan();});
+    function km(a, b) {
+      const rad=Math.PI/180, dlat=(b.lat-a.lat)*rad,dlon=(b.lon-a.lon)*rad;
+      const h=Math.sin(dlat/2)**2+Math.cos(a.lat*rad)*Math.cos(b.lat*rad)*Math.sin(dlon/2)**2;
+      return 6371*2*Math.asin(Math.sqrt(Math.max(0,Math.min(1,h))));
+    }
+    // V5.6.19 — Shanghai rail network: https://github.com/Naptie/openmetro/tree/main/data/cn-shanghai (2026-09).
+    // Station coordinates converted GCJ-02 -> WGS84. Missing track distances and street walking are estimates.
+    const RAIL_STATIONS=[["爱国路",31.281915,121.548378],["爱辉路",31.34598,121.444717],["鞍山新村",31.275257,121.505269],["安亭",31.290367,121.157427],["白银路",31.347333,121.240914],["宝安公路",31.371348,121.426266],["宝山路",31.25345,121.471767],["宝杨路",31.397198,121.475041],["北蔡",31.182302,121.547747],["北桥",31.047044,121.405419],["北新泾",31.218258,121.369373],["北洋泾路",31.241289,121.548039],["北中路",31.18495,121.557107],["博兴路",31.265702,121.582476],["漕宝路",31.170224,121.428515],["漕河泾开发区",31.172509,121.393125],["曹路",31.273375,121.678846],["漕溪路",31.178628,121.43379],["曹杨路",31.241135,121.413052],["漕盈路",31.162341,121.09228],["世纪大道",31.230768,121.522863],["世纪公园",31.211575,121.546633],["长风公园",31.227093,121.391672],["昌平路",31.23561,121.437999],["长清路",31.176447,121.483289],["长寿路",31.242711,121.433646],["常熟路",31.215406,121.444538],["昌邑路",31.246053,121.535794],["场中路",31.305486,121.408801],["陈春路",31.177281,121.55394],["成山路",31.172757,121.491764],["陈翔公路",31.308425,121.302294],["赤峰路",31.283178,121.477915],["中华艺术宫",31.187249,121.48916],["川沙",31.188831,121.693882],["春申路",31.100161,121.381189],["大柏树",31.291363,121.478704],["大场镇",31.295068,121.411502],["大渡河路",31.233589,121.389783],["大华三路",31.275868,121.418301],["大连路",31.25997,121.508686],["大木桥路",31.195978,121.458712],["丹阳路",31.2559,121.526821],["打浦桥",31.208237,121.46413],["大世界",31.229337,121.474662],["德平路",31.247563,121.55999],["淀山湖大道",31.136356,121.07754],["定边路",31.258253,121.357787],["滴水湖",30.909609,121.925497],["迪士尼",31.143433,121.663692],["东安路",31.192723,121.45031],["东宝兴路",31.26182,121.475683],["东城一路",31.032595,121.527776],["东川路",31.020149,121.415272],["洞泾",31.086579,121.22605],["东靖路",31.292856,121.584522],["东兰路",31.157702,121.387279],["东陆路",31.2847,121.5749],["东明路",31.174711,121.506465],["昌吉东路",31.295565,121.195902],["华东理工大学",31.146145,121.424359],["航头东",31.057207,121.613304],["华夏东路",31.198691,121.676675],["惠南东",31.028598,121.789486],["康桥东",31.149047,121.610698],["南京东路",31.240057,121.480126],["三林东",31.148574,121.518641],["武威东路",31.277466,121.387444],["殷高东路",31.323755,121.502366],["周浦东",31.1123,121.602704],["芳甸路",31.234004,121.554172],["芳华路",31.195271,121.545838],["芳芯路",31.193338,121.554973],["繁荣路",31.104799,121.566324],["封浜",31.26946,121.292535],["奉浦大道",30.944087,121.444404],["枫桥路",31.24368,121.40675],["奉贤新城",30.916085,121.491856],["丰翔路",31.310034,121.37623],["丰庄",31.244432,121.350548],["复旦大学",31.298324,121.495074],["富锦路",31.39404,121.420004],["抚顺路",31.285693,121.511398],["复兴岛",31.282922,121.557059],["港城路",31.35536,121.570781],["高桥",31.354741,121.558713],["高青路",31.161994,121.511403],["共富新村",31.356883,121.42942],["共康路",31.320769,121.442447],["广兰路",31.213253,121.616867],["光明路",31.298025,121.112566],["顾村公园",31.346406,121.368375],["顾戴路",31.142772,121.387212],["桂林公园",31.168854,121.415005],["桂林路",31.176655,121.413421],["桂桥路",31.25159,121.630865],["古浪路",31.286325,121.387566],["国帆路",31.341548,121.508759],["国权路",31.291285,121.505608],["顾唐路",31.268204,121.652209],["海伦路",31.261261,121.484207],["海天三路",31.170535,121.792558],["航津路",31.337528,121.589761],["航头",31.039608,121.591895],["航中路",31.167333,121.350749],["汉中路",31.243771,121.454117],["合川路",31.168418,121.380138],["衡山路",31.206409,121.441816],["鹤沙航城",31.080076,121.60705],["鹤涛路",31.074138,121.581762],["红宝石路",31.200714,121.393725],["虹漕路",31.1659,121.405908],["虹口足球场",31.273318,121.47463],["虹梅路",31.162221,121.392607],["虹桥1号航站楼",31.19328,121.342798],["虹桥2号航站楼",31.196014,121.319921],["虹桥火车站",31.195991,121.314441],["虹桥路",31.199378,121.416171],["虹莘路",31.139347,121.375722],["后滩",31.173876,121.469223],["花木路",31.213389,121.558507],["环城东路",30.933236,121.458661],["黄兴公园",31.297463,121.529048],["黄兴路",31.280881,121.524051],["黄杨路",31.236195,121.586807],["华宁路",31.009424,121.390626],["华鹏路",31.178385,121.522219],["花桥",31.3006,121.099784],["汇金路",31.163139,121.147099],["惠南",31.055936,121.757319],["汇臻路",31.027432,121.520216],["呼兰路",31.341514,121.433075],["国际客运中心",31.25215,121.493702],["嘉定新城",31.332043,121.24986],["剑川路",31.028428,121.411951],["江川路",31.007389,121.418849],["江宁路",31.246142,121.440216],["江浦公园",31.26663,121.519332],["江浦路",31.276986,121.513994],["江苏路",31.222262,121.426006],["江湾体育场",31.306306,121.508908],["江湾镇",31.307495,121.480557],["江月路",31.086359,121.504199],["交通大学",31.204078,121.430625],["嘉善路",31.20473,121.456131],["嘉怡路",31.261084,121.341122],["基隆路",31.353461,121.586194],["静安寺",31.225103,121.441924],["景洪路",31.111744,121.439706],["景西路",31.101631,121.414124],["金海湖",30.930954,121.488057],["金海路",31.265301,121.634402],["金吉路",31.266476,121.624525],["锦江乐园",31.144096,121.409465],["金京路",31.281999,121.61127],["金科路",31.206427,121.59779],["金平路",31.013234,121.405554],["金桥",31.263036,121.607132],["金桥路",31.259265,121.577599],["锦秋路",31.321994,121.377121],["金沙江路",31.233981,121.40855],["锦绣路",31.189732,121.535736],["金粤路",31.244273,121.624802],["金运路",31.242933,121.314794],["九亭",31.13925,121.314917],["巨峰路",31.28286,121.584152],["康恒路",31.156417,121.549435],["康桥",31.136462,121.563075],["康文路",31.337114,121.414671],["康新公路",31.132686,121.613003],["蓝村路",31.213767,121.52328],["岚皋路",31.258026,121.417291],["蓝天路",31.243212,121.573773],["老西门",31.220976,121.479289],["乐秀路",31.267308,121.309598],["联航路",31.075685,121.506198],["莲花路",31.132785,121.398267],["莲溪路",31.171313,121.562178],["临港大道",30.925885,121.90677],["凌空路",31.19491,121.719732],["凌兆新村",31.143319,121.485186],["临平路",31.262867,121.496248],["临洮路",31.264974,121.326318],["临沂新村",31.195274,121.512311],["刘行",31.359409,121.357759],["李子园",31.270843,121.385321],["龙柏新村",31.178769,121.365864],["龙漕路",31.171353,121.439774],["隆昌路",31.277324,121.540393],["隆德路",31.232349,121.418932],["龙华",31.174581,121.448368],["龙溪路",31.196266,121.375403],["龙阳路",31.205746,121.553376],["龙耀路",31.16165,121.45513],["娄山关路",31.213002,121.399408],["鲁班路",31.201169,121.470618],["芦恒路",31.121126,121.493816],["陆家浜路",31.213761,121.48162],["陆家嘴",31.240266,121.497689],["罗南新村",31.390652,121.352859],["罗山路",31.155497,121.588953],["罗秀路",31.133454,121.431185],["马当路",31.211469,121.472731],["马陆",31.32165,121.272459],["美兰湖",31.403719,121.345298],["创新中路",31.215993,121.669429],["淮海中路",31.221967,121.459798],["华夏中路",31.177979,121.578899],["嘉松中路",31.166136,121.21948],["龙华中路",31.186291,121.452483],["杨高中路",31.229651,121.544381],["延吉中路",31.290624,121.530611],["闵行开发区",31.002613,121.365113],["民雷路",31.270443,121.663847],["闵瑞路",31.050146,121.525998],["民生路",31.237976,121.539228],["南陈路",31.323538,121.393761],["南大路",31.301083,121.375705],["南浦大桥",31.210518,121.495278],["南翔",31.298868,121.318614],["国家会展中心",31.190373,121.294735],["嫩江路",31.316867,121.527612],["宁国路",31.270656,121.528016],["嘉定北",31.393505,121.232906],["江杨北路",31.409651,121.435181],["梅岭北路",31.245132,121.392347],["四川北路",31.253983,121.479703],["外高桥保税区北",31.349951,121.582706],["西藏北路",31.265355,121.464262],["杨高北路",31.282272,121.598755],["中山北路",31.260772,121.454622],["东方绿舟",31.100591,121.015106],["东方体育中心",31.155351,121.475794],["潘广路",31.366013,121.35124],["蟠龙路",31.188359,121.274207],["蟠祥路·国家会计学院",31.183414,121.281696],["彭浦新村",31.308445,121.44403],["人民广场",31.234619,121.470575],["平凉路",31.261109,121.522346],["浦电路",31.22225,121.525009],["浦东1号2号航站楼",31.153056,121.801291],["浦东大道",31.242366,121.514923],["浦东足球场",31.243837,121.611226],["浦航路",31.043188,121.526268],["浦江镇",31.098682,121.501859],["浦三路",31.153017,121.5347],["祁安路",31.293376,121.380168],["七宝",31.157219,121.344647],["祁华路",31.324207,121.368896],["祁连山路",31.273486,121.371403],["青浦新城",31.16081,121.121068],["七莘路",31.133556,121.357863],["曲阜路",31.244225,121.466998],["曲阳路",31.278482,121.486655],["三林",31.145307,121.507399],["三鲁公路",31.058285,121.523054],["三门路",31.315209,121.503916],["商城路",31.232311,121.511886],["上大路",31.316768,121.404027],["上海汽车城",31.287316,121.176222],["上海儿童医学中心",31.205364,121.519121],["上海赛车场",31.333864,121.22165],["上海马戏城",31.281753,121.447421],["上海体育馆",31.184691,121.432801],["上海国际旅游度假区",31.158321,121.675439],["上海图书馆",31.209836,121.439751],["自然博物馆",31.238349,121.457794],["上海火车站",31.251515,121.453354],["上海科技馆",31.220955,121.540144],["上海松江站",30.986963,121.22647],["上海南站",31.156462,121.42541],["上海体育场",31.187491,121.438917],["上海游泳馆",31.181008,121.436809],["上海大学",31.32239,121.384233],["上海财经大学",31.309633,121.491865],["上海西站",31.264514,121.396272],["上海动物园",31.192129,121.363524],["上南路",31.150884,121.50203],["沈杜公路",31.063557,121.507883],["申江路",31.282398,121.622648],["沈梅路",31.093378,121.576383],["佘山",31.106172,121.225261],["世博大道",31.18477,121.479814],["市光路",31.324784,121.527591],["石龙路",31.159848,121.438595],["双柏路",31.085129,121.417117],["双江路",31.35567,121.535104],["水产路",31.383214,121.483745],["水城路",31.201336,121.387615],["曙建路",31.092534,121.413261],["书院",30.961553,121.846348],["泗泾",31.12035,121.255829],["四平路",31.27687,121.497042],["一大会址·黄陂南路",31.225828,121.468364],["一大会址·新天地",31.218307,121.47065],["淞滨路",31.372856,121.488333],["淞发路",31.347095,121.495934],["淞虹路",31.220108,121.354936],["松江体育中心",31.018132,121.226129],["松江大学城",31.05609,121.228158],["松江新城",31.032413,121.226321],["宋园路",31.198391,121.407432],["长江南路",31.333999,121.486995],["虹梅南路",31.105753,121.428437],["灵岩南路",31.150696,121.490838],["浦东南路",31.235375,121.511022],["浦东南路",31.239925,121.506276],["祁连山南路",31.239487,121.362659],["三林南",31.128057,121.482369],["陕西南路",31.217048,121.454161],["外高桥保税区南",31.323742,121.597754],["西藏南路",31.203954,121.485073],["杨高南路",31.189711,121.520183],["台儿庄路",31.255016,121.593253],["塘桥",31.211832,121.514312],["唐镇",31.216261,121.652018],["桃浦新村",31.283475,121.345038],["天潼路",31.245762,121.47781],["铁力路",31.409953,121.456549],["提篮桥",31.255533,121.502376],["铜川路",31.25256,121.392385],["通河新村",31.33295,121.436918],["同济大学",31.284087,121.501928],["通南路",31.339579,121.475109],["外环路",31.122793,121.388383],["望园路",30.934061,121.4791],["威宁路",31.21672,121.382644],["文井路",31.005568,121.37616],["汶水路",31.294405,121.445644],["长江西路",31.347658,121.47072],["高科西路",31.187817,121.505437],["高桥西",31.353582,121.544988],["华夏西路",31.151966,121.510151],["嘉定西",31.379059,121.223405],["金沙江西路",31.243069,121.330606],["南京西路",31.231749,121.455393],["延安西路",31.211462,121.412415],["殷高西路",31.321928,121.480347],["友谊西路",31.383082,121.4233],["野生动物园",31.052487,121.6949],["世博会博物馆",31.199538,121.477083],["武定路",31.229158,121.431529],["五角场",31.300063,121.510232],["五莲路",31.274204,121.583653],["武宁路",31.236191,121.425867],["武威路",31.278495,121.360063],["吴中路",31.186202,121.409259],["五洲大道",31.304736,121.584998],["下南路",31.181439,121.535885],["向城路",31.224387,121.527747],["翔殷路",31.307068,121.527633],["小南门",31.218872,121.493946],["萧塘",30.967894,121.437261],["下沙",31.056686,121.584794],["西岑",31.072747,120.95993],["西渡",30.991329,121.427828],["歇浦路",31.252865,121.547228],["新场",31.047817,121.644755],["新村路",31.26568,121.41802],["行知路",31.286312,121.41712],["星中路",31.160008,121.364291],["新江湾城",31.330481,121.50252],["新闸路",31.240284,121.463596],["莘庄",31.113057,121.380743],["秀沿路",31.140375,121.594195],["学林路",31.185697,121.610164],["徐家汇",31.197384,121.431978],["徐泾北城",31.177563,121.237245],["徐盈路",31.180148,121.249555],["延长路",31.273543,121.450736],["杨树浦路",31.253981,121.512823],["杨思",31.163073,121.488978],["姚虹路",31.193403,121.401757],["耀华路",31.180526,121.490143],["伊犁路",31.200729,121.39925],["银都路",31.091258,121.385631],["殷高路",31.323658,121.491089],["迎春路",31.223151,121.546721],["宜山路",31.188581,121.422557],["永德路",31.041112,121.438603],["邮电新村",31.270402,121.489776],["友谊路",31.405887,121.471378],["远东大道",31.201414,121.750927],["元江路",31.064751,121.427281],["源深路",31.243409,121.526677],["源深体育中心",31.235108,121.530316],["云锦路",31.168412,121.453943],["云山路",31.25314,121.566919],["云顺路",31.239262,121.596134],["云台路",31.184241,121.495997],["御桥",31.160347,121.566687],["豫园",31.229973,121.482934],["张华浜",31.359966,121.494208],["张江高科",31.204082,121.583283],["张江路",31.191336,121.624972],["兆丰路",31.290904,121.145735],["肇嘉浜路",31.201326,121.445613],["赵巷",31.163239,121.187793],["真北路",31.234082,121.377311],["真光路",31.255113,121.379521],["镇坪路",31.248208,121.42514],["真如",31.252592,121.402566],["真新新村",31.257414,121.367324],["中春路",31.151728,121.330055],["中科路",31.181088,121.598268],["中宁路",31.246888,121.40989],["中山公园",31.21979,121.411125],["中潭路",31.256417,121.436378],["中兴路",31.255135,121.464472],["洲海路",31.314393,121.585181],["周浦",31.116363,121.563384],["颛桥",31.068933,121.397231],["朱家角",31.102563,121.044466],["朱梅路",31.126273,121.433187],["紫藤路",31.171573,121.360225],["紫竹高新区",31.025178,121.446639],["醉白池",31.003259,121.224944]];
+    const RAIL_NODES=[[0,"12"],[1,"18"],[2,"8"],[3,"11"],[4,"11"],[5,"1"],[6,"3"],[6,"4"],[7,"3"],[8,"13"],[9,"5"],[10,"2"],[11,"6"],[12,"18"],[13,"6"],[14,"1"],[14,"12"],[15,"9"],[16,"9"],[17,"3"],[18,"11"],[18,"14"],[18,"3"],[18,"4"],[19,"17"],[20,"2"],[20,"4"],[20,"6"],[20,"9"],[21,"2"],[22,"15"],[23,"7"],[24,"13"],[24,"7"],[25,"13"],[25,"7"],[26,"1"],[26,"7"],[27,"14"],[27,"18"],[28,"7"],[29,"13"],[30,"13"],[30,"8"],[31,"11"],[32,"3"],[33,"8"],[34,"2"],[35,"5"],[36,"3"],[37,"7"],[38,"13"],[38,"15"],[39,"7"],[40,"12"],[40,"4"],[41,"12"],[41,"4"],[42,"18"],[43,"9"],[44,"14"],[44,"8"],[45,"6"],[46,"17"],[47,"14"],[48,"16"],[49,"11"],[50,"4"],[50,"7"],[51,"3"],[52,"41"],[53,"5"],[54,"9"],[55,"6"],[56,"12"],[57,"12"],[58,"13"],[58,"6"],[59,"11"],[60,"15"],[61,"16"],[62,"2"],[63,"16"],[64,"51"],[65,"10"],[65,"2"],[66,"11"],[67,"15"],[68,"10"],[69,"16"],[70,"9"],[71,"7"],[72,"18"],[73,"18"],[74,"14"],[75,"5"],[76,"11"],[77,"5"],[78,"15"],[79,"13"],[80,"18"],[81,"1"],[82,"18"],[83,"12"],[84,"10"],[84,"6"],[85,"10"],[86,"6"],[87,"1"],[88,"1"],[89,"2"],[90,"11"],[91,"15"],[91,"7"],[92,"12"],[93,"12"],[93,"15"],[94,"15"],[94,"9"],[95,"14"],[96,"15"],[97,"10"],[98,"10"],[98,"18"],[99,"9"],[100,"10"],[100,"4"],[101,"2"],[102,"6"],[103,"18"],[104,"10"],[105,"1"],[105,"12"],[105,"13"],[106,"9"],[107,"1"],[108,"16"],[109,"18"],[110,"15"],[111,"12"],[112,"3"],[112,"8"],[113,"12"],[114,"10"],[115,"10"],[115,"2"],[115,"51"],[116,"10"],[116,"17"],[116,"2"],[117,"10"],[117,"3"],[117,"4"],[118,"12"],[119,"7"],[120,"7"],[121,"5"],[122,"8"],[123,"8"],[124,"14"],[125,"5"],[126,"13"],[127,"11"],[128,"17"],[129,"16"],[130,"41"],[131,"1"],[131,"18"],[132,"12"],[133,"11"],[134,"5"],[135,"5"],[136,"13"],[137,"12"],[137,"18"],[138,"18"],[138,"8"],[139,"11"],[139,"2"],[140,"10"],[141,"3"],[142,"8"],[143,"10"],[143,"11"],[144,"12"],[144,"9"],[145,"14"],[146,"10"],[147,"14"],[147,"2"],[147,"7"],[148,"15"],[148,"51"],[149,"15"],[150,"5"],[151,"12"],[151,"9"],[152,"9"],[153,"1"],[154,"12"],[155,"2"],[156,"5"],[157,"9"],[158,"6"],[159,"15"],[160,"13"],[160,"3"],[160,"4"],[161,"7"],[162,"14"],[163,"13"],[164,"9"],[165,"12"],[165,"6"],[166,"11"],[167,"18"],[168,"18"],[169,"11"],[170,"4"],[170,"6"],[171,"7"],[172,"14"],[172,"9"],[173,"10"],[173,"8"],[174,"14"],[175,"8"],[176,"1"],[177,"13"],[177,"18"],[178,"16"],[179,"2"],[180,"8"],[181,"4"],[182,"14"],[183,"6"],[184,"7"],[185,"11"],[186,"10"],[187,"12"],[187,"3"],[188,"12"],[189,"11"],[189,"13"],[190,"11"],[190,"12"],[191,"10"],[192,"16"],[192,"18"],[192,"2"],[192,"7"],[193,"11"],[194,"15"],[194,"2"],[195,"4"],[196,"8"],[197,"8"],[197,"9"],[198,"14"],[198,"2"],[199,"7"],[200,"11"],[200,"16"],[201,"15"],[202,"13"],[202,"9"],[203,"11"],[204,"7"],[205,"2"],[206,"13"],[207,"13"],[207,"16"],[208,"17"],[209,"12"],[209,"7"],[210,"18"],[210,"9"],[211,"8"],[212,"5"],[213,"9"],[214,"41"],[215,"18"],[215,"6"],[216,"7"],[217,"15"],[218,"4"],[219,"11"],[220,"17"],[220,"2"],[221,"8"],[222,"12"],[223,"11"],[224,"3"],[225,"15"],[226,"10"],[227,"6"],[228,"8"],[229,"12"],[230,"1"],[231,"17"],[232,"11"],[232,"6"],[232,"8"],[233,"7"],[234,"17"],[235,"2"],[236,"1"],[237,"1"],[237,"2"],[237,"8"],[238,"18"],[239,"6"],[240,"2"],[240,"51"],[241,"14"],[241,"4"],[242,"14"],[243,"41"],[244,"8"],[245,"11"],[246,"15"],[247,"9"],[248,"7"],[249,"11"],[250,"17"],[251,"12"],[252,"12"],[252,"8"],[253,"8"],[254,"11"],[255,"41"],[256,"10"],[257,"9"],[258,"7"],[259,"11"],[260,"6"],[261,"11"],[262,"1"],[263,"1"],[263,"4"],[264,"51"],[265,"10"],[266,"13"],[267,"1"],[267,"3"],[267,"4"],[268,"2"],[269,"9"],[270,"1"],[270,"15"],[270,"3"],[271,"4"],[272,"11"],[273,"7"],[274,"18"],[275,"11"],[275,"15"],[276,"10"],[277,"6"],[278,"41"],[278,"8"],[279,"12"],[280,"18"],[281,"9"],[282,"13"],[283,"8"],[284,"3"],[285,"15"],[286,"10"],[287,"3"],[288,"10"],[289,"15"],[290,"16"],[291,"9"],[292,"10"],[292,"8"],[293,"1"],[293,"14"],[294,"10"],[294,"13"],[295,"3"],[296,"3"],[297,"2"],[298,"9"],[299,"9"],[300,"9"],[301,"10"],[302,"18"],[302,"3"],[303,"15"],[304,"6"],[306,"14"],[305,"2"],[307,"13"],[308,"51"],[309,"1"],[309,"10"],[309,"12"],[310,"6"],[311,"4"],[311,"8"],[312,"7"],[313,"9"],[314,"4"],[315,"2"],[316,"11"],[317,"10"],[317,"12"],[318,"3"],[319,"12"],[320,"14"],[320,"15"],[321,"1"],[322,"10"],[323,"18"],[324,"1"],[325,"5"],[326,"2"],[327,"5"],[328,"1"],[329,"18"],[330,"6"],[330,"7"],[331,"10"],[332,"6"],[333,"11"],[334,"13"],[335,"12"],[335,"13"],[335,"2"],[336,"3"],[336,"4"],[337,"3"],[338,"1"],[339,"16"],[340,"13"],[341,"14"],[342,"10"],[343,"6"],[344,"13"],[344,"14"],[345,"11"],[346,"15"],[347,"6"],[348,"13"],[349,"4"],[350,"8"],[351,"9"],[352,"5"],[353,"18"],[354,"17"],[355,"5"],[356,"14"],[357,"16"],[358,"7"],[359,"7"],[360,"9"],[361,"10"],[362,"1"],[363,"1"],[363,"5"],[364,"11"],[365,"13"],[366,"1"],[366,"11"],[366,"9"],[367,"17"],[368,"17"],[369,"1"],[370,"4"],[371,"8"],[372,"15"],[373,"7"],[373,"8"],[374,"10"],[375,"5"],[376,"18"],[377,"18"],[378,"3"],[378,"4"],[378,"9"],[379,"15"],[380,"10"],[381,"3"],[382,"2"],[383,"15"],[384,"14"],[385,"6"],[386,"11"],[387,"14"],[387,"6"],[388,"14"],[389,"7"],[390,"11"],[390,"18"],[391,"10"],[391,"14"],[392,"3"],[393,"2"],[394,"13"],[395,"11"],[396,"7"],[396,"9"],[397,"17"],[398,"13"],[399,"14"],[400,"3"],[400,"4"],[400,"7"],[401,"11"],[401,"14"],[402,"14"],[403,"51"],[403,"9"],[404,"13"],[405,"14"],[406,"2"],[406,"3"],[406,"4"],[407,"3"],[407,"4"],[408,"8"],[409,"6"],[410,"18"],[411,"5"],[412,"17"],[413,"15"],[414,"10"],[415,"15"],[416,"9"]];
+    const RAIL_EDGES=[[0,103,60,900,0],[103,0,60,900,0],[1,167,120,1333,0],[167,1,120,1333,0],[2,176,60,920,0],[176,2,60,920,0],[3,334,120,1821,0],[334,3,120,1821,0],[4,169,120,2053,0],[169,4,120,2053,0],[5,433,60,1442,0],[433,5,60,1442,0],[6,69,60,1083,0],[69,6,60,1083,0],[7,126,120,1585,0],[126,7,120,1585,0],[8,483,60,1109,0],[483,8,60,1109,0],[9,41,60,876,0],[41,9,60,876,0],[10,170,120,2334,0],[170,10,120,2334,0],[10,524,120,2760,0],[524,10,120,2760,0],[11,417,120,1375,0],[417,11,120,1375,0],[12,62,60,1440,0],[62,12,60,1440,0],[13,92,60,1031,0],[92,13,60,1031,0],[14,438,60,1028,0],[438,14,60,1028,0],[15,338,60,1792,0],[338,15,60,1792,0],[16,239,60,1164,0],[239,16,60,1164,0],[17,118,120,2143,0],[118,17,120,2143,0],[19,478,120,1661,0],[478,19,120,1661,0],[20,242,60,1216,0],[242,20,60,1216,0],[21,440,60,1444,0],[440,21,60,1444,0],[22,506,60,1504,0],[506,22,60,1504,0],[23,507,60,1504,0],[507,23,60,1504,0],[24,63,180,3676,0],[63,24,180,3676,0],[25,346,120,2131,0],[346,25,120,2131,0],[26,445,60,916,0],[445,26,60,916,0],[27,487,60,899,0],[487,27,60,899,0],[28,276,120,2214,0],[276,28,120,2214,0],[29,249,60,985,0],[249,29,60,985,0],[30,52,60,804,0],[52,30,60,804,0],[31,190,120,1325,0],[190,31,120,1325,0],[32,42,60,977,0],[42,32,60,977,0],[33,472,60,858,0],[472,33,60,858,0],[34,172,60,791,0],[172,34,60,791,0],[35,31,60,963,0],[31,35,60,963,0],[36,395,60,1008,0],[395,36,60,1008,0],[37,501,120,1695,0],[501,37,120,1695,0],[38,452,60,1431,0],[452,38,60,1431,0],[39,58,60,1499,0],[58,39,60,1499,0],[40,50,60,1282,0],[50,40,60,1282,0],[41,228,60,1109,0],[228,41,60,1109,0],[42,76,60,1528,0],[76,42,60,1528,0],[43,473,60,948,0],[473,43,60,948,0],[44,286,120,2031,0],[286,44,120,2031,0],[45,49,60,986,0],[49,45,60,986,0],[46,400,120,2051,0],[400,46,120,2051,0],[47,231,180,2577,0],[231,47,180,2577,0],[48,460,120,1549,0],[460,48,120,1549,0],[48,475,60,1162,0],[475,48,60,1162,0],[49,180,120,1947,0],[180,49,120,1947,0],[50,455,60,1199,0],[455,50,60,1199,0],[51,205,120,1928,0],[205,51,120,1928,0],[52,293,60,1411,0],[293,52,60,1411,0],[53,454,60,1224,0],[454,53,60,1224,0],[54,173,120,946,0],[173,54,120,946,0],[55,469,60,835,0],[469,55,60,835,0],[56,184,60,1084,0],[184,56,60,1084,0],[57,67,60,947,0],[67,57,60,947,0],[58,310,60,776,0],[310,58,60,776,0],[59,265,60,965,0],[265,59,60,965,0],[60,496,60,853,0],[496,60,60,853,0],[61,309,60,761,0],[309,61,60,761,0],[62,490,60,977,0],[490,62,60,977,0],[63,525,300,5843,0],[525,63,300,5843,0],[64,511,60,985,0],[511,64,60,985,0],[67,351,60,1328,0],[351,67,60,1328,0],[68,274,60,804,0],[274,68,60,804,0],[69,140,60,1385,0],[140,69,60,1385,0],[70,165,60,1189,0],[165,70,60,1189,0],[71,170,60,1051,0],[170,71,60,1051,0],[71,171,240,1576,0],[171,71,240,1576,0],[72,363,120,2244,0],[363,72,120,2244,0],[73,443,120,2409,0],[443,73,120,2409,0],[74,142,60,771,0],[142,74,60,771,0],[75,212,120,976,0],[212,75,120,976,0],[76,161,120,1677,0],[161,76,120,1677,0],[77,421,60,1578,0],[421,77,60,1578,0],[78,336,240,5306,0],[336,78,240,5306,0],[79,349,120,1244,0],[349,79,120,1244,0],[80,453,180,3621,0],[453,80,180,3621,0],[81,47,180,2127,0],[47,81,180,2127,0],[82,372,420,10688,0],[372,82,420,10688,0],[83,340,240,6221,0],[340,83,240,6221,0],[84,406,60,725,0],[406,84,60,725,0],[85,259,120,1820,0],[259,85,120,1820,0],[86,319,120,1734,0],[319,86,120,1734,0],[87,120,60,1064,0],[120,87,60,1064,0],[88,457,60,808,0],[457,88,60,808,0],[89,136,120,3580,0],[136,89,120,3580,0],[90,222,120,2297,0],[222,90,120,2297,0],[91,250,120,1414,0],[250,91,120,1414,0],[92,248,60,1414,0],[248,92,60,1414,0],[93,523,60,1421,0],[523,93,60,1421,0],[94,225,120,1771,0],[225,94,120,1771,0],[95,156,120,1960,0],[156,95,120,1960,0],[96,20,60,716,0],[20,96,60,716,0],[98,204,60,1439,0],[204,98,60,1439,0],[99,393,60,1378,0],[393,99,60,1378,0],[100,354,120,1398,0],[354,100,120,1398,0],[102,123,60,897,0],[123,102,60,897,0],[103,75,120,2790,0],[75,103,120,2790,0],[104,187,60,1599,0],[187,104,60,1599,0],[106,104,60,1242,0],[104,106,60,1242,0],[107,77,60,1609,0],[77,107,60,1609,0],[108,5,120,1767,0],[5,108,120,1767,0],[109,412,120,1569,0],[412,109,120,1569,0],[110,404,240,3359,0],[404,110,240,3359,0],[111,500,180,3512,0],[500,111,180,3512,0],[113,322,180,2894,0],[322,113,180,2894,0],[114,74,120,2711,0],[74,114,120,2711,0],[115,16,120,1397,0],[16,115,120,1397,0],[116,117,60,951,0],[117,116,60,951,0],[117,442,60,1224,0],[442,117,60,1224,0],[118,480,120,1712,0],[480,118,120,1712,0],[120,320,60,1138,0],[320,120,60,1138,0],[121,368,180,3193,0],[368,121,180,3193,0],[122,437,60,1156,0],[437,122,60,1156,0],[123,100,120,696,0],[100,123,120,696,0],[124,279,60,1225,0],[279,124,60,1225,0],[125,482,60,1238,0],[482,125,60,1238,0],[126,233,60,1252,0],[233,126,60,1252,0],[127,312,180,2283,0],[312,127,180,2283,0],[128,295,60,1547,0],[295,128,60,1547,0],[129,449,120,2091,0],[449,129,120,2091,0],[130,527,120,1175,0],[527,130,120,1175,0],[131,343,120,933,0],[343,131,120,933,0],[132,326,120,1324,0],[326,132,120,1324,0],[133,342,60,753,0],[342,133,60,753,0],[134,17,60,1421,0],[17,134,60,1421,0],[135,36,60,1116,0],[36,135,60,1116,0],[136,80,120,2638,0],[80,136,120,2638,0],[137,362,120,2376,0],[362,137,120,2376,0],[138,252,120,1587,0],[252,138,120,1587,0],[139,115,60,999,0],[115,139,60,999,0],[140,45,60,1231,0],[45,140,60,1231,0],[141,328,120,1382,0],[328,141,120,1382,0],[142,139,60,1436,0],[139,142,60,1436,0],[143,357,120,2025,0],[357,143,120,2025,0],[144,143,120,2051,0],[143,144,120,2051,0],[145,382,360,6429,0],[382,145,360,6429,0],[146,512,240,5231,0],[512,146,240,5231,0],[147,144,60,563,0],[144,147,60,563,0],[148,287,120,2707,0],[287,148,120,2707,0],[149,145,60,563,0],[145,149,60,563,0],[150,182,60,1588,0],[182,150,60,1588,0],[151,430,60,1502,0],[430,151,60,1502,0],[152,431,60,1502,0],[431,152,60,1502,0],[153,114,60,1250,0],[114,153,60,1250,0],[154,33,120,1477,0],[33,154,120,1477,0],[156,416,120,3221,0],[416,156,120,3221,0],[157,446,60,1163,0],[446,157,60,1163,0],[158,277,60,1350,0],[277,158,60,1350,0],[159,491,60,1026,0],[491,159,60,1026,0],[160,201,120,1477,0],[201,160,120,1477,0],[161,444,60,1451,0],[444,161,60,1451,0],[162,111,60,1349,0],[111,162,60,1349,0],[163,324,120,2534,0],[324,163,120,2534,0],[164,82,240,5698,0],[82,164,240,5698,0],[166,108,120,1884,0],[108,166,120,1884,0],[167,216,120,1963,0],[216,167,120,1963,0],[168,409,60,979,0],[409,168,60,979,0],[169,266,180,2910,0],[266,169,180,2910,0],[170,10,120,2334,0],[10,170,120,2334,0],[170,71,60,1051,0],[71,170,60,1051,0],[171,451,300,1994,0],[451,171,300,1994,0],[172,133,120,1456,0],[133,172,120,1456,0],[173,290,60,1015,0],[290,173,60,1015,0],[174,175,60,1359,0],[175,174,60,1359,0],[175,102,60,1079,0],[102,175,60,1079,0],[176,158,60,1134,0],[158,176,60,1134,0],[177,183,120,2235,0],[183,177,120,2235,0],[178,189,120,1670,0],[189,178,120,1670,0],[179,331,60,1186,0],[331,179,60,1186,0],[180,432,120,1733,0],[432,180,120,1733,0],[181,318,120,1499,0],[318,181,120,1499,0],[182,341,60,1165,0],[341,182,60,1165,0],[183,464,60,816,0],[464,183,60,816,0],[184,397,120,1493,0],[397,184,120,1493,0],[185,59,60,923,0],[59,185,60,923,0],[186,64,120,1745,0],[64,186,120,1745,0],[188,377,180,2717,0],[377,188,180,2717,0],[189,429,120,1597,0],[429,189,120,1597,0],[190,37,60,1195,0],[37,190,60,1195,0],[191,526,60,1869,0],[526,191,60,1869,0],[192,394,180,4825,0],[394,192,180,4825,0],[193,389,60,1679,0],[389,193,60,1679,0],[194,97,60,1828,0],[97,194,60,1828,0],[196,124,120,2838,0],[124,196,120,2838,0],[197,196,60,1024,0],[196,197,60,1024,0],[198,348,120,2211,0],[348,198,120,2211,0],[199,361,60,1170,0],[361,199,60,1170,0],[200,110,120,2124,0],[110,200,120,2124,0],[201,71,120,970,0],[71,201,120,970,0],[202,197,120,2701,0],[197,202,120,2701,0],[203,14,60,921,0],[14,203,60,921,0],[204,112,180,4281,0],[112,204,180,4281,0],[205,243,60,1084,0],[243,205,60,1084,0],[206,22,60,976,0],[22,206,60,976,0],[207,23,60,976,0],[23,207,60,976,0],[208,91,120,1232,0],[91,208,120,1232,0],[209,119,60,6668,0],[119,209,60,6668,0],[210,426,60,1624,0],[426,210,60,1624,0],[211,513,120,2243,0],[513,211,120,2243,0],[212,297,120,1502,0],[297,212,120,1502,0],[213,73,60,2462,0],[73,213,60,2462,0],[214,493,120,1834,0],[493,214,120,1834,0],[215,494,180,2892,0],[494,215,180,2892,0],[217,66,240,5072,0],[66,217,240,5072,0],[218,403,60,950,0],[403,218,60,950,0],[219,311,60,1034,0],[311,219,60,1034,0],[220,508,120,1428,0],[508,220,120,1428,0],[221,159,120,1582,0],[159,221,120,1582,0],[222,402,120,2452,0],[402,222,120,2452,0],[223,495,120,1144,0],[495,223,120,1144,0],[224,61,60,1111,0],[61,224,60,1111,0],[225,234,120,1740,0],[234,225,120,1740,0],[226,181,60,1298,0],[181,226,60,1298,0],[227,198,120,1780,0],[198,227,120,1780,0],[228,270,120,1895,0],[270,228,120,1895,0],[229,13,120,1719,0],[13,229,120,1719,0],[230,65,120,2591,0],[65,230,120,2591,0],[231,484,180,3080,0],[484,231,180,3080,0],[232,302,180,1737,0],[302,232,180,1737,0],[233,55,60,1324,0],[55,233,60,1324,0],[234,186,60,1591,0],[186,234,60,1591,0],[235,335,60,1399,0],[335,235,60,1399,0],[236,113,120,1905,0],[113,236,120,1905,0],[237,355,60,1674,0],[355,237,60,1674,0],[238,246,180,2318,0],[246,238,180,2318,0],[239,245,60,964,0],[245,239,60,964,0],[240,19,60,1068,0],[19,240,60,1068,0],[241,0,60,988,0],[0,241,60,988,0],[242,177,120,1413,0],[177,242,120,1413,0],[243,439,60,849,0],[439,243,60,849,0],[244,488,60,1018,0],[488,244,60,1018,0],[245,273,120,1546,0],[273,245,120,1546,0],[246,370,60,1394,0],[370,246,60,1394,0],[247,271,240,4242,0],[271,247,240,4242,0],[248,477,120,2947,0],[477,248,120,2947,0],[249,498,180,3078,0],[498,249,180,3078,0],[250,155,120,1058,0],[155,250,120,1058,0],[251,300,120,2203,0],[300,251,120,2203,0],[252,30,120,1870,0],[30,252,120,1870,0],[253,516,120,1454,0],[516,253,120,1454,0],[254,57,60,1373,0],[57,254,60,1373,0],[255,232,120,2809,0],[232,255,120,2809,0],[256,224,60,899,0],[224,256,60,899,0],[257,447,120,1407,0],[447,257,120,1407,0],[258,391,60,883,0],[391,258,60,883,0],[259,392,120,1490,0],[392,259,120,1490,0],[260,303,180,3078,0],[303,260,180,3078,0],[261,461,120,1815,0],[461,261,120,1815,0],[262,89,240,5059,0],[89,262,240,5059,0],[263,79,120,1678,0],[79,263,120,1678,0],[264,435,120,1501,0],[435,264,120,1501,0],[265,257,60,954,0],[257,265,60,954,0],[266,44,180,3780,0],[44,266,180,3780,0],[267,260,120,1672,0],[260,267,120,1672,0],[268,81,180,2207,0],[81,268,180,2207,0],[269,379,120,1198,0],[379,269,120,1198,0],[270,514,120,3353,0],[514,270,120,3353,0],[271,262,120,2673,0],[262,271,120,2673,0],[272,503,120,3060,0],[503,272,120,3060,0],[273,56,120,1328,0],[56,273,120,1328,0],[274,154,180,2276,0],[154,274,180,2276,0],[275,281,60,1131,0],[281,275,60,1131,0],[276,90,60,1133,0],[90,276,60,1133,0],[277,157,60,837,0],[157,277,60,837,0],[278,418,60,1434,0],[418,278,60,1434,0],[279,18,120,1580,0],[18,279,120,1580,0],[280,317,60,836,0],[317,280,60,836,0],[281,39,60,1032,0],[39,281,60,1032,0],[282,12,60,989,0],[12,282,60,989,0],[283,333,120,1331,0],[333,283,120,1331,0],[284,98,60,1076,0],[98,284,60,1076,0],[285,399,60,1311,0],[399,285,60,1311,0],[286,405,180,3184,0],[405,286,180,3184,0],[287,304,60,2122,0],[304,287,60,2122,0],[288,149,120,2707,0],[149,288,120,2707,0],[289,365,60,951,0],[365,289,60,951,0],[290,241,120,980,0],[241,290,120,980,0],[291,425,120,1939,0],[425,291,120,1939,0],[293,411,60,892,0],[411,293,60,892,0],[294,125,60,989,0],[125,294,60,989,0],[295,105,120,1386,0],[105,295,120,1386,0],[296,141,60,1431,0],[141,296,60,1431,0],[297,199,60,1286,0],[199,297,60,1286,0],[298,468,60,1585,0],[468,298,60,1585,0],[299,450,240,6311,0],[450,299,240,6311,0],[300,329,180,3463,0],[329,300,180,3463,0],[301,390,120,1643,0],[390,301,120,1643,0],[302,470,120,1641,0],[470,302,120,1641,0],[303,236,60,1038,0],[236,303,60,1038,0],[304,467,120,4033,0],[467,304,120,4033,0],[305,288,120,1579,0],[288,305,120,1579,0],[306,109,120,1489,0],[109,306,120,1489,0],[307,458,60,988,0],[458,307,60,988,0],[308,85,60,1178,0],[85,308,60,1178,0],[309,327,60,1211,0],[327,309,60,1211,0],[310,174,60,732,0],[174,310,60,732,0],[311,27,120,1046,0],[27,311,120,1046,0],[314,486,60,1214,0],[486,314,60,1214,0],[315,26,60,1438,0],[26,315,60,1438,0],[316,209,60,1395,0],[209,316,60,1395,0],[317,70,60,1282,0],[70,317,60,1282,0],[318,255,180,2628,0],[255,318,180,2628,0],[319,214,60,1437,0],[214,319,60,1437,0],[320,284,60,1033,0],[284,320,60,1033,0],[321,456,120,3784,0],[456,321,120,3784,0],[322,353,120,1590,0],[353,322,120,1590,0],[323,237,60,1464,0],[237,323,60,1464,0],[324,24,120,2962,0],[24,324,120,2962,0],[325,153,120,3072,0],[153,325,120,3072,0],[326,407,60,1126,0],[407,326,60,1126,0],[327,521,60,1336,0],[521,327,60,1336,0],[328,375,60,1084,0],[375,328,60,1084,0],[329,86,60,1219,0],[86,329,60,1219,0],[330,280,60,1023,0],[280,330,60,1023,0],[331,88,60,1039,0],[88,331,60,1039,0],[332,28,60,1143,0],[28,332,60,1143,0],[333,40,120,1441,0],[40,333,120,1441,0],[334,78,120,2251,0],[78,334,120,2251,0],[335,219,60,1096,0],[219,335,60,1096,0],[336,169,180,3140,0],[169,336,180,3140,0],[337,419,120,1530,0],[419,337,120,1530,0],[338,463,60,1527,0],[463,338,60,1527,0],[339,479,60,1151,0],[479,339,60,1151,0],[340,313,480,15204,0],[313,340,480,15204,0],[341,396,120,1715,0],[396,341,120,1715,0],[342,428,60,830,0],[428,342,60,830,0],[343,298,60,1119,0],[298,343,60,1119,0],[344,6,120,1905,0],[6,344,120,1905,0],[345,7,120,1905,0],[7,345,120,1905,0],[346,29,120,1309,0],[29,346,120,1309,0],[347,529,120,1963,0],[529,347,120,1963,0],[348,15,120,1683,0],[15,348,120,1683,0],[349,116,120,1832,0],[116,349,120,1832,0],[350,366,120,1414,0],[366,350,120,1414,0],[352,244,120,1416,0],[244,352,120,1416,0],[353,283,60,988,0],[283,353,60,988,0],[354,476,120,1763,0],[476,354,120,1763,0],[355,509,120,1571,0],[509,355,120,1571,0],[356,87,120,2606,0],[87,356,120,2606,0],[357,246,60,1317,0],[246,357,60,1317,0],[358,424,120,844,0],[424,358,120,844,0],[359,330,120,1682,0],[330,359,120,1682,0],[360,226,60,1467,0],[226,360,60,1467,0],[361,195,240,2856,0],[195,361,240,2856,0],[362,93,120,1717,0],[93,362,120,1717,0],[363,373,240,3843,0],[373,363,240,3843,0],[364,32,60,1061,0],[32,364,60,1061,0],[366,240,120,1387,0],[240,366,120,1387,0],[367,371,60,974,0],[371,367,60,974,0],[368,423,60,1046,0],[423,368,60,1046,0],[369,8,120,1903,0],[8,369,120,1903,0],[370,474,60,1197,0],[474,370,60,1197,0],[371,193,60,1096,0],[193,371,60,1096,0],[372,230,300,7008,0],[230,372,300,7008,0],[373,211,360,6278,0],[211,373,360,6278,0],[374,413,60,1002,0],[413,374,60,1002,0],[375,2,60,867,0],[2,375,60,867,0],[376,307,120,1080,0],[307,376,120,1080,0],[377,60,60,772,0],[60,377,60,772,0],[378,223,60,943,0],[223,378,60,943,0],[379,264,60,849,0],[264,379,60,849,0],[380,369,60,1330,0],[369,380,60,1330,0],[381,497,120,1556,0],[497,381,120,1556,0],[382,11,120,1499,0],[11,382,120,1499,0],[383,385,120,1715,0],[385,383,120,1715,0],[384,72,180,3386,0],[72,384,180,3386,0],[385,384,180,2658,0],[384,385,180,2658,0],[386,150,60,905,0],[150,386,60,905,0],[387,414,60,1393,0],[414,387,60,1393,0],[388,381,120,1821,0],[381,388,120,1821,0],[389,191,120,1363,0],[191,389,120,1363,0],[390,358,60,1150,0],[358,390,60,1150,0],[391,314,60,1100,0],[314,391,60,1100,0],[392,25,120,1336,0],[25,392,120,1336,0],[393,504,60,1639,0],[504,393,60,1639,0],[394,83,360,12574,0],[83,394,360,12574,0],[395,376,60,1800,0],[376,395,60,1800,0],[396,378,120,1700,0],[378,396,120,1700,0],[397,427,120,1770,0],[427,397,120,1770,0],[398,128,60,1716,0],[128,398,60,1716,0],[399,254,60,1522,0],[254,399,60,1522,0],[400,256,60,1230,0],[256,400,60,1230,0],[401,208,120,1597,0],[208,401,120,1597,0],[402,202,120,1720,0],[202,402,120,1720,0],[403,285,120,3307,0],[285,403,120,3307,0],[404,268,120,1789,0],[268,404,120,1789,0],[405,441,120,1655,0],[441,405,120,1655,0],[406,294,60,1006,0],[294,406,60,1006,0],[407,168,120,1804,0],[168,407,120,1804,0],[408,292,180,2195,0],[292,408,180,2195,0],[409,54,60,1260,0],[54,409,60,1260,0],[410,510,60,1046,0],[510,410,60,1046,0],[411,356,120,1490,0],[356,411,120,1490,0],[412,166,60,1102,0],[166,412,60,1102,0],[413,122,60,1062,0],[122,413,60,1062,0],[414,420,60,1070,0],[420,414,60,1070,0],[415,227,60,1572,0],[227,415,60,1572,0],[416,194,60,993,0],[194,416,60,993,0],[417,253,120,1779,0],[253,417,120,1779,0],[418,160,120,1556,0],[160,418,120,1556,0],[419,306,120,1694,0],[306,419,120,1694,0],[420,1,180,2678,0],[1,420,180,2678,0],[421,235,60,1294,0],[235,421,60,1294,0],[422,401,120,1505,0],[401,422,120,1505,0],[423,106,60,1417,0],[106,423,60,1417,0],[424,107,120,1211,0],[107,424,120,1211,0],[425,4,180,3962,0],[4,425,180,3962,0],[426,99,120,2055,0],[99,426,120,2055,0],[427,132,120,1450,0],[132,427,120,1450,0],[428,269,60,1259,0],[269,428,60,1259,0],[429,308,120,1597,0],[308,429,120,1597,0],[430,517,60,1009,0],[517,430,60,1009,0],[431,518,60,1009,0],[518,431,60,1009,0],[432,388,120,1602,0],[388,432,120,1602,0],[433,101,60,1359,0],[101,433,60,1359,0],[434,164,240,6424,0],[164,434,240,6424,0],[435,364,120,2052,0],[364,435,120,2052,0],[436,188,60,1173,0],[188,436,60,1173,0],[437,179,60,762,0],[179,437,60,762,0],[438,213,120,1041,0],[213,438,120,1041,0],[439,34,60,1119,0],[34,439,60,1119,0],[440,436,60,794,0],[436,440,60,794,0],[441,323,60,1311,0],[323,441,60,1311,0],[442,471,60,1158,0],[471,442,60,1158,0],[443,522,120,1160,0],[522,443,120,1160,0],[444,9,60,1223,0],[9,444,60,1223,0],[445,218,60,1916,0],[218,445,60,1916,0],[446,289,60,1177,0],[289,446,60,1177,0],[447,332,120,2449,0],[332,447,120,2449,0],[448,95,120,2952,0],[95,448,120,2952,0],[449,137,120,2010,0],[137,449,120,2010,0],[451,448,120,2977,0],[448,451,120,2977,0],[452,489,120,2023,0],[489,452,120,2023,0],[453,434,240,4848,0],[434,453,240,4848,0],[454,220,60,922,0],[220,454,60,922,0],[455,53,60,1260,0],[53,455,60,1260,0],[456,134,120,1916,0],[134,456,120,1916,0],[457,121,60,1476,0],[121,457,60,1476,0],[458,131,60,1060,0],[131,458,60,1060,0],[459,415,60,1408,0],[415,459,60,1408,0],[460,48,120,1549,0],[48,460,120,1549,0],[461,217,120,2141,0],[217,461,120,2141,0],[462,499,120,1665,0],[499,462,120,1665,0],[463,135,60,1482,0],[135,463,60,1482,0],[464,352,120,2028,0],[352,464,120,2028,0],[465,502,60,1478,0],[502,465,60,1478,0],[466,272,120,3437,0],[272,466,120,3437,0],[467,466,60,1302,0],[466,467,60,1302,0],[468,337,60,1043,0],[337,468,60,1043,0],[469,315,60,1376,0],[315,469,60,1376,0],[470,43,120,1198,0],[43,470,120,1198,0],[471,138,120,1205,0],[138,471,120,1205,0],[472,492,60,749,0],[492,472,60,749,0],[473,46,60,814,0],[46,473,60,814,0],[474,386,60,886,0],[386,474,60,886,0],[475,48,60,1162,0],[48,475,60,1162,0],[475,524,180,2934,0],[524,475,180,2934,0],[476,387,120,1311,0],[387,476,120,1311,0],[477,275,60,817,0],[275,477,60,817,0],[478,151,60,1453,0],[151,478,60,1453,0],[479,152,60,1453,0],[152,479,60,1453,0],[480,465,120,1589,0],[465,480,120,1589,0],[481,485,180,2847,0],[485,481,180,2847,0],[482,374,60,1077,0],[374,482,60,1077,0],[483,408,120,1599,0],[408,483,120,1599,0],[484,127,360,5868,0],[127,484,360,5868,0],[485,367,120,3391,0],[367,485,120,3391,0],[486,38,60,989,0],[38,486,60,989,0],[487,282,120,978,0],[282,487,120,978,0],[488,251,60,821,0],[251,488,60,821,0],[489,221,120,1385,0],[221,489,120,1385,0],[490,203,120,849,0],[203,490,120,849,0],[491,316,120,1645,0],[316,491,120,1645,0],[492,422,60,1120,0],[422,492,60,1120,0],[493,261,180,2579,0],[261,493,180,2579,0],[494,229,60,1396,0],[229,494,60,1396,0],[495,84,60,1245,0],[84,495,60,1245,0],[496,258,120,1956,0],[258,496,120,1956,0],[497,380,60,1661,0],[380,497,60,1661,0],[498,200,60,1516,0],[200,498,60,1516,0],[500,3,120,1203,0],[3,500,120,1203,0],[501,68,60,1140,0],[68,501,60,1140,0],[502,185,60,1155,0],[185,502,60,1155,0],[503,163,180,3851,0],[163,503,180,3851,0],[504,51,60,1282,0],[51,504,60,1282,0],[505,410,60,1356,0],[410,505,60,1356,0],[506,519,60,1518,0],[519,506,60,1518,0],[507,520,60,1518,0],[520,507,60,1518,0],[508,35,120,1095,0],[35,508,120,1095,0],[509,96,60,1153,0],[96,509,60,1153,0],[510,515,60,1017,0],[515,510,60,1017,0],[511,505,60,1283,0],[505,511,60,1283,0],[512,192,2160,14885,0],[192,512,2160,14885,0],[513,321,60,1637,0],[321,513,60,1637,0],[514,462,60,1571,0],[462,514,60,1571,0],[515,21,60,763,0],[21,515,60,763,0],[516,178,120,1557,0],[178,516,120,1557,0],[517,206,120,1725,0],[206,517,120,1725,0],[518,207,120,1725,0],[207,518,120,1725,0],[519,344,120,1840,0],[344,519,120,1840,0],[520,345,120,1840,0],[345,520,120,1840,0],[521,296,60,1228,0],[296,521,60,1228,0],[522,398,120,2050,0],[398,522,120,2050,0],[523,215,120,2414,0],[215,523,120,2414,0],[524,10,120,2760,0],[10,524,120,2760,0],[524,475,180,2934,0],[475,524,180,2934,0],[525,299,120,2804,0],[299,525,120,2804,0],[526,263,60,887,0],[263,526,60,887,0],[527,238,60,1040,0],[238,527,60,1040,0],[528,481,120,2084,0],[481,528,120,2084,0],[529,383,120,1790,0],[383,529,120,1790,0],[6,7,300,126,1],[7,6,300,126,1],[15,16,540,378,1],[16,15,600,441,1],[20,21,420,252,1],[20,22,660,504,1],[20,23,660,504,1],[21,20,240,63,1],[21,22,660,504,1],[21,23,660,504,1],[22,20,420,252,1],[22,21,420,252,1],[22,23,420,252,1],[23,20,420,252,1],[23,21,420,252,1],[23,22,420,252,1],[25,26,420,252,1],[25,27,420,252,1],[25,28,420,252,1],[26,25,420,252,1],[26,27,420,252,1],[26,28,420,252,1],[27,25,420,252,1],[27,26,420,252,1],[27,28,360,189,1],[28,25,420,252,1],[28,26,420,252,1],[28,27,360,189,1],[32,33,600,441,1],[33,32,360,189,1],[34,35,420,252,1],[35,34,420,252,1],[36,37,660,504,1],[37,36,600,441,1],[38,39,240,63,1],[39,38,240,63,1],[42,43,360,189,1],[43,42,600,441,1],[51,52,420,252,1],[52,51,420,252,1],[54,55,420,252,1],[55,54,360,189,1],[56,57,420,252,1],[57,56,540,378,1],[60,61,360,189,1],[61,60,300,126,1],[67,68,420,252,1],[68,67,420,252,1],[76,77,420,252,1],[77,76,360,189,1],[84,85,660,504,1],[85,84,360,189,1],[104,105,240,63,1],[105,104,240,63,1],[112,113,420,252,1],[113,112,420,252,1],[115,116,660,504,1],[116,115,540,378,1],[117,118,720,567,1],[118,117,720,567,1],[122,123,240,63,1],[123,122,240,63,1],[125,126,420,252,1],[126,125,420,252,1],[131,132,360,189,1],[131,133,540,378,1],[132,131,480,315,1],[132,133,360,189,1],[133,131,540,378,1],[133,132,360,189,1],[140,141,780,630,1],[141,140,780,630,1],[144,145,540,378,1],[144,146,420,252,1],[145,144,540,378,1],[145,146,420,252,1],[146,144,420,252,1],[146,145,420,252,1],[147,148,540,378,1],[147,149,540,378,1],[148,147,540,378,1],[148,149,360,189,1],[149,147,540,378,1],[149,148,360,189,1],[150,151,480,315,1],[150,152,480,315,1],[151,150,480,315,1],[151,152,480,315,1],[152,150,480,315,1],[152,151,480,315,1],[166,167,360,189,1],[167,166,360,189,1],[173,174,240,63,1],[174,173,240,63,1],[175,176,240,63,1],[176,175,300,126,1],[177,178,600,441,1],[178,177,480,315,1],[182,183,420,252,1],[183,182,420,252,1],[184,185,480,315,1],[185,184,480,315,1],[188,189,480,315,1],[188,190,360,189,1],[189,188,480,315,1],[189,190,480,315,1],[190,188,600,441,1],[190,189,540,378,1],[191,192,660,504,1],[192,191,720,567,1],[195,196,420,252,1],[196,195,420,252,1],[205,206,420,252,1],[205,207,420,252,1],[206,205,480,315,1],[206,207,480,315,1],[207,205,480,315,1],[207,206,480,315,1],[212,213,540,378,1],[213,212,540,378,1],[218,219,420,252,1],[219,218,540,378,1],[221,222,240,63,1],[222,221,240,63,1],[223,224,360,189,1],[224,223,360,189,1],[228,229,240,63,1],[229,228,240,63,1],[239,240,540,378,1],[240,239,540,378,1],[242,243,420,252,1],[243,242,420,252,1],[244,245,900,756,1],[245,244,840,693,1],[247,248,240,63,1],[247,249,600,441,1],[247,250,600,441,1],[248,247,240,63,1],[248,249,600,441,1],[248,250,780,630,1],[249,247,600,441,1],[249,248,420,252,1],[249,250,480,315,1],[250,247,600,441,1],[250,248,660,504,1],[250,249,480,315,1],[252,253,660,504,1],[253,252,660,504,1],[256,257,420,252,1],[257,256,420,252,1],[258,259,660,504,1],[259,258,660,504,1],[261,262,360,189,1],[262,261,360,189,1],[264,265,360,189,1],[265,264,480,315,1],[270,271,480,315,1],[271,270,600,441,1],[273,274,600,441,1],[274,273,540,378,1],[275,276,240,63,1],[276,275,240,63,1],[281,282,360,189,1],[282,281,360,189,1],[287,288,360,189,1],[288,287,360,189,1],[300,301,360,189,1],[300,302,360,189,1],[301,300,360,189,1],[301,302,360,189,1],[302,300,360,189,1],[302,301,360,189,1],[307,308,540,378,1],[307,309,360,189,1],[308,307,540,378,1],[308,309,480,315,1],[309,307,360,189,1],[309,308,540,378,1],[312,313,420,252,1],[313,312,660,504,1],[314,315,240,63,1],[315,314,240,63,1],[326,327,480,315,1],[327,326,360,189,1],[338,339,540,378,1],[339,338,540,378,1],[343,344,780,630,1],[343,345,780,630,1],[344,343,900,756,1],[344,345,900,756,1],[345,343,900,756,1],[345,344,900,756,1],[348,349,540,378,1],[348,350,540,378,1],[349,348,540,378,1],[349,350,720,567,1],[350,348,540,378,1],[350,349,720,567,1],[355,356,240,63,1],[356,355,240,63,1],[359,360,300,126,1],[360,359,300,126,1],[374,375,660,504,1],[375,374,660,504,1],[376,377,360,189,1],[377,376,540,378,1],[378,379,480,315,1],[379,378,480,315,1],[387,388,480,315,1],[388,387,480,315,1],[395,396,660,504,1],[395,397,540,378,1],[396,395,600,441,1],[396,397,420,252,1],[397,395,540,378,1],[397,396,420,252,1],[399,400,420,252,1],[400,399,420,252,1],[406,407,480,315,1],[407,406,480,315,1],[410,411,300,126,1],[411,410,240,63,1],[421,422,360,189,1],[422,421,360,189,1],[427,428,480,315,1],[427,429,540,378,1],[428,427,360,189,1],[428,429,540,378,1],[429,427,420,252,1],[429,428,780,630,1],[430,431,300,126,1],[431,430,300,126,1],[439,440,420,252,1],[440,439,420,252,1],[459,460,480,315,1],[460,459,480,315,1],[463,464,660,504,1],[463,465,420,252,1],[464,463,720,567,1],[464,465,480,315,1],[465,463,660,504,1],[465,464,480,315,1],[472,473,360,189,1],[473,472,360,189,1],[478,479,900,756,1],[478,480,660,504,1],[479,478,900,756,1],[479,480,420,252,1],[480,478,900,756,1],[480,479,900,756,1],[489,490,360,189,1],[490,489,360,189,1],[493,494,300,126,1],[494,493,480,315,1],[495,496,300,126,1],[496,495,540,378,1],[501,502,540,378,1],[502,501,480,315,1],[506,507,660,504,1],[506,508,420,252,1],[507,506,660,504,1],[507,508,420,252,1],[508,506,660,504,1],[508,507,660,504,1],[509,510,300,126,1],[510,509,240,63,1],[512,513,660,504,1],[513,512,660,504,1],[516,517,720,567,1],[516,518,720,567,1],[517,516,1080,945,1],[517,518,1080,945,1],[518,516,1080,945,1],[518,517,1080,945,1],[519,520,300,126,1],[520,519,300,126,1]];
+    const railAdj=RAIL_NODES.map(()=>[]),railAt=RAIL_STATIONS.map(()=>[]);
+    RAIL_EDGES.forEach(e=>railAdj[e[0]].push(e));RAIL_NODES.forEach((n,i)=>railAt[n[0]].push(i));
+    const railPoints=RAIL_STATIONS.map((s,i)=>({id:"rail"+i,name:s[0],lat:s[1],lon:s[2]}));
+    const transportCache=new Map(),railSearchCache=new Map(),accessCache=new Map();
+    // Approximate Huangpu centerline; known central stations explicitly assigned to banks.
+    const riverLine=[[31.16,121.456],[31.18,121.470],[31.19,121.474],[31.20,121.490],[31.21,121.505],[31.22,121.505],[31.2275,121.500],[31.235,121.490],[31.24,121.489],[31.245,121.496],[31.25,121.512],[31.255,121.526],[31.26,121.537],[31.27,121.553],[31.28,121.565],[31.30,121.590],[31.35,121.635]];
+    const eastStation=new Set(["陆家嘴","浦东南路","商城路","浦东大道","世纪大道","浦电路","塘桥","蓝村路","临沂新村","中华艺术宫","世博大道","耀华路","云台路","高科西路","上海儿童医学中心","源深路","源深体育中心","昌邑路","民生路","北洋泾路","歇浦路","丹阳路"]);
+    const westStation=new Set(["南京东路","豫园","小南门","南浦大桥","国际客运中心","提篮桥","杨树浦路","大连路","平凉路","江浦公园","宁国路","隆昌路","爱国路","鞍山新村","同济大学","世博会博物馆","西藏南路","天潼路","人民广场"]);
+    function pointEast(p){if(typeof p.id==="number")return p.id===8;if(/^hub[0-6]$/.test(String(p.id)))return p.id==="hub5";
+      if(eastStation.has(p.name))return true;if(westStation.has(p.name))return false;
+      if(p.lat<riverLine[0][0])return p.lon>riverLine[0][1];if(p.lat>=riverLine[riverLine.length-1][0])return p.lon>riverLine[riverLine.length-1][1];
+      for(let i=1;i<riverLine.length;i++){const a=riverLine[i-1],b=riverLine[i];if(p.lat<=b[0])return p.lon>a[1]+(b[1]-a[1])*(p.lat-a[0])/(b[0]-a[0]);}return false;
+    }
+    // V5.6.19: directed bus/rail graph. Bus stop positions are approximate WGS84 junction anchors,
+    // NOT surveyed stop coordinates. Published stop order and service window; omitted stops counted by ordinal gaps.
+    // Sources: https://lucabus.com/shanghai/line/55/ ; https://lucabus.com/shanghai/line/65/
+    // https://www.modiauto.com.cn/cx/bus_77391.html ; https://www.modiauto.com.cn/cx/bus_44274.html
+    // https://www.modiauto.com.cn/cx/bus_32622.html ; https://www.modiauto.com.cn/cx/bus_67994.html
+    // https://findit.city/cn/china/shanghai/transport/bus/67 ; https://lucabus.com/shanghai/line/64/
+    // https://lucabus.com/shanghai/line/71/ ; https://findit.city/cn/china/shanghai/transport/bus/49
+    // https://bkso.baidu.com/item/上海公交隧道三线/19196109 (2026-11 随申行 station list)
+    const BUS_STOPS={
+      shili:["十六铺",31.2278,121.4940,0],hankou:["中山东一路汉口路",31.2355,121.4903,0],
+      nanjing:["中山东一路南京东路",31.2385,121.4903,0],jinling:["中山东二路金陵东路",31.2318,121.4927,0],xinkai:["中山东二路新开河路",31.2295,121.4937,0],
+      wusong:["吴淞路海宁路",31.2503,121.4881,0],tongji:["同济大学",31.2842,121.5017,0],guoquan:["四平路国权路",31.2899,121.5068,0],
+      wujiaoS:["五角场（四平路）",31.3000,121.5093,0],wujiaoN:["五角场（淞沪路）",31.3048,121.5098,0],
+      tiantong:["天潼路四川北路",31.2459,121.4812,0],xingxi:["中兴路西藏北路",31.2582,121.4643,0],
+      hanSi:["汉口路四川中路",31.2352,121.4856,0],jiuJiang:["九江路江西中路",31.2370,121.4836,0],jiuZhe:["九江路浙江中路",31.2354,121.4757,0],
+      huanghe:["南京西路黄河路",31.2352,121.4665,0],jingan:["静安寺",31.2249,121.4440,0],yujiang:["愚园路江苏路",31.2230,121.4306,0],yuanxi:["愚园路安西路",31.2219,121.4207,0],
+      zhongChang:["中山公园（长宁路）",31.2208,121.4144,0],kaihui:["凯旋路汇川路",31.2193,121.4103,0],zhongWan:["中山公园（万航渡路）",31.2236,121.4168,0],huaYang:["华阳路长宁路",31.2207,121.4201,0],
+      zhongMetro:["中山公园地铁站",31.2194,121.4113,0],zhongXi:["长宁路中山西路",31.2226,121.4054,0],shida:["华东师大",31.2283,121.4054,0],jinsha:["金沙江路中山北路",31.2340,121.4090,0],changfeng:["长风公园",31.2332,121.3996,0],
+      railway:["上海火车站（南广场）",31.2483,121.4520,0],jinyuan:["晋元路海宁路",31.2502,121.4620,0],menggu:["西藏北路蒙古路",31.2491,121.4670,0],qufu:["西藏北路曲阜路",31.2444,121.4672,0],
+      beijing:["西藏中路北京东路",31.2397,121.4708,0],fuzhou:["人民广场（福州路）",31.2334,121.4742,0],guangdong:["人民广场（广东路）",31.2311,121.4755,0],
+      xizanghuai:["西藏南路淮海东路",31.2269,121.4771,0],laoximen:["老西门",31.2210,121.4794,0],xiaobei:["小北门",31.2255,121.4804,0],laobei:["老北门",31.2283,121.4845,0],xinbei:["新北门",31.2290,121.4880,0],xiaodong:["小东门",31.2259,121.4911,0],dadong:["大东门",31.2223,121.4906,0],huaiyun:["淮海东路云南南路",31.2270,121.4757,0],
+      hennan:["河南中路南京东路",31.2400,121.4800,0],beiFu:["北京东路福建中路",31.2404,121.4760,0],xinzha:["新闸路地铁站",31.2403,121.4636,0],hanzhong:["恒丰路汉中路",31.2433,121.4548,0],beihen:["北京东路河南中路",31.2423,121.4800,0],renxin:["人民路新开河路",31.2294,121.4920,0],
+      yanZhe:["延安东路浙江中路",31.2300,121.4794,0],century:["世纪大道浦东南路",31.2389,121.5069,1],pudongdong:["浦东南路东昌路",31.2354,121.5110,1],zhangpu:["张杨路浦东南路",31.2302,121.5130,1],puzhang:["浦东南路张杨路",31.2307,121.5134,1],pudongda:["浦东南路浦东大道",31.2415,121.5075,1],fuyan:["福建中路延安东路",31.2305,121.4816,0],fuzhe:["福州路浙江中路",31.2330,121.4771,0],xiha:["西藏北路海宁路",31.2480,121.4680,0],tianjin:["天目中路晋元路",31.2520,121.4622,0],zhangfu:["张杨路福山路",31.2310,121.5223,1],
+      brtBund:["延安东路外滩（中运量）",31.2322,121.4903,0],brtHen:["河南中路（中运量）",31.2304,121.4815,0],brtXi:["西藏中路（中运量）",31.2289,121.4740,0],brtHuang:["黄陂北路（中运量）",31.2273,121.4678,0],brtChang:["常德路（中运量）",31.2233,121.4495,0],brtJiang:["江苏路（中运量）",31.2188,121.4308,0],brtKai:["凯旋路（中运量）",31.2139,121.4142,0],brtLou:["娄山关路（中运量）",31.2102,121.4009,0],brtShui:["水城南路（中运量）",31.2068,121.3910,0],
+      hanJiang:["汉口路江西中路",31.2356,121.4838,0],renmin:["人民广场",31.2337,121.4704,0],weiHuang:["威海路黄陂北路",31.2308,121.4666,0],changHuai:["常熟路淮海中路",31.2166,121.4490,0],baoqing:["宝庆路淮海中路",31.2140,121.4469,0],zhaofeng:["肇嘉浜路枫林路",31.2029,121.4541,0],xietu:["斜土路东安路",31.1974,121.4507,0],tiyuguan:["上海体育馆",31.1823,121.4373,0],tianyao:["中山南二路天钥桥路",31.1838,121.4426,0],zhongyi:["中山医院",31.2024,121.4526,0],changChang:["常熟路长乐路",31.2192,121.4497,0]
+    };
+    // [line, direction terminal, first/last departure minute, estimated headway minutes, speed km/h, [stopKey, published ordinal]...]
+    const BUS_PATTERNS=[
+      ["55","新江湾城（世界路）",330,1350,12,18,[["shili",5],["jinling",6],["hankou",7],["wusong",8],["tongji",14],["guoquan",15],["wujiaoS",17],["wujiaoN",18]]],
+      ["55","南浦大桥",330,1350,15,18,[["wujiaoN",9],["guoquan",11],["tongji",12],["wusong",18],["nanjing",19],["xinkai",20],["shili",21]]],
+      ["65","北区汽车站",300,1370,15,18,[["shili",5],["jinling",6],["hankou",7],["tiantong",8]]],
+      ["65","南浦大桥",300,1370,15,18,[["xingxi",3],["tiantong",7],["nanjing",8],["xinkai",9],["shili",10]]],
+      ["20","中山公园（万航渡路）",300,1410,15,17,[["hanSi",1],["jiuJiang",2],["huanghe",5],["jingan",10],["yujiang",14],["yuanxi",15],["zhongChang",17],["kaihui",18],["zhongWan",19]]],
+      ["20","汉口路四川中路",300,1395,15,17,[["zhongWan",1],["huaYang",2],["yuanxi",3],["yujiang",4],["jingan",7],["huanghe",11],["jiuZhe",12],["hanSi",13]]],
+      ["67","建德花园",300,1415,15,17,[["zhongMetro",1],["zhongXi",2],["shida",3],["jinsha",4],["changfeng",5]]],
+      ["67","中山公园地铁站",320,1380,15,17,[["changfeng",10],["jinsha",11],["shida",12],["zhongXi",13],["zhongMetro",14]]],
+      ["930","白渡路中山南路",330,1350,21,16,[["railway",1],["jinyuan",2],["menggu",3],["beijing",4],["fuzhou",5],["guangdong",6],["xizanghuai",7],["laoximen",8],["xiaobei",9],["laobei",10],["xinbei",11],["xiaodong",12],["dadong",13]]],
+      ["930","上海火车站（南广场）",330,1350,15,16,[["dadong",2],["xiaodong",3],["xinbei",4],["laobei",5],["huaiyun",6],["guangdong",7],["fuzhou",8],["beijing",9],["jinyuan",10],["railway",11]]],
+      ["64","中山北路中潭路",300,1380,15,17,[["dadong",6],["xiaodong",7],["renxin",8],["xinbei",9],["hennan",10],["beiFu",12],["xinzha",14],["hanzhong",16]]],
+      ["64","南浦大桥",300,1380,15,17,[["hanzhong",5],["xinzha",7],["beiFu",9],["beihen",10],["hennan",11],["xinbei",12],["renxin",13],["xiaodong",14],["dadong",15]]],
+      ["隧道三线","博山东路龙居路",325,1417,15,18,[["railway",1],["jinyuan",2],["qufu",3],["guangdong",4],["yanZhe",5],["century",6],["pudongdong",7],["zhangpu",8],["zhangfu",10]]],
+      ["隧道三线","上海火车站（南广场）",330,1360,15,18,[["puzhang",15],["pudongdong",16],["pudongda",17],["fuyan",18],["fuzhe",19],["fuzhou",20],["xiha",21],["tianjin",22],["railway",23]]],
+      ["71","申昆路枢纽站",330,1410,10,22,[["brtBund",1],["brtHen",2],["brtXi",3],["brtHuang",4],["brtChang",8],["brtJiang",11],["brtKai",14],["brtLou",15],["brtShui",16]]],
+      ["71","延安东路外滩",270,1350,10,22,[["brtShui",10],["brtLou",11],["brtKai",12],["brtJiang",15],["brtChang",18],["brtHuang",22],["brtXi",23],["brtBund",24]]],
+      ["49","上海体育馆",300,1380,15,17,[["hanJiang",1],["renmin",3],["weiHuang",4],["changHuai",9],["baoqing",10],["zhaofeng",13],["xietu",15],["tiyuguan",20]]],
+      ["49","汉口路江西中路",300,1380,15,17,[["tiyuguan",1],["tianyao",2],["zhongyi",7],["baoqing",10],["changChang",11],["renmin",16],["jiuZhe",17],["hanJiang",18]]]
+    ];
+    function walkMeters(a,b){return Math.ceil(km(a,b)*1250);}
+    function walkSeconds(m){return Math.ceil(m/1.22);}
+    function pointKey(p){return p.id+":"+p.lat+":"+p.lon;}
+    const netPoints=RAIL_NODES.map(n=>railPoints[n[0]]),netMeta=RAIL_NODES.map(n=>({type:"rail",line:n[1],service:"rail"+n[1],wait:300,exit:120}));
+    const netAdj=railAdj.map(edges=>edges.map(e=>({to:e[1],seconds:e[2],meters:e[3],walk:e[4]?e[3]:0,ride:!e[4]})));
+    const railCount=netPoints.length;
+    function addNetEdge(from,to,seconds,meters,walk,ride){netAdj[from].push({to,seconds,meters,walk,ride});}
+    for(const [pi,p] of BUS_PATTERNS.entries()){
+      const [line,direction,first,last,headway,speed,stops]=p;
+      // Route only during the conservative 10:00–22:00 event window; do not model special peak/night variants.
+      if(first>600||last<1320)continue;
+      let prev=-1,ordinal=0;
+      for(const [key,index] of stops){
+        const s=BUS_STOPS[key],j=netPoints.length;netPoints.push({id:"bus:"+key,name:s[0],lat:s[1],lon:s[2],bank:s[3]});
+        netMeta.push({type:"bus",line,service:"bus"+pi,direction,wait:Math.ceil(headway*30),exit:30});netAdj.push([]);
+        if(prev>=0){const a=netPoints[prev],b=netPoints[j],n=index-ordinal;
+          const distance=Math.max(Math.ceil(km(a,b)*(a.bank!==b.bank?1.45:1.35)*1000),n*240);
+          const seconds=Math.ceil(distance/(speed/3.6)+n*30+(a.bank!==b.bank?120:0));
+          addNetEdge(prev,j,seconds,distance,0,true);}
+        prev=j;ordinal=index;
+      }
+    }
+    function netBank(p){return p.bank===undefined?Number(pointEast(p)):p.bank;}
+    // Surface interchanges: short same-bank walking, explicit boarding wait, no reverse vehicle edges.
+    for(let i=railCount;i<netPoints.length;i++){const a=netPoints[i],ma=netMeta[i];
+      for(let j=0;j<i;j++){const b=netPoints[j],mb=netMeta[j];if(netBank(a)!==netBank(b)||ma.service===mb.service)continue;
+        const raw=km(a,b);if(raw>(mb.type==="rail"?.43:.28))continue;
+        const m=Math.max(60,walkMeters(a,b)+60),s=walkSeconds(m);
+        addNetEdge(i,j,s+ma.exit+mb.wait,m,m,false);addNetEdge(j,i,s+mb.exit+ma.wait,m,m,false);
+      }
+    }
+    function access(p,mode){const key=mode+"|"+pointKey(p);if(accessCache.has(key))return accessCache.get(key);
+      const list=[],railNear=railPoints.map((s,i)=>({i,m:walkMeters(p,s),same:netBank(p)===netBank(s)})).filter(x=>x.same).sort((a,b)=>a.m-b.m);
+      for(const x of railNear.filter(x=>x.m<=2400).slice(0,7).concat(railNear.slice(0,1))){for(const j of railAt[x.i])if(!list.some(y=>y.i===j))list.push({i:j,m:x.m});}
+      if(mode==="public")for(let j=railCount;j<netPoints.length;j++){const q=netPoints[j];if(netBank(p)!==netBank(q))continue;const m=walkMeters(p,q)+60;if(m<=1450)list.push({i:j,m});}
+      if(accessCache.size>128)accessCache.clear();accessCache.set(key,list);return list;
+    }
+    function networkSearch(a,mode){const key=mode+"|"+pointKey(a);if(railSearchCache.has(key))return railSearchCache.get(key);
+      const n=mode==="public"?netPoints.length:railCount,t=new Float64Array(n),m=new Float64Array(n),w=new Float64Array(n),prev=new Int16Array(n),prevRide=new Uint8Array(n),used=new Uint8Array(n);t.fill(Infinity);m.fill(Infinity);prev.fill(-1);
+      for(const x of access(a,mode)){t[x.i]=walkSeconds(x.m)+netMeta[x.i].wait;m[x.i]=w[x.i]=x.m;}
+      for(let k=0;k<n;k++){let i=-1;for(let j=0;j<n;j++)if(!used[j]&&(i<0||t[j]<t[i]||t[j]===t[i]&&m[j]<m[i]))i=j;if(i<0||!Number.isFinite(t[i]))break;used[i]=1;
+        for(const e of netAdj[i]){const j=e.to;if(j>=n)continue;const nt=t[i]+e.seconds,nm=m[i]+e.meters;if(nt<t[j]||nt===t[j]&&nm<m[j]){t[j]=nt;m[j]=nm;w[j]=w[i]+e.walk;prev[j]=i;prevRide[j]=Number(e.ride);}}
+      }
+      const out={t,m,w,prev,prevRide};if(railSearchCache.size>64)railSearchCache.clear();railSearchCache.set(key,out);return out;
+    }
+    function rideDetails(q,j){let path=[],k=j;while(k>=0){path.push(k);k=q.prev[k];}path.reverse();const rides=[];
+      for(let i=1;i<path.length;i++){const from=path[i-1],to=path[i];if(!q.prevRide[to])continue;const meta=netMeta[from],last=rides[rides.length-1];
+        if(last&&last.service===meta.service&&last.end===from){last.end=to;last.alight=netPoints[to].name;}
+        else rides.push({...meta,start:from,end:to,board:netPoints[from].name,alight:netPoints[to].name});}
+      return rides;
+    }
+    function leg(a,b,mode){if(!a||a.id===b.id)return {seconds:0,minutes:0,meters:0,walk:0,label:"原地",rides:[]};
+      const key=mode+"|"+pointKey(a)+"|"+pointKey(b);if(transportCache.has(key))return transportCache.get(key);
+      const same=netBank(a)===netBank(b),dm=walkMeters(a,b);let best=same?{seconds:walkSeconds(dm)+60,meters:dm,walk:dm,label:"步行估算",rides:[]}:{seconds:Infinity,meters:Infinity,walk:0,label:"",rides:[]};
+      if(mode==="taxi"){const m=Math.ceil(km(a,b)*1350),seconds=480+m/1000*3600/22+(same?0:480);if(seconds<best.seconds)best={seconds,meters:m,walk:0,label:"出租车估算",rides:[]};}
+      else{const q=networkSearch(a,mode);
+        for(const x of access(b,mode)){const j=x.i,seconds=q.t[j]+walkSeconds(x.m)+netMeta[j].exit,meters=q.m[j]+x.m;
+          if(!Number.isFinite(seconds)||seconds>best.seconds||seconds===best.seconds&&meters>=best.meters)continue;
+          const rides=rideDetails(q,j);if(!rides.length)continue;
+          const label=rides.map(v=>v.type==="rail"?"地铁"+v.line+"号线":(/^\d+$/.test(v.line)?"公交"+v.line+"路":"公交"+v.line)).join("＋")+"＋步行";
+          best={seconds,meters,walk:q.w[j]+x.m,label,board:rides[0].board,alight:rides[rides.length-1].alight,rides};
+        }}
+      if(!Number.isFinite(best.seconds))best={seconds:900+km(a,b)*228+(same?0:720),meters:Math.ceil(km(a,b)*1400),walk:0,label:"接驳估算（路线待核）",rides:[]};
+      const out={...best,minutes:Math.max(1,Math.ceil(best.seconds/60))};if(transportCache.size>4096)transportCache.clear();transportCache.set(key,out);return out;
+    }
+    function transfer(a,b,mode){return leg(a,b,mode).minutes;}
+    function transferLabel(a,b,mode){const q=leg(a,b,mode);return q.rides?.length?q.rides.map(v=>(v.type==="rail"?"地铁"+v.line+"号线":(/^\d+$/.test(v.line)?"公交"+v.line+"路":"公交"+v.line))+"（"+v.board+"→"+v.alight+(v.direction?"，开往"+v.direction:"")+"）").join("；换乘")+"＋步行":q.label;}
+    // Native container: show transportation details without external navigation.
+    function mapLegLink(a,b,mode){return "#leg-"+encodeURIComponent(JSON.stringify({from:a.name,to:b.name,detail:transferLabel(a,b,mode),minutes:transfer(a,b,mode),walk:leg(a,b,mode).walk}));}
+    function routeMeters(steps,origin,mode){let a=origin,total=0;for(const s of steps){total+=leg(a,s.v,mode).meters;a=s.v;}return total;}
+    // One fewer visit is worth at most 15 minutes of elapsed time, not an unlimited detour.
+    const FEW_STOP_PENALTY=12; // Weight actual transfer time twice in elapsed+travel; a saved stop cannot justify a large detour.
+    const DISTRICT_PAIRS=[[0,12,4,12,"中山公园商圈","同一地铁枢纽，短距离步行"],[9,10,3,35,"外滩连游","南京东路至外滩南段，连续集章"],[0,5,2,22,"中山公园·环球港","地铁3/4号线相邻站"],[5,12,1,22,"中山公园·环球港","同一轨道走廊"],[0,3,2,25,"长宁商圈","同片区短距离接驳"],[3,12,2,22,"长宁商圈","短距离步行"],[4,13,3,20,"新天地商圈","短距离步行，展览须有预约"],[4,14,2,24,"新天地商圈","淮海中路附近，展览须有预约"]];
+    function districtEdge(a,b,mode){return DISTRICT_PAIRS.find(([x,y,w,max])=>((a===x&&b===y)||(a===y&&b===x))&&Math.max(transfer(V[x],V[y],mode),transfer(V[y],V[x],mode))<=max);}
+    function routeDistricts(p){const steps=p.best.steps,groups=[];for(let i=1;i<steps.length;i++){const edge=districtEdge(steps[i-1].v.id,steps[i].v.id,p.mode);if(!edge)continue;let g=groups[groups.length-1];if(g&&g.end===i-1){g.end=i;g.names.add(edge[4]);g.minutes+=steps[i].tr;}else groups.push({start:i-1,end:i,names:new Set([edge[4]]),minutes:steps[i].tr});}return groups;}
+    function districtResult(p){const groups=routeDistricts(p);return '<section class="district-result" aria-label="片区连游结果"><div class="district-head"><strong>片区连游</strong><small>'+groups.length+' 组连续场馆</small></div>'+(groups.length?groups.map(g=>'<div class="district-summary"><b>'+esc([...g.names].join(" / "))+'</b><small>第 '+(g.start+1)+'–'+(g.end+1)+' 站 · 内部交通约 '+g.minutes+' 分钟</small><p>'+p.best.steps.slice(g.start,g.end+1).map(s=>esc(s.v.name)).join(' → ')+'</p></div>').join(""):'<p class="muted">当前路线未形成连续片区组合。预约、开放日期、目标或时间约束可能使独立访问更合适。</p>')+(p.districtBaseline?'<p class="muted">相对同首站的严格最短时间方案：'+(p.best.t-p.districtBaseline.t>=0?"+":"")+(p.best.t-p.districtBaseline.t)+' 分钟 · '+((routeMeters(p.best.steps,p.origin,p.mode)-p.districtBaseline.meters)/1000>=0?"+":"")+((routeMeters(p.best.steps,p.origin,p.mode)-p.districtBaseline.meters)/1000).toFixed(1)+' km。最多增加10分钟，优先保留预约与必集。</p>':'')+'</section>';}
+    function renderDistrictCandidates(){const el=$("districtCandidates");if(!el)return;const d=date(),mode=$("mode").value,region=$("region").value,use=$("useSlots").checked;const rows=DISTRICT_PAIRS.filter(([a,b,w,max])=>[a,b].every(i=>(!region||V[i].district===region)&&eligible(V[i],d,use).length)&&Math.max(transfer(V[a],V[b],mode),transfer(V[b],V[a],mode))<=max);
+      el.innerHTML=rows.length?rows.map(([a,b,w,max,label,reason])=>{const stamps=[...new Map([a,b].flatMap(i=>eligible(V[i],d,use)).map(it=>[it.id,it])).values()];return '<div class="district-summary"><div class="district-head"><b>'+esc(label)+'</b><small>'+stamps.length+'枚可安排</small></div><p>'+esc(V[a].name)+' ↔ '+esc(V[b].name)+'</p><small>'+esc(reason)+' · '+transfer(V[a],V[b],mode)+' / '+transfer(V[b],V[a],mode)+'分钟（双向估算）</small><button type="button" data-district-pair="'+a+','+b+'">将组合印章加入必集</button></div>';}).join(""):'<p class="muted">当前日期、范围及收录进度没有可用的完整组合。预约项目须先登记。</p>';}
+        function eligible(v, d, use, excluded = new Set(state.done)) {
+      return v.items.filter((s) => inDate(s, d) && !excluded.has(s.id) && (s.kind === "walk" && !s.dateUncertain || use && s.kind !== "walk" && slot(s, d)));
+    }
+    function visitOptions(v, arrive, mask, available, d, limit, dwell, idBit) {
+      let normal = available.filter((s) => s.kind === "walk" && !(mask & idBit[s.id])), reserved = available.filter((s) => s.kind !== "walk" && !(mask & idBit[s.id]));
+      let result = [];
+      for (let k = 0; k < 1 << reserved.length; k++) {
+        let fixed = reserved.filter((_, i) => k & 1 << i).map((s) => ({ s, t: time(slot(s, d).time), duration: slot(s, d).duration })).sort((a, b) => a.t - b.t);
+        let now = Math.max(arrive, 600), picked = [], blocks = [];
+        let cost = normal.length ? dwell + 5 * (normal.length - 1) : 0, normalPending = normal.length > 0, valid = true;
+        for (let r of fixed) {
+          if (normalPending && now + cost <= r.t) {
+            blocks.push({ start: now, end: now + cost, items: normal });
+            picked.push(...normal);
+            now += cost;
+            normalPending = false;
+          }
+          if (now > r.t || r.t < 600 || r.t + r.duration > 1320) {
+            valid = false;
+            break;
+          }
+          blocks.push({ start: r.t, end: r.t + r.duration, items: [r.s] });
+          picked.push(r.s);
+          now = r.t + r.duration;
+        }
+        if (!valid) continue;
+        if (normalPending) {
+          blocks.push({ start: now, end: now + cost, items: normal });
+          picked.push(...normal);
+          now += cost;
+        }
+        if (!picked.length || now > limit) continue;
+        let bits = picked.reduce((m, s) => m | idBit[s.id], 0);
+        result.push({ end: now, mask: mask | bits, gain: picked.length, items: picked, blocks, arrival: Math.max(arrive, 600) });
+      }
+      return result;
+    }
+    function plan(opts = {}) {
+      var _a, _b, _c;
+      let d = opts.day || date(), st = Math.max(600, time($("start").value)), finish = Math.min(1320, time($("end").value)), dwell = Number($("dwell").value), buffer = Number($("buffer").value), limit = finish - buffer, mode = $("mode").value, region = $("region").value, use = $("useSlots").checked;
+      if (!d || d < "2026-11-28" || d > "2027-01-03" || !Number.isFinite(st + finish + dwell + buffer) || dwell < 5 || dwell > 90 || buffer < 0 || limit <= st) return { error: "\u8BF7\u68C0\u67E5\u65E5\u671F\u3001\u51FA\u53D1\u53CA\u7ED3\u675F\u65F6\u95F4\uFF0C\u786E\u4FDD\u7559\u6709\u8DB3\u591F\u7684\u6253\u5361\u65F6\u95F4\u3002" };
+      let idBit = {};
+      [...IDS].forEach((id, i) => idBit[id] = 1 << i);
+      let available = V.map((v) => eligible(v, d, use, opts.excluded || new Set(state.done))), venues = V.filter((v) => (!region || v.district === region) && available[v.id].length), origin = routeOrigin();
+      if($("originSource").value==='gps'&&!origin)return {error:"请先授权定位或切换为手动出发地。"};
+      if(origin&&km(origin,{lat:31.23,lon:121.47})>80)return {error:"出发地点距离上海市区较远，请先选择抵达上海后的出发参考点。"};
+      const firstPolicy=$("firstPolicy").value, fixed=$("firstVenue").value;
+      // With no origin, optimize an open path from any venue.
+      if(firstPolicy==="fixed"&&fixed==="")return {error:"请选择指定的首个集章点。"};
+      let states = [{ last: origin, mask: 0, visited: 0, t: st, count: 0, steps: [], travel: 0 }], best = states[0];
+      const goal = (_a = opts.goal) != null ? _a : effectiveGoal(), needed = goal ? Math.max(0, goal - ((_c = (_b = opts.excluded) == null ? void 0 : _b.size) != null ? _c : state.done.length)) : Infinity;
+      const requestedStyle=opts.style || $("routeStyle").value || "fast", style=requestedStyle==="smooth"?"fast":requestedStyle, claim = targetMode==="total" && goal > 0 && goal <= 6 && $("claimLast").checked;
+      const must = (state.must || []).filter((id) => !(opts.excluded || new Set(state.done)).has(id)), mustMask = must.reduce((m, id) => m | idBit[id], 0), bitCount = (m) => {
+        let n = 0;
+        while (m) {
+          m &= m - 1;
+          n++;
+        }
+        return n;
+      };
+      const owned=opts.excluded||new Set(state.done),bookedMask=use?distinctStamps().filter(it=>!owned.has(it.id)&&inDate(it,d)&&slot(it,d)).reduce((m,it)=>m|idBit[it.id],0):0;
+      // Connected districts, conditional on date, collected stamps and registered appointments.
+      // [venueA, venueB, preference weight, max bidirectional connection minutes].
+      // 0/12 share a mall-to-station pedestrian bridge; 0/5 and 5/12 are adjacent rail stops.
+      // 4/13 and 4/14 only become eligible with an actual exhibition appointment.
+      const districtPairs=DISTRICT_PAIRS;
+      const activePairs=districtPairs.filter(([a,b,w,max])=>[a,b].every(id=>venues.some(v=>v.id===id))&&Math.max(transfer(V[a],V[b],mode),transfer(V[b],V[a],mode))<=max);
+      const pairedIds=opts.pairIds||[9,10],pairTrial=!!opts.pairTrial&&activePairs.some(([a,b])=>pairedIds.includes(a)&&pairedIds.includes(b)),pairBits=(1<<pairedIds[0])|(1<<pairedIds[1]);
+      const hasPair=visited=>(visited&pairBits)===pairBits;
+      const adjacentPair=(q,a,b)=>q.steps.some((s,i)=>i>0&&((s.v.id===a&&q.steps[i-1].v.id===b)||(s.v.id===b&&q.steps[i-1].v.id===a)));
+      const pendingPair=visited=>pairTrial&&(visited&pairBits)!==0&&!hasPair(visited);
+      const pairNext=(visited,id)=>!pendingPair(visited)||((pairBits&(1<<id))!==0&&(visited&(1<<id))===0);
+      const districtScore=q=>activePairs.reduce((n,[a,b,w])=>n+(adjacentPair(q,a,b)?w:0),0);
+      const firstCost=q=>q.steps.length?q.steps[0].tr:0; const distance=q=>q.meters??0; const smooth=opts.smoothWeight||0; const smoothCost=q=>q.t+smooth*(distance(q)/1000+5*(q.crossings||0));
+      const rank = (a, b) => {
+        let bd=bitCount(b.mask&bookedMask)-bitCount(a.mask&bookedMask);if(bd)return bd;
+        let md = bitCount(b.mask & mustMask) - bitCount(a.mask & mustMask);
+        if (md) return md;
+        let aa = a.count >= needed, bb = b.count >= needed;
+        if (aa !== bb) return aa ? -1 : 1;
+        if (aa && bb) {
+          let c = claim ? Number(canClaim(b)) - Number(canClaim(a)) : 0;
+          // Claim eligibility is a tie-breaker, never a reason for a slower fast route.
+          if (style === "few") return (a.t+a.travel+FEW_STOP_PENALTY*a.steps.length)-(b.t+b.travel+FEW_STOP_PENALTY*b.steps.length) || a.travel-b.travel || a.steps.length-b.steps.length || b.count-a.count || firstCost(a)-firstCost(b);
+          if (style === "max") return b.count - a.count || a.t - b.t || a.travel - b.travel || firstCost(a)-firstCost(b);
+          return (smooth?smoothCost(a)-smoothCost(b):0)||a.t - b.t || a.travel - b.travel || distance(a)-distance(b) || c || b.count - a.count || firstCost(a)-firstCost(b);
+        }
+        let urgent = (q) => q.steps.flatMap((st2) => st2.items).filter((it) => it.kind !== "walk" && (Date.parse(it.end) - Date.parse(d)) / 864e5 <= 7).length;
+        return (opts.deadline ? urgent(b) - urgent(a) : 0) || b.count - a.count || (smooth?smoothCost(a)-smoothCost(b):0) || (style==="few"?(a.t+a.travel+FEW_STOP_PENALTY*a.steps.length)-(b.t+b.travel+FEW_STOP_PENALTY*b.steps.length):0) || a.t - b.t || a.travel - b.travel || firstCost(a)-firstCost(b);
+      };
+      if (needed === 0 && !must.length && !bookedMask) return { best, d, st, finish, buffer, limit, mode, origin, candidates: venues.length, target: goal };
+      let firstId=null;
+      const feasible=venues.filter(v=>visitOptions(v,st+transfer(origin,v,mode),0,available[v.id],d,limit,dwell,idBit).length);
+      if(origin)feasible.sort((a,b)=>leg(origin,a,mode).seconds-leg(origin,b,mode).seconds||km(origin,a)-km(origin,b)||a.id-b.id);
+      if(firstPolicy==="fixed"){firstId=Number(fixed);if(!feasible.some(v=>v.id===firstId))return {error:"指定首站在所选日期、范围及时间内没有可收录的印章，请更换首站或调整设置。"};}
+      else if(firstPolicy==="nearest"&&origin){if(!feasible.length)return opts.day?{best,d,st,finish,buffer,limit,mode,origin,candidates:venues.length,target:goal}:{error:"所选条件下没有可作为首站的未收录集章点。"};firstId=feasible[0].id;}
+      const trMatrix=V.map(a=>V.map(b=>transfer(a,b,mode))),startTr=V.map(v=>transfer(origin,v,mode)),dmatrix=V.map(a=>V.map(b=>leg(a,b,mode).meters)),startDm=V.map(v=>leg(origin,v,mode).meters),cross=(a,b)=>a&&pointEast(a)!==pointEast(b)?1:0,cmatrix=V.map(a=>V.map(b=>cross(a,b))),startCross=V.map(v=>cross(origin,v));
+      function search(seed,width){
+        let frontier=[{last:origin,mask:0,visited:0,t:st,count:0,steps:[],travel:0}],winner=frontier[0];
+        for(let depth=0;depth<bitCount(venues.reduce((m,v)=>m|available[v.id].reduce((x,it)=>x|idBit[it.id],0),0));depth++){
+          const next=new Map();
+          for(const p of frontier)for(const v of venues){
+            if(depth===0&&seed!==null&&v.id!==seed||!pairNext(p.visited,v.id)||!available[v.id].some(it=>!(p.mask&idBit[it.id])))continue;
+            const tr=depth===0?startTr[v.id]:trMatrix[p.last.id][v.id];
+            for(const op of visitOptions(v,p.t+tr,p.mask,available[v.id],d,limit,dwell,idBit)){
+              const n={last:v,mask:op.mask,visited:p.visited|1<<v.id,t:op.end,count:p.count+op.gain,steps:[...p.steps,{v,tr,...op}],travel:p.travel+tr,meters:(p.meters||0)+(depth===0?startDm[v.id]:dmatrix[p.last.id][v.id]),crossings:(p.crossings||0)+(depth===0?startCross[v.id]:cmatrix[p.last.id][v.id])};
+              const key=n.last.id+"|"+n.mask+(pairTrial?"|"+(n.visited&pairBits):""),old=next.get(key)||[];const dominates=(a,b)=>a.t<=b.t&&a.travel<=b.travel&&a.meters<=b.meters&&a.crossings<=b.crossings;
+              if(!old.some(x=>dominates(x,n)))next.set(key,[...old.filter(x=>!dominates(n,x)),n]);
+              if((!pairTrial||hasPair(n.visited))&&((pairTrial&&!hasPair(winner.visited))||rank(n,winner)<0))winner=n;
+            }
+          }
+          if(!next.size)break;
+          frontier=[...next.values()].flat().sort(rank).slice(0,width);
+        }
+        return winner;
+      }
+      // Exact subset DP for walk-only itineraries.
+      function exactWalk(){
+        const n=venues.length,N=1<<n,full=N-1,masks=venues.map(v=>available[v.id].reduce((m,it)=>m|idBit[it.id],0));
+        if(!n)return best;
+        const union=new Int32Array(N),counts=new Uint8Array(N),sizes=new Uint8Array(N),globalVisited=new Int32Array(N);
+        for(let m=1;m<N;m++){const b=m&-m,i=31-Math.clz32(b),rest=m^b;union[m]=union[rest]|masks[i];globalVisited[m]=globalVisited[rest]|(1<<venues[i].id);counts[m]=bitCount(union[m]);sizes[m]=sizes[rest]+1;}
+        const costs=new Int32Array(N*n),prev=new Int8Array(N*n),first=new Int8Array(N*n);costs.fill(-1);prev.fill(-1);first.fill(-1);const distances=new Int32Array(N*n),crossings=new Uint8Array(N*n);
+        let win=null;
+        const compare=(a,b)=>{
+          if(!b)return -1;
+          const md=bitCount(b.mask&mustMask)-bitCount(a.mask&mustMask);if(md)return md;
+          const aa=a.count>=needed,bb=b.count>=needed;if(aa!==bb)return aa?-1:1;
+          if(aa&&bb){const c=claim?Number(b.claim)-Number(a.claim):0;
+            if(style==='few')return (a.t+a.travel+FEW_STOP_PENALTY*a.len)-(b.t+b.travel+FEW_STOP_PENALTY*b.len)||a.travel-b.travel||a.len-b.len||b.count-a.count||a.firstCost-b.firstCost;
+            if(style==='max')return b.count-a.count||a.t-b.t||a.travel-b.travel||a.firstCost-b.firstCost;
+            return (smooth?smoothCost(a)-smoothCost(b):0)||a.t-b.t||a.travel-b.travel||a.meters-b.meters||c||b.count-a.count||a.firstCost-b.firstCost;
+          }
+          return b.count-a.count||(smooth?smoothCost(a)-smoothCost(b):0)||(style==='few'?(a.t+a.travel+FEW_STOP_PENALTY*a.len)-(b.t+b.travel+FEW_STOP_PENALTY*b.len):0)||a.t-b.t||a.travel-b.travel||a.meters-b.meters||a.firstCost-b.firstCost;
+        };
+        for(let i=0;i<n;i++){const v=venues[i],m=1<<i,tr=startTr[v.id];if(firstId!==null&&v.id!==firstId||st+tr+dwell+5*(counts[m]-1)>limit)continue;const k=m*n+i;costs[k]=tr;distances[k]=startDm[v.id];crossings[k]=startCross[v.id];first[k]=i;}
+        for(let m=1;m<N;m++){
+          const count=counts[m],len=sizes[m],dwellTotal=len*dwell+5*(count-len);
+          for(let bits=m;bits;bits&=bits-1){const i=31-Math.clz32(bits&-bits),k=m*n+i,tr=costs[k];if(tr<0)continue;
+            const t=st+tr+dwellTotal;if(t>limit)continue;
+            const v=venues[i],f=first[k],fc=startTr[venues[f].id];
+            const a={m,i,mask:union[m],count,len,t,travel:tr,meters:distances[k],crossings:crossings[k],firstCost:fc,claim:v.id<=3||v.id>=5&&v.id<=10};
+            if((!pairTrial||hasPair(globalVisited[m]))&&compare(a,win)<0)win=a;
+            for(let rest=full^m;rest;rest&=rest-1){const b=rest&-rest,j=31-Math.clz32(b);if(!pairNext(globalVisited[m],venues[j].id)||!(masks[j]&~union[m]))continue;const nm=m|b,nt=tr+trMatrix[v.id][venues[j].id],nk=nm*n+j;
+              if(st+nt+sizes[nm]*dwell+5*(counts[nm]-sizes[nm])>limit)continue;
+              const nd=distances[k]+dmatrix[v.id][venues[j].id],nc=crossings[k]+cmatrix[v.id][venues[j].id],score=nt+smooth*(nd/1000+5*nc),oldScore=costs[nk]+smooth*(distances[nk]/1000+5*crossings[nk]);if(costs[nk]<0||score<oldScore||score===oldScore&&(nt<costs[nk]||nt===costs[nk]&&nd<distances[nk])){costs[nk]=nt;distances[nk]=nd;crossings[nk]=nc;prev[nk]=i;first[nk]=f;}
+            }
+          }
+        }
+        if(!win)return best;
+        const order=[];let m=win.m,i=win.i;while(i>=0){order.unshift(venues[i]);const j=prev[m*n+i];m^=1<<i;i=j;}
+        let p={last:origin,mask:0,visited:0,t:st,count:0,steps:[],travel:0};
+        for(const v of order){const tr=transfer(p.last,v,mode),op=visitOptions(v,p.t+tr,p.mask,available[v.id],d,limit,dwell,idBit)[0];if(!op)return best;p={last:v,mask:op.mask,visited:p.visited|1<<v.id,t:op.end,count:p.count+op.gain,steps:[...p.steps,{v,tr,...op}],travel:p.travel+tr,meters:(p.meters||0)+leg(p.last,v,mode).meters,crossings:(p.crossings||0)+cross(p.last,v)};}
+        return p;
+      }
+      if(venues.every(v=>available[v.id].every(it=>it.kind==='walk')))best=exactWalk();
+      else{
+        const width=opts.day?350:Math.max(1000,opts.beam||1000);
+        best=search(firstId,venues.length<=8?Infinity:width);
+        if(firstPolicy==="overall"&&origin&&feasible.length&&venues.length>8){
+          const seeds=feasible.slice(0,opts.day?1:3);
+          for(let i=0;i<seeds.length;i++){
+            const candidate=search(seeds[i].id,i===0?width:Math.max(100,Math.floor(width/2)));
+            if(rank(candidate,best)<0)best=candidate;
+          }
+        }
+      }
+      let districtBaseline=null;
+      if(requestedStyle==="smooth"&&!opts.smoothWeight&&!opts.pairTrial){
+        districtBaseline={t:best.t,meters:distance(best)};
+        const baseline=best,valid=q=>q&&q.count>=Math.min(baseline.count,needed)&&(q.mask&baseline.mask&mustMask)===(baseline.mask&mustMask)&&(q.mask&baseline.mask&bookedMask)===(baseline.mask&bookedMask)&&q.t<=baseline.t+10;
+        for(const weight of [0.7,1.4,2.5]){const q=plan({...opts,style:"smooth",smoothWeight:weight}).best;if(valid(q)&&(q.crossings||0)*5000+distance(q)<(best.crossings||0)*5000+distance(best))best=q;}
+        // Strong geographic pair candidates are explicitly evaluated; the group is never a hard requirement.
+        // Strict baseline is preserved in its own route style; no duplicate Starbucks stamp or added river crossing.
+        for(const [a,b,w] of activePairs){
+          if(adjacentPair(best,a,b)||!((baseline.visited|best.visited)&((1<<a)|(1<<b))))continue;
+          const q=plan({...opts,style:"fast",pairTrial:true,pairIds:[a,b]}).best;
+          if(!valid(q)||!adjacentPair(q,a,b)||(q.crossings||0)>(baseline.crossings||0))continue;
+          const gain=districtScore(q)-districtScore(best);
+          if(gain>0&&distance(q)<=distance(baseline)+2500||gain===0&&distance(q)<distance(best)&&q.t<=best.t)best=q;
+        }
+      }
+      return { best, d, st, finish, buffer, limit, mode, origin, firstId, candidates: venues.length, target: goal, districtBaseline };
+    }
+    function svgRoute(steps) {
+      if (!steps.length) return "";
+      let x = (v) => 30 + (v.lon - 121.3) / 0.245 * 310, y = (v) => 230 - (v.lat - 31.17) / 0.16 * 205;
+      let poly = steps.map((s) => x(s.v) + "," + y(s.v)).join(" ");
+      return '<div class="map"><div class="map-heading"><strong>\u8DEF\u7EBF\u793A\u610F\u56FE</strong><small>\u70B9\u7F16\u53F7\u67E5\u770B\u884C\u7A0B</small></div><svg viewBox="0 0 370 255" role="img" aria-label="\u96C6\u7AE0\u8DEF\u7EBF\u793A\u610F\u56FE"><rect width="370" height="255" fill="#edf5f7"/><path d="M265 0 Q225 75 292 130 Q323 190 275 255" stroke="#bcdfe9" stroke-width="18" fill="none"/><g font-size="10" fill="#68839b"><text x="11" y="17">\u5317 \u2191</text><text x="14" y="244">\u8DEF\u7EBF\u793A\u610F\uFF08\u975E\u5B9E\u9645\u9053\u8DEF\uFF09</text></g><polyline points="' + poly + '" stroke="#176bb0" stroke-width="2.5" fill="none" stroke-linejoin="round"/>' + steps.map((s, i) => '<g class="route-pin" role="button" tabindex="0" data-stop="' + (i + 1) + '" aria-label="\u7B2C' + (i + 1) + "\u7AD9 " + esc(s.v.name) + '"><circle cx="' + x(s.v) + '" cy="' + y(s.v) + '" r="9" fill="#176bb0" stroke="white" stroke-width="1.5"/><text x="' + x(s.v) + '" y="' + (y(s.v) + 3.5) + '" fill="white" text-anchor="middle" font-size="10">' + (i + 1) + "</text></g>").join("") + "</svg></div>";
+    }
+    $("route").addEventListener("change", (e) => {
+      let id = e.target.dataset.routeStamp;
+      if (!IDS.has(id)) return;
+      toggle(id, e.target.checked, true);
+      const result=$("routeGoalResult");if(result&&lastPlan&&!lastPlan.error)result.outerHTML=goalResult(lastPlan);
+      let m = $("routeUpdated");
+      if (m) m.textContent = "\u5DF2\u8BB0\u5F55\u3002\u9700\u8981\u8C03\u6574\u884C\u7A0B\u65F6\uFF0C\u53EF\u91CD\u65B0\u751F\u6210\u8DEF\u7EBF\u3002";
+    });
+    let lastPlan=null,routeChoices=[],compareGeneration=0,computeGeneration=0,targetMode="total";
+    const routeLabels={fast:'严格最短时间',smooth:'少绕路／就近连游',few:'少跑地点（兼顾时间）',max:'多集印章'};
+    function clearRouteChoices(){compareGeneration++;routeChoices=[];$('routeChoices').innerHTML='';}
+    function effectiveGoal(){const g=Number($("goal").value);return g&&targetMode==="new"?state.done.length+g:g;}
+    function scrollResult(){try{$("route").scrollIntoView({block:"start"});}catch(e){$("route").scrollIntoView(true);}}
+    function showPlan(){clearRouteChoices();try{renderPlan(plan());}catch(e){lastPlan=null;$("route").innerHTML='<p class="warn">暂时无法生成路线，请检查设置后重试。</p>';}}
+    function requestPlan(){const token=++computeGeneration,btn=$("compute");clearRouteChoices();btn.disabled=true;btn.textContent="正在规划…";$("route").innerHTML='<p class="route-working" role="status">正在根据目标、时间和预约计算路线…</p>';setTimeout(function(){if(token!==computeGeneration)return;try{showPlan();}finally{btn.disabled=false;btn.textContent="生成推荐路线";scrollResult();}},45);}
+    function goalResult(p){const b=p.best,n=state.done.length,planned=new Set(b.steps.reduce((all,st)=>all.concat(st.items.map(it=>it.id)),[])),left=Array.from(planned).filter(id=>!state.done.includes(id)).length,final=n+left,miss=Math.max(0,p.target-final);return '<p id="routeGoalResult" class="target-result goal-result">'+(p.target?(targetMode==="new"?"本次新增目标 "+Number($("goal").value)+" 枚":"累计目标 "+p.target+" 枚")+" · "+(miss?"预计还差 "+miss+" 枚":"预计达标"):"尽量多集 · 预计累计 "+final+"/30 枚")+'<small>当前已收集 '+n+'/30 枚 · 本路线尚可新增 '+left+' 枚 · 完成后预计 '+final+'/30 枚</small></p>';}
+    async function compareRoutes(){
+      const gen=++compareGeneration;routeChoices=[];$('routeChoices').innerHTML='<p class="muted">正在比较路线…</p>';
+      const initial=$('routeStyle').value||'fast',styles=[initial,...['fast','smooth','few','max'].filter(x=>x!==initial)],unique=new Map();
+      for(const style of styles){
+        await new Promise(resolve=>setTimeout(resolve,0));if(gen!==compareGeneration)return;
+        const p=plan({style});if(p.error||!p.best.steps.length)continue;
+        const key=p.best.steps.map(st=>st.v.id+':'+st.items.map(it=>it.id).sort().join(',')).join('|');
+        if(unique.has(key)){unique.get(key).labels.push(routeLabels[style]);continue;}
+        const option={style,p,labels:[routeLabels[style]]};unique.set(key,option);
+      }
+      if(gen!==compareGeneration)return;routeChoices=[...unique.values()];
+      $('routeChoices').innerHTML=routeChoices.length?'<p class="muted">同一日期和设置下的候选路线；相同路线已合并。</p>'+routeChoices.map((o,i)=>{const b=o.p.best;return '<button type="button" class="route-choice" data-route-choice="'+i+'"><strong>'+o.labels.join(' / ')+'</strong><span>'+b.count+'枚 · '+b.steps.length+'站 · 交通约'+Math.round(b.travel)+'分钟</span><small>预计'+clock(b.t)+'结束 · '+b.steps.slice(0,3).map(st=>esc(st.v.name)).join(' → ')+(b.steps.length>3?'…':'')+'</small></button>'}).join(''):'<p class="muted">当前设置没有可比较的路线，请调整日期或预约。</p>';
+    }
+    $('compareRoutes').onclick=compareRoutes;
+    document.querySelector('.availability-presets').addEventListener('click',e=>{const b=e.target.closest('[data-availability]');if(!b)return;const mode=b.dataset.availability;$('dayMode').value=mode==='weekend'?'weekend':'all';$('start').value=mode==='evening'?'18:00':'10:00';$('end').value='22:00';$('buffer').value=mode==='evening'?'30':'60';if(mode==='weekend'){let d=date(),i=0;while(d<'2027-01-03'&&i++<7&&!([0,6].includes(new Date(d+'T00:00:00Z').getUTCDay())))d=new Date(Date.parse(d)+864e5).toISOString().slice(0,10);$('date').value=d;}document.querySelectorAll('[data-availability]').forEach(el=>el.classList.toggle('primary',el===b));invalidate();clearMulti();renderQuickDates();renderReminders();showPlan();});
+    $('routeChoices').addEventListener('click',e=>{const b=e.target.closest('[data-route-choice]');if(!b)return;const choice=routeChoices[Number(b.dataset.routeChoice)];if(!choice)return;$('routeStyle').value=choice.style;$('routeChoices').querySelectorAll('button').forEach(el=>el.classList.toggle('primary',el===b));renderPlan(choice.p);$('route').scrollIntoView({block:'start'});});
+    function renderPlan(p) {
+      lastPlan = p;
+      if (p.error) {
+        $("route").innerHTML = '<p class="warn">' + p.error + "</p>";
+        return;
+      }
+      let b = p.best;
+      if (p.target && state.done.length >= p.target && !b.steps.length && !(state.must || []).some((id) => !state.done.includes(id))) {
+        $("route").innerHTML = goalResult(p)+'<div class="empty">已达到累计目标。可选择更高目标，或切换「本次新增」继续规划。</div>';
+        return;
+      }
+      if (!b.steps.length) {
+        $("route").innerHTML = goalResult(p)+'<div class="empty">\u6CA1\u6709\u53EF\u5B89\u6392\u7684\u672A\u96C6\u5370\u7AE0\uFF0C\u8BD5\u8BD5\u5176\u4ED6\u65E5\u671F\u6216\u5EF6\u957F\u884C\u7A0B\u3002</div>' + planWarnings(p);
+        return;
+      }
+      let html = goalResult(p) + districtResult(p) + '<div class="metrics"><div class="metric"><strong>' + b.count + '</strong>\u8DEF\u7EBF\u8BA1\u5212\u65B0\u589E</div><div class="metric"><strong>' + b.steps.length + '</strong>\u6253\u5361\u5730\u70B9</div><div class="metric"><strong>' + Math.round(b.travel) + '</strong>\u4EA4\u901A\u7EA6\u9700\uFF08\u5206\u949F\uFF09</div></div><p class="muted">' + p.d + " \xB7 " + clock(p.st) + " \u51FA\u53D1 \xB7 " + clock(b.t) + " \u9884\u8BA1\u7ED3\u675F \xB7 \u5269\u4F59 " + (p.finish - b.t) + " \u5206\u949F\uFF08\u542B\u9884\u7559 " + p.buffer + " \u5206\u949F\uFF09\u3002" + (p.origin ? " \u51FA\u53D1\u5730\u70B9\uFF1A" + esc(p.origin.name) + "\uFF08\u5DF2\u8BA1\u5165\u9996\u7AD9\u4EA4\u901A\uFF09\u3002" : " \u672A\u5305\u542B\u51FA\u53D1\u81F3\u9996\u7AD9\u65F6\u95F4\u3002") + "</p>" + (targetMode === "total" && p.target > 0 && p.target <= 6 && state.done.length + b.count >= p.target ? '<p class="claim-route">' + (canClaim(b) ? "\u6700\u540E\u4E00\u7AD9\u53EF\u524D\u5F80\u6307\u5B9A\u96C6\u7AE0\u5904\u6838\u9A8C\u9886\u5956\uFF08\u5E93\u5B58\u4EE5\u73B0\u573A\u4E3A\u51C6\uFF09\u3002" : "\u6700\u540E\u4E00\u7AD9\u4E0D\u662F\u6307\u5B9A\u9886\u5956\u70B9\uFF0C\u8BF7\u53E6\u5B89\u6392\u9886\u5956\u3002") + "</p>" : "") + '<div id="routeFeasibility">' + planWarnings(p) + '</div><button type="button" class="primary save-trip-button" id="saveTrip">\u4FDD\u5B58\u884C\u7A0B \xB7 \u5F00\u59CB\u96C6\u7AE0</button><details class="edit-route"><summary>\u8C03\u6574\u8DEF\u7EBF</summary><p class="muted">\u8C03\u6574\u7AD9\u70B9\u540E\u91CD\u65B0\u68C0\u67E5\u65F6\u95F4\u4E0E\u9884\u7EA6\uFF0C\u5931\u8D25\u65F6\u4FDD\u7559\u539F\u8DEF\u7EBF\u3002</p><div id="editStops">' + editControls(p) + '</div><label class="field">\u6DFB\u52A0\u96C6\u7AE0\u70B9<select id="addVenue"><option value="">\u8BF7\u9009\u62E9</option>' + V.filter((v) => !b.steps.some((st) => st.v.id === v.id) && eligible(v, p.d, $("useSlots").checked).length).map((v) => '<option value="' + v.id + '">' + esc(v.name) + "</option>").join("") + '</select></label><button type="button" data-add-venue>\u6DFB\u52A0\u5230\u672B\u7AD9</button><p id="editError" class="warn" aria-live="polite"></p></details>' + svgRoute(b.steps);
+      html+='<p class="muted">全程约 '+(b.t-p.st)+' 分钟 · 交通约 '+b.travel+' 分钟 · 总路程约 '+(routeMeters(b.steps,p.origin,p.mode)/1000).toFixed(1)+' km（含首段；不限起点时除外）</p>';
+      let total = 0;
+      for (let [i, s] of b.steps.entries()) {
+        total += s.gain;
+        const connected=i>0?districtEdge(b.steps[i-1].v.id,s.v.id,p.mode):null,groupNote=connected?'<p class="district-leg">片区连游 · '+esc(connected[4])+' · '+esc(connected[5])+'</p>':"";
+        const from=i?b.steps[i-1].v:p.origin,legInfo=leg(from,s.v,p.mode),legCheck=from&&from.id!==s.v.id?'<p class="muted">步行约 '+legInfo.walk+' 米 · <a class="action" rel="noopener" href="'+esc(mapLegLink(from,s.v,p.mode))+'">查看本段交通详情</a></p>':"";
+        html += '<div class="route-stop" id="stop-' + (i + 1) + '" tabindex="-1" data-n="' + (i + 1) + '"><div class="flex"><span class="time">' + clock(s.arrival) + "\u2013" + clock(s.end) + '</span><span class="pill">+' + s.gain + " \xB7 \u7D2F\u8BA1" + total + "</span></div><h3>" + esc(s.v.name) + "</h3><small>" + esc(s.v.district + " " + s.v.address) + " · " + (i===0&&!p.origin?"未计首站交通":transferLabel(i?b.steps[i-1].v:p.origin,s.v,p.mode)+"约"+s.tr+"分钟 · 约"+(leg(i?b.steps[i-1].v:p.origin,s.v,p.mode).meters/1000).toFixed(1)+"km") + '</small>'+groupNote+legCheck+'<div class="chips">' + s.items.map((it) => '<label style="display:flex;gap:3px;align-items:center;background:#edf3f9;padding:3px 5px;border-radius:5px;font-size:11px"><input style="width:17px;height:17px;margin:0" type="checkbox" data-route-stamp="' + it.id + '" ' + (has(it) ? "checked" : "") + ">" + esc(it.stamp) + (it.kind !== "walk" ? "\uFF08\u9884\u7EA6\uFF09" : "") + "</label>").join("") + "</div>" + s.blocks.filter((x) => x.items[0].kind !== "walk").map((x) => '<p class="muted">\u9884\u7EA6 ' + clock(x.start) + "\u2013" + clock(x.end) + " " + esc(x.items[0].activity) + "</p>").join("") + '<a class="action" href="' + mapLink(s.v) + '">\u67E5\u770B\u5730\u5740</a></div>';
+      }
+      html += '<p class="status" id="routeUpdated" aria-live="polite"></p><button id="copyRoute" style="width:100%;margin-top:12px">\u67E5\u770B\u8DEF\u7EBF\u6587\u5B57</button><p class="muted">地铁采用2026-09上海线路、区间及换乘数据；公交覆盖9条已核对双向站序的重点线路，支持公交与地铁换乘；公交站位为路口参考坐标，车程、步行、候车及缺失轨道里程为估算，不含实时班次及道路导航；每段可查看乘车说明，请在地图 App 手动核对当时方案。请预留排队时间。\u6D3B\u52A8\u53D8\u52A8\u53CA\u7B7E\u5230\u8981\u6C42\u4EE5\u73B0\u573A\u4E3A\u51C6\u3002</p>';
+      $("route").innerHTML = html;
+      $("copyRoute").onclick = () => copy(routeText(p));
+      $("saveTrip").onclick = () => {
+        saveOneTrip(p);
+      };
+    }
+    function routeText(p) {
+      return "\u6CAA\u4E0A\u96C6\u7AE0\u8BA1\u5212 " + p.d + "\n\u9884\u8BA1\u65B0\u589E " + p.best.count + " \u679A\uFF08\u4EA4\u901A\u65F6\u95F4\u4EC5\u4F9B\u53C2\u8003\uFF0C\u8BF7\u6838\u5BF9\u9884\u7EA6\uFF09\n" + p.best.steps.map((s, i) => i + 1 + ". " + clock(s.arrival) + "\u2013" + clock(s.end) + " " + s.v.name + "\uFF08" + s.v.address + "\uFF09 +" + s.gain + "\u679A").join("\n");
+    }
+    function copy(t) {
+      showText("\u67E5\u770B\u6587\u5B57", t, false, "\u53EF\u5728\u9875\u9762\u9009\u4E2D\u6587\u5B57\uFF1B\u5BB9\u5668\u4E0D\u652F\u6301\u4E00\u952E\u590D\u5236\u3002");
+    }
+    $("districtCandidates").addEventListener("click",e=>{const b=e.target.closest("[data-district-pair]");if(!b)return;const ids=b.dataset.districtPair.split(",").map(Number),items=ids.flatMap(i=>eligible(V[i],date(),$("useSlots").checked));state.must=[...new Set([...(state.must||[]),...items.map(it=>it.id)])];save();renderMust();renderPocket();renderSeries();$("routeStyle").value="smooth";invalidate();clearMulti();requestPlan();});
+    $("compute").onclick = requestPlan;
+    document.addEventListener("change",refreshSettingsSummary);
+    $("plan").addEventListener("click",()=>setTimeout(refreshSettingsSummary,0));
+    for (let id of ["date", "region", "start", "end", "origin", "firstPolicy", "firstVenue", "mode", "dwell", "buffer", "useSlots", "routeStyle", "claimLast"]) $(id).addEventListener("change", () => {
+      invalidate();
+      renderList();
+      renderDates();
+      renderReminders();
+      renderQuickDates();
+      clearMulti();
+      updateFirstControls();
+    });
+    for (let id of ["query", "listDate", "remaining", "listKind"]) $(id).addEventListener(id === "query" ? "input" : "change", renderList);
+    $("share").onclick = () => copy("\u5B9D\u53EF\u68A630\u5468\u5E74\u4E0A\u6D77\u76DB\u5178\uFF5C\u5DF2\u96C6 " + state.done.length + "/30 \u679A\n" + REWARDS.map((r) => (state.done.length >= r[0] ? "\u2713 " : "\u25CB ") + r[0] + "\u679A " + r[1]).join("\n") + "\n\u4E2A\u4EBA\u96C6\u7AE0\u8BB0\u5F55");
+    $("backup").onclick = () => showText("\u5907\u4EFD\u6587\u672C", JSON.stringify(state), false, "\u8BF7\u4FDD\u7559\u5B8C\u6574\u6587\u672C\u3002\u5982\u9700\u8F6C\u79FB\u8BB0\u5F55\uFF0C\u53EF\u5728\u5176\u4ED6\u73AF\u5883\u624B\u52A8\u9009\u53D6\u6587\u5B57\u3002");
+    $("restore").onclick = () => showText("\u6062\u590D\u5907\u4EFD", "", true, "\u8F93\u5165\u5B8C\u6574\u5907\u4EFD\u6587\u672C\u3002\u6062\u590D\u4F1A\u66FF\u6362\u73B0\u6709\u672C\u673A\u8BB0\u5F55\u3002");
+    $("reset").onclick = () => {
+      if (confirm("\u786E\u5B9A\u6E05\u7A7A\u672C\u8BBE\u5907\u5168\u90E8\u96C6\u7AE0\u3001\u9884\u7EA6\u548C\u884C\u7A0B\u8BB0\u5F55\uFF1F")) {
+        state = { done: [], slots: {} };
+        save();
+        refreshProgress();
+        renderList();
+        renderDates();
+        invalidate();
+      }
+    };
+    function eventDays(from, to, mode = "all") {
+      let out = [];
+      if (!from || !to || from > to) return out;
+      for (let d = /* @__PURE__ */ new Date(from + "T12:00:00Z"); d.toISOString().slice(0, 10) <= to; d.setUTCDate(d.getUTCDate() + 1)) {
+        let w = d.getUTCDay(), weekend = w === 0 || w === 6;
+        if (mode === "weekend" && !weekend || mode === "weekday" && weekend) continue;
+        out.push(d.toISOString().slice(0, 10));
+      }
+      return out;
+    }
+    function weekdayName(d) {
+      return "\u5468" + "\u65E5\u4E00\u4E8C\u4E09\u56DB\u4E94\u516D"[(/* @__PURE__ */ new Date(d + "T12:00:00Z")).getUTCDay()];
+    }
+    function refreshGoal(){
+      const g=Number($("goal").value),n=state.done.length,need=targetMode==="new"?g:Math.max(0,g-n);
+      const txt="已收集 "+n+"/30 枚 · "+(g?(targetMode==="new"?"本次新增目标 "+g+" 枚"+(g>30-n?"（最多还可集 "+(30-n)+" 枚）":""):"累计目标 "+g+" 枚 · "+(need?"还需集 "+need+" 枚":"已达标，可改选更高目标")):"尽量多集 · 还剩 "+(30-n)+" 款未收录");
+      $("goalHint").textContent=txt;$("mapGoalHint").textContent=txt;$("claimOption").hidden=!(targetMode==="total"&&(g===3||g===6));
+      for(const id of ["goalOptions","mapGoalOptions"]){const group=$(id);group.closest(".goal-box").dataset.mode=targetMode;for(const b of group.querySelectorAll("button")){const a=Number(b.dataset.goal)===g;b.classList.toggle("primary",a);b.setAttribute("aria-pressed",String(a));}}
+      for(const id of ["goalMode","mapGoalMode"])for(const b of $(id).querySelectorAll("button")){const a=b.dataset.targetMode===targetMode;b.classList.toggle("primary",a);b.setAttribute("aria-pressed",String(a));}
+    }
+    function refreshSettingsSummary(){renderDistrictCandidates();const opt=$("origin").options[$("origin").selectedIndex];$("routeSettingsSummary").textContent=($("originSource").value==="gps"?"当前位置":opt?opt.textContent.split(" · ")[0]:"不限起点")+" · "+($("region").value||"全上海")+" · "+$("start").value+"–"+$("end").value;for(const b of $("timePresets").querySelectorAll("button")){const active=b.dataset.time===$("start").value+"|"+$("end").value;b.classList.toggle("primary",active);b.setAttribute("aria-pressed",String(active));}}
+    for(const id of ["goalMode","mapGoalMode"])$(id).addEventListener("click",e=>{const b=e.target.closest("[data-target-mode]");if(!b)return;targetMode=b.dataset.targetMode;refreshGoal();invalidate();clearMulti();});
+    function clearMulti() {
+      multiGeneration++;
+      multiPreview = [];
+      if ($("multiResult")) $("multiResult").innerHTML = "";
+    }
+    function renderReminders() {
+      let d = date();
+      if (!d) return;
+      let today = new Date(Date.now() + 288e5).toISOString().slice(0, 10);
+      let rows = [];
+      if (today < "2026-11-27") rows.push("\u5361\u724C\u8D5B\u4E8B11\u670826\u65E5\u8D77\u62A5\u540D\uFF0C\u5DE5\u574A11\u670827\u65E515:00\u8D77\u9884\u7EA6\uFF1B\u63D2\u753B\u5C55\u5206\u6279\u9884\u7EA6\u3002");
+      else rows.push("\u9884\u7EA6\u53CA\u8D5B\u4E8B\u62A5\u540D\u8BF7\u67E5\u770B\u300C\u5B9D\u53EF\u68A6\u5361\u724C\u4F1A\u5458\u300D\u5C0F\u7A0B\u5E8F\uFF0C\u63D2\u753B\u5C55\u53E6\u6709\u5B89\u6392\u3002");
+      let ends = /* @__PURE__ */ new Map();
+      for (let v of V) for (let it of v.items) {
+        if (has(it)) continue;
+        let diff = (Date.parse(it.end) - Date.parse(d)) / 864e5;
+        if (diff >= 0 && diff <= 2 && inDate(it, d)) ends.set(it.id, it);
+      }
+      let names = [...ends.values()].map((x) => x.stamp);
+      $("reminders").innerHTML = "<details" + (names.length ? " open" : "") + "><summary>\u51FA\u53D1\u524D\u63D0\u9192" + (names.length ? ' <span class="deadline-label">' + names.length + "\u679A\u5373\u5C06\u622A\u6B62</span>" : "") + "</summary><p>" + rows[0] + "</p><p>\u9996\u6B21\u9886\u53D6\u624B\u518C\u987B\u73B0\u573A\u62CD\u7167\u5E76\u5E26\u6307\u5B9A\u8BDD\u9898\u53D1\u5E03\u5C0F\u7EA2\u4E66\u7B14\u8BB0\u3002\u5C55\u89C8\u3001\u5DE5\u574A\u548C\u5361\u724C\u8D5B\u8BF7\u6838\u5BF9\u5177\u4F53\u573A\u6B21\u3002</p>" + (names.length ? '<p class="deadline-label">' + fmt(d) + "\u8D77\u4E09\u5929\u5185\u622A\u6B62\uFF1A" + names.map(esc).join("\u3001") + "</p>" : "") + '<a href="#" data-official="https://www.pokemon.cn/tcg/campaign/24854.html">\u67E5\u770B\u6D3B\u52A8\u516C\u544A \u2197</a></details>';
+    }
+    async function multiPlan(generation) {
+      if($("firstPolicy").value==="fixed")return {error:"指定首站适用于单日路线。多日规划请选择整体效率或就近优先，每日根据剩余印章安排首站。"};
+      let from = date(), to = $("lastDay").value, mode = $("dayMode").value, g = effectiveGoal() || 30, excluded = new Set(state.done), days = eventDays(from, to, mode).filter((d) => !chosenDays.size || chosenDays.has(d)), used = /* @__PURE__ */ new Set(), out = [];
+      if (!days.length || to > "2027-01-03") {
+        return { error: "\u8BF7\u9009\u62E9\u6709\u6548\u7684\u51FA\u884C\u65E5\u671F\u8303\u56F4\u3002" };
+      }
+      if (excluded.size >= g && !(state.must || []).some((id) => !excluded.has(id))) return { error: "\u5DF2\u7ECF\u8FBE\u5230\u6240\u9009\u76EE\u6807\u3002" };
+      let use = $("useSlots").checked, region = $("region").value;
+      while ((excluded.size < g || (state.must || []).some((id) => !excluded.has(id))) && out.length < days.length) {
+        let bySignature = /* @__PURE__ */ new Map();
+        for (let day of days) {
+          if (used.has(day)) continue;
+          let signature = V.filter((v) => !region || region === v.district).map((v) => v.id + ":" + eligible(v, day, use, excluded).map((it) => it.id + (it.kind !== "walk" ? "@" + slot(it, day).time + "/" + slot(it, day).duration : "")).join(",")).join("|");
+          if (!bySignature.has(signature)) bySignature.set(signature, day);
+        }
+        let best = null;
+        for (let day of bySignature.values()) {
+          await new Promise(function(resolve){setTimeout(resolve,0);});
+          if(generation!==multiGeneration)return {cancelled:true};
+          let p = plan({ day, excluded, goal: g, beam: 100, deadline: g === 30 });
+          if (p.error) return p;
+          if (!p.best.count || excluded.size >= g && !p.best.steps.some((st) => st.items.some((it) => (state.must || []).includes(it.id) && !excluded.has(it.id)))) continue;
+          let reaches = excluded.size + p.best.count >= g, prev = best && excluded.size + best.best.count >= g;
+          let urgency = (q) => q.best.steps.flatMap((st) => st.items).filter((it) => it.kind !== "walk" && (Date.parse(it.end) - Date.parse(q.d)) / 864e5 <= 7).length;
+          let mustScore = (q) => q.best.steps.flatMap((st) => st.items).filter((it) => (state.must || []).includes(it.id) && !excluded.has(it.id)).length;
+          let m = best ? mustScore(p) - mustScore(best) : 0;
+          let u = m || (best && g === 30 ? urgency(p) - urgency(best) : 0);
+          if (!best || u > 0 || u === 0 && (reaches && !prev || reaches === prev && (reaches ? p.best.t < best.best.t || p.best.t === best.best.t && day < best.d : p.best.count > best.best.count || p.best.count === best.best.count && (p.best.t < best.best.t || p.best.t === best.best.t && day < best.d)))) best = p;
+        }
+        if (!best) break;
+        used.add(best.d);
+        for (let step of best.best.steps) for (let it of step.items) excluded.add(it.id);
+        out.push(best);
+      }
+      return { out: out.sort((a, b) => a.d.localeCompare(b.d)), g, final: excluded.size, missingMust: (state.must || []).filter((id) => !excluded.has(id)) };
+    }
+    function showMulti() {
+      let generation=++multiGeneration;
+      let out = $("multiResult");
+      out.textContent = "\u6B63\u5728\u8BA1\u7B97\u884C\u7A0B\u2026";
+      setTimeout(async () => {
+        try {
+          let r = await multiPlan(generation);
+          if(r.cancelled||generation!==multiGeneration)return;
+          if (r.error) {
+            out.textContent = r.error;
+            return;
+          }
+          multiPreview = r.out;
+          let n = state.done.length;
+          out.innerHTML = '<p class="target-result">' + (r.out.length ? "\u5EFA\u8BAE " + r.out.length + " \u5929 \xB7 " : "") + "当前已收集 "+n+"/30 枚 · 预计新增 "+(r.final-n)+" 枚 · 完成后累计 "+r.final+"/30 枚 · 累计目标 "+r.g+" 枚" + (r.final < r.g ? "\uFF0C\u8FD8\u5DEE " + (r.g - r.final) + " \u679A\uFF08\u90E8\u5206\u6D3B\u52A8\u9700\u9884\u7EA6\uFF09" : "") + "</p>" + (r.missingMust.length ? '<p class="warn">\u4ECD\u672A\u5B89\u6392\u7684\u5FC5\u96C6\u5370\u7AE0\uFF1A' + distinctStamps().filter((it) => r.missingMust.includes(it.id)).map((it) => esc(it.stamp)).join("\u3001") + "</p>" : "") + (r.out.length ? '<button type="button" class="primary save-all-trips" data-save-all>\u4FDD\u5B58\u5168\u90E8 ' + r.out.length + " \u5929\u884C\u7A0B</button>" : "") + r.out.map((p, i) => '<details class="day-plan"><summary>' + fmt(p.d) + " " + weekdayName(p.d) + " \xB7 " + p.best.count + "\u679A \xB7 " + clock(p.st) + "\u2013" + clock(p.best.t) + "</summary>" + p.best.steps.map((st, i2) => "<p><b>" + (i2 + 1) + ". " + esc(st.v.name) + "</b> " + clock(st.arrival) + "\u2013" + clock(st.end) + "<br><small>" + st.items.map((it) => esc(it.stamp)).join("\u3001") + ' \xB7 <a href="' + mapLink(st.v) + '">\u5730\u56FE</a></small></p>').join("") + '<button type="button" data-save-day="' + i + '">\u4FDD\u5B58\u8FD9\u4E00\u5929\u7684\u884C\u7A0B</button></details>').join("") + '<p class="muted">\u6BCF\u5929\u53EA\u8BA1\u672A\u96C6\u5370\u7AE0\uFF1B\u6309\u73B0\u6709\u9884\u7EA6\u548C\u4F30\u7B97\u4EA4\u901A\u5B89\u6392\uFF0C\u4E0D\u4FDD\u8BC1\u5929\u6570\u6700\u5C11\u3002\u5468\u672B\u9009\u9879\u4EC5\u6309\u661F\u671F\u7B5B\u9009\uFF0C\u4E0D\u542B\u8C03\u4F11\u3002</p>';
+        } catch (e) {
+          if(generation!==multiGeneration)return;
+          out.textContent = "\u672A\u80FD\u751F\u6210\u884C\u7A0B\uFF0C\u8BF7\u7F29\u77ED\u65E5\u671F\u8303\u56F4\u6216\u8C03\u6574\u8BBE\u7F6E\u3002";
+        }
+      }, 20);
+    }
+    for(const id of ["goalOptions","mapGoalOptions"])$(id).addEventListener("click",e=>{const b=e.target.closest("button[data-goal]");if(!b)return;$("goal").value=b.dataset.goal;refreshGoal();invalidate();clearMulti();});
+    $("calendarKind").onchange = renderDates;
+    $("calendarDays").onchange = renderDates;
+    $("multiCompute").onclick = showMulti;
+    $("lastDay").onchange = clearMulti;
+    $("dayMode").onchange = clearMulti;
+    function distinctStamps() {
+      let m = /* @__PURE__ */ new Map();
+      for (let v of V) for (let it of v.items) {
+        if (!m.has(it.id)) m.set(it.id, __spreadProps(__spreadValues({}, it), { places: [] }));
+        m.get(it.id).places.push(v);
+      }
+      return [...m.values()].sort((a, b) => a.start.localeCompare(b.start) || a.end.localeCompare(b.end) || a.id.localeCompare(b.id));
+    }
+    const pocketNames = { walk: "\u6253\u5361", exhibition: "\u5C55\u89C8", workshop: "\u5DE5\u574A", card: "\u5361\u724C" };
+    let pocketSelected = null;
+    function renderPocket() {
+      let all = dexStamps(), kind = $("pocketKind").value, day = $("dexDate").value || date(), q = $("dexSearch").value.trim().toLowerCase().replace(/^#|^no\.?\s*/g, ""), items = all.filter((it) => {
+        let chosen = (state.must || []).includes(it.id), n = DEX[it.id];
+        return (!q || it.stamp.includes(q) || String(n).padStart(4, "0").includes(q)) && (!kind || it.kind === kind) && (dexFilter === "all" || dexFilter === "done" && has(it) || dexFilter === "missing" && !has(it) || dexFilter === "must" && chosen || dexFilter === "today" && !has(it) && inDate(it, day) || dexFilter === "booking" && it.kind !== "walk");
+      });
+      $("dexCount").textContent = state.done.length;
+      $("dexProgress").style.width = state.done.length / 30 * 100 + "%";
+      $("pocketSummary").innerHTML = Object.keys(pocketNames).map((k) => {
+        let a = all.filter((it) => it.kind === k);
+        return '<span><i class="k-' + k + '"></i>' + pocketNames[k] + " <b>" + a.filter(has).length + "/" + a.length + "</b></span>";
+      }).join("");
+      $("dexResults").textContent = "\u663E\u793A " + items.length + " / 30 \u6B3E";
+      $("pocketGrid").innerHTML = items.map((it) => {
+        let chosen = (state.must || []).includes(it.id), done = has(it), open = inDate(it, day), closing = open && (Date.parse(it.end) - Date.parse(day)) / 864e5 <= 2;
+        return '<article data-kind="' + it.kind + '" class="stamp-tile dex-tile pixel-dex-tile ' + (done ? "is-done" : "") + (chosen ? " is-target" : "") + '"><button type="button" class="tile-check" data-info="' + it.id + '" aria-label="查看 '+dexNo(it.id)+' 详情"><span class="dex-id">' + dexNo(it.id) + "</span>" + dexArt(it.id) + '</button><button type="button" class="tile-favorite" data-star="' + it.id + '" aria-pressed="' + chosen + '" aria-label="' + (chosen ? "取消必集 " : "加入必集 ") + dexNo(it.id) + '">' + (chosen ? "★" : "☆") + '</button><div class="dex-tile-footer"><button class="tile-info" type="button" data-pocket="' + it.id + '" aria-pressed="' + done + '" aria-label="' + (done ? "取消收录 " : "标记收录 ") + dexNo(it.id) + '" title="' + (done ? "已收录，点击取消" : "点击收录") + '">' + (done ? "✓" : "+") + "</button></div></article>";
+      }).join("") || '<p class="empty">\u6CA1\u6709\u7B26\u5408\u6761\u4EF6\u7684\u5370\u7AE0</p>';
+      if (pocketSelected) renderPocketDetail(pocketSelected);
+    }
+    function renderPocketDetail(id) {
+      let it = distinctStamps().find((i) => i.id === id);
+      if (!it) return;
+      pocketSelected = id;
+      let day = $("dexDate").value || date(), done = has(it), wanted = (state.must || []).includes(id), open = inDate(it, day), status = done ? "\u5DF2\u6536\u5F55" : !open ? day < it.start ? "\u5C1A\u672A\u5F00\u59CB" : "\u5DF2\u7ED3\u675F" : it.kind === "walk" ? "\u5F53\u5929\u53EF\u76F4\u63A5\u6253\u5361" : slot(it, day) ? "\u5F53\u5929\u5DF2\u767B\u8BB0\u9884\u7EA6" : "\u5F53\u5929\u5F00\u653E \xB7 \u9700\u9884\u7EA6";
+      $("dexOverlay").hidden = false;
+      $("pocketDetail").innerHTML = '<div class="dex-sheet"><button type="button" data-close-pocket class="sheet-close" aria-label="\u5173\u95ED\u8BE6\u60C5">\u5173\u95ED \xD7</button><div class="dex-detail-hero ' + (done ? "is-done" : "") + '"><span class="dex-id">' + dexNo(id) + "</span>" + dexArt(id) + "<p>" + status + '</p></div><div class="dex-detail-body"><div class="detail-facts"><span>\u5F00\u653E\u65E5\u671F<strong>' + fmt(it.start) + "\u2013" + fmt(it.end) + "</strong></span><span>\u6D3B\u52A8\u7C7B\u578B<strong>" + pocketNames[it.kind] + "</strong></span></div><h3>\u5982\u4F55\u6536\u5F55</h3><p>" + esc(it.activity) + "</p>" + (it.kind !== "walk" ? '<p class="booking-notice">\u8BF7\u5148\u5728\u5B98\u65B9\u6E20\u9053\u786E\u8BA4\u9884\u7EA6\u6216\u62A5\u540D\uFF0C\u518D\u767B\u8BB0\u573A\u6B21\u3002</p><button type="button" data-detail-book>\u767B\u8BB0\u9884\u7EA6 \u203A</button>' : "") + "<h3>\u96C6\u7AE0\u5730\u70B9 " + it.places.length + "\u5904</h3>" + it.places.map((v) => '<div class="detail-place"><strong>' + esc(v.name) + "</strong><p>" + esc(v.address) + '</p><div class="flex"><a href="' + mapLink(v) + '">\u67E5\u770B\u5730\u5740</a><button type="button" data-detail-map="' + v.id + '">\u67E5\u770B\u5730\u70B9</button></div></div>').join("") + '<div class="detail-actions"><button type="button" data-detail-must="' + id + '" aria-pressed="' + wanted + '">' + (wanted ? "\u2605 \u5DF2\u52A0\u5165\u5FC5\u96C6" : "\u2606 \u52A0\u5165\u5FC5\u96C6") + '</button><button type="button" class="primary" data-detail-toggle="' + id + '">' + (done ? "\u53D6\u6D88\u6536\u5F55" : "\u6807\u8BB0\u5DF2\u6536\u5F55") + '</button></div><button type="button" class="detail-plan" data-detail-plan="' + id + '">\u4E3A\u8FD9\u679A\u5370\u7AE0\u89C4\u5212\u8DEF\u7EBF \u203A</button><p class="muted">\u6536\u5F55\u4EC5\u4E3A\u4E2A\u4EBA\u8BB0\u5F55\uFF0C\u4E0D\u4EE3\u8868\u5B98\u65B9\u76D6\u7AE0\u3002</p></div></div>';
+    }
+    function renderQuickDates() {
+      let d = date();
+      $("quickDates").innerHTML = eventDays("2026-11-28", "2027-01-03").map((day) => {
+        let a = daily(day);
+        return '<button type="button" data-quickday="' + day + '" class="' + (day === d ? "selected" : "") + '" aria-pressed="' + (day === d) + '"><small>' + weekdayName(day) + "</small><b>" + fmt(day) + "</b><small>" + a.total + "\u679A\u5F00\u653E</small><small>" + a.normal + "\u76F4\u63A5\u96C6 \xB7 " + a.booked + "\u5DF2\u767B\u8BB0</small></button>";
+      }).join("");
+      let active = $("quickDates").querySelector(".selected");
+      if (active) $("quickDates").scrollLeft = Math.max(0, active.offsetLeft - $("quickDates").offsetLeft - 18);
+    }
+    function selectTripDay(day) {
+      $("date").value = day;
+      renderList();
+      renderDates();
+      renderReminders();
+      renderQuickDates();
+      clearMulti();
+      switchTab("plan");
+      showPlan();
+      $("tabPlan").scrollIntoView({ block: "nearest" });
+    }
+    function renderTimeline() {
+      let kind = $("calendarKind").value, mode = $("calendarDays").value, days = eventDays("2026-11-28", "2027-01-03", mode), items = distinctStamps().filter((it) => !kind || it.kind === kind);
+      let html = '<p class="muted">\u5DE6\u53F3\u6ED1\u52A8\u67E5\u770B\u5B8C\u6574\u6392\u671F\u3002\u5B9E\u5FC3\u8272\u5757\u4E3A\u5F00\u653E\u65E5\u671F\uFF0C\u70B9\u51FB\u65E5\u671F\u89C4\u5212\u8DEF\u7EBF\u3002</p><div class="schedule-scroll"><table class="schedule-table"><thead><tr><th scope="col">\u5370\u7AE0 / \u5730\u70B9</th>' + days.map((day) => '<th scope="col"><button type="button" data-scheduleday="' + day + '" class="' + (day === date() ? "selected" : "") + '">' + fmt(day) + "<small>" + weekdayName(day) + "</small></button></th>").join("") + "</tr></thead><tbody>";
+      for (let it of items) {
+        html += '<tr><th scope="row" class="' + (has(it) ? "schedule-done" : "") + '"><button type="button" class="calendar-stamp-link" data-calendar-stamp="' + it.id + '"><strong>' + esc(it.stamp) + (has(it) ? " \u2713" : "") + "</strong></button><small>" + esc(it.places[0].name) + (it.places.length > 1 ? " \u7B493\u5904" : "") + "</small></th>" + days.map((day) => "<td" + (day === date() ? ' class="today-col"' : "") + ">" + (inDate(it, day) ? '<button type="button" class="schedule-cell k-' + it.kind + (has(it) ? " faded" : "") + '" data-calendar-stamp="' + it.id + '" data-calendar-date="' + day + '" aria-label="' + esc(it.stamp + " " + fmt(day)) + '"></button>' : "") + "</td>").join("") + "</tr>";
+      }
+      $("scheduleView").innerHTML = html + "</tbody></table></div>";
+    }
+    function calendarMode(timeline) {
+      $("dateChart").hidden = timeline;
+      $("scheduleView").hidden = !timeline;
+      $("dailyView").classList.toggle("primary", !timeline);
+      $("timelineView").classList.toggle("primary", timeline);
+      $("dailyView").setAttribute("aria-pressed", String(!timeline));
+      $("timelineView").setAttribute("aria-pressed", String(timeline));
+      if (timeline) renderTimeline();
+    }
+    $("pocketKind").onchange = renderPocket;
+    $("pocketRemaining").onchange = renderPocket;
+    $("pocketGrid").addEventListener("click", (e) => {
+      let b = e.target.closest("button");
+      if (!b) return;
+      if (b.dataset.pocket) {
+        let id = b.dataset.pocket;
+        toggle(id, !state.done.includes(id));
+        let target = $("pocketGrid").querySelector('[data-pocket="' + id + '"]');
+        if (target) target.focus();
+      } else if (b.dataset.star) toggleMust(b.dataset.star);
+      else if (b.dataset.info) renderPocketDetail(b.dataset.info);
+    });
+    $("quickDates").addEventListener("click", (e) => {
+      let b = e.target.closest("[data-quickday]");
+      if (b) selectTripDay(b.dataset.quickday);
+    });
+    $("scheduleView").addEventListener("click", (e) => {
+      const stamp=e.target.closest('[data-calendar-stamp]');if(stamp){$('dexDate').value=stamp.dataset.calendarDate||date();renderPocketDetail(stamp.dataset.calendarStamp);return;}
+      let b = e.target.closest("[data-scheduleday]");
+      if (b) selectTripDay(b.dataset.scheduleday);
+    });
+    $("dailyView").onclick = () => calendarMode(false);
+    $("timelineView").onclick = () => calendarMode(true);
+    function focusRouteStop(e) {
+      let b = e.target.closest("[data-stop]");
+      if (!b) return;
+      let stop = $("stop-" + b.dataset.stop);
+      if (stop) {
+        stop.focus();
+        stop.scrollIntoView({ block: "center" });
+      }
+    }
+    $("route").addEventListener("click", focusRouteStop);
+    $("route").addEventListener("keydown", (e) => {
+      if ((e.key === "Enter" || e.key === " ") && e.target.closest("[data-stop]")) {
+        e.preventDefault();
+        focusRouteStop(e);
+      }
+    });
+    function canClaim(p) {
+      let last = p.steps[p.steps.length - 1];
+      return !!last && (last.v.id <= 3 || last.v.id >= 5 && last.v.id <= 10 || last.v.id === 4 && last.items.some((it) => it.kind === "exhibition"));
+    }
+    function validateSaved(a) {
+      if (!a || !/^202[67]-\d\d-\d\d$/.test(a.day) || a.day < "2026-11-28" || a.day > "2027-01-03" || !Array.isArray(a.stops)) return null;
+      let seen = /* @__PURE__ */ new Set(), stops = [];
+      for (let st of a.stops.slice(0, 30)) {
+        let v = V[st == null ? void 0 : st.venue];
+        if (!v || !Number.isInteger(st.venue) || !Array.isArray(st.ids) || !Number.isFinite(st.arrival) || !Number.isFinite(st.end) || st.arrival < 600 || st.end > 1320 || st.end < st.arrival) continue;
+        let ids = st.ids.filter((id) => v.items.some((it) => it.id === id && inDate(it, a.day)) && !seen.has(id));
+        ids.forEach((id) => seen.add(id));
+        if (ids.length) stops.push({ venue: v.id, arrival: st.arrival, end: st.end, ids: [...new Set(ids)], skip: !!st.skip });
+      }
+      return stops.length ? { day: a.day, stops } : null;
+    }
+    function saveOneTrip(p) {
+      var _a;
+      let packed = packPlan(p);
+      if (!packed) return;
+      if (((_a = state.trips) == null ? void 0 : _a[packed.day]) && !confirm("\u66FF\u6362 " + fmt(packed.day) + " \u7684\u884C\u7A0B\uFF1F\u5176\u4ED6\u65E5\u671F\u3001\u5DF2\u96C6\u5370\u7AE0\u548C\u9884\u7EA6\u4E0D\u53D8\u3002")) return;
+      state.saved = packed;
+      save();
+      renderSaved();
+      renderHome();
+      $("savedTrip").scrollIntoView({ block: "start" });
+    }
+    function packPlan(p) {
+      return validateSaved({ day: p.d, stops: p.best.steps.map((st) => ({ venue: st.v.id, arrival: st.arrival, end: st.end, ids: st.items.map((it) => it.id), skip: false })) });
+    }
+    function savedCounts() {
+      let t = state.saved;
+      if (!t) return { total: 0, done: 0, left: 0 };
+      let ids = t.stops.flatMap((st) => st.ids), done = ids.filter((id) => state.done.includes(id)).length;
+      return { total: ids.length, done, left: t.stops.filter((st) => !st.skip).flatMap((st) => st.ids).filter((id) => !state.done.includes(id)).length };
+    }
+    function renderSaved() {
+      renderTripShelf();
+      let el = $("savedTrip"), t = state.saved;
+      el.hidden = !t;
+      if (!t) {
+        el.innerHTML = "";
+        return;
+      }
+      let c = savedCounts(), next = t.stops.findIndex((st) => !st.skip && st.ids.some((id) => !state.done.includes(id)));
+      el.innerHTML = '<div class="flex"><h2>\u5DF2\u4FDD\u5B58\u884C\u7A0B</h2><button type="button" data-clear-trip>\u5220\u9664</button></div><p class="muted">' + fmt(t.day) + " " + weekdayName(t.day) + " \xB7 \u5DF2\u96C6 " + c.done + "/" + c.total + ' \u679A</p><div class="saved-bar"><i style="width:' + c.done / c.total * 100 + '%"></i></div>' + (next >= 0 ? '<div class="next-card"><small>\u4E0B\u4E00\u7AD9 \xB7 \u7B2C ' + (next + 1) + "/" + t.stops.length + " \u7AD9</small><h3>" + esc(V[t.stops[next].venue].name) + "</h3><p>" + clock(t.stops[next].arrival) + "\u2013" + clock(t.stops[next].end) + " \xB7 " + esc(V[t.stops[next].venue].address) + "</p><p>\u5F85\u96C6\uFF1A" + t.stops[next].ids.filter((id) => !state.done.includes(id)).map((id) => esc(V[t.stops[next].venue].items.find((it) => it.id === id).stamp)).join("\u3001") + '</p><a class="next-nav" href="' + mapLink(V[t.stops[next].venue]) + '">\u67E5\u770B\u4E0B\u4E00\u7AD9\u5730\u5740</a></div>' : '<p class="target-result">\u672C\u884C\u7A0B\u5DF2\u65E0\u5F85\u6267\u884C\u7AD9\u70B9\u3002</p>') + '<details class="saved-all" ' + (next < 0 ? "" : "open") + '><summary>\u5B8C\u6574\u884C\u7A0B</summary><div class="saved-stops">' + t.stops.map((st, i) => {
+        let v = V[st.venue], complete = st.ids.every((id) => state.done.includes(id));
+        return '<article class="saved-stop ' + (complete ? "finished" : st.skip ? "skipped" : i === next ? "next-stop" : "") + '"><div class="flex"><strong>' + (i + 1) + ". " + esc(v.name) + "</strong><small>" + (complete ? "\u5DF2\u5B8C\u6210" : st.skip ? "\u5DF2\u8DF3\u8FC7" : i === next ? "\u4E0B\u4E00\u7AD9" : clock(st.arrival) + "\u2013" + clock(st.end)) + '</small></div><p class="muted">' + esc(v.address) + "</p>" + st.ids.map((id) => {
+          let it = v.items.find((x) => x.id === id);
+          return '<label class="live-check"><input type="checkbox" data-live-stamp="' + id + '" ' + (state.done.includes(id) ? "checked" : "") + "><span>" + esc(it.stamp) + "<small>" + esc(it.activity) + "</small></span></label>";
+        }).join("") + '<div class="flex"><a class="live-nav" href="' + mapLink(v) + '">\u67E5\u770B\u5730\u5740</a>' + (!complete ? '<button type="button" data-skip="' + i + '">' + (st.skip ? "\u6062\u590D\u672C\u7AD9" : "\u8DF3\u8FC7\u672C\u7AD9") + "</button>" : "") + "</div></article>";
+      }).join("") + '</div></details><p class="muted">\u52FE\u7AE0\u4E0D\u4F1A\u6E05\u9664\u884C\u7A0B\uFF1B\u8DF3\u8FC7\u4E0D\u7B97\u5DF2\u96C6\u3002\u539F\u9884\u7EA6\u53CA\u9884\u8BA1\u65F6\u95F4\u8BF7\u81EA\u884C\u6838\u5BF9\u3002</p>';
+    }
+    function renderHome() {
+      const now=shToday(), local=new Date(Date.now()+288e5).toISOString().slice(0,16),before=now<'2026-11-28',after=now>'2027-01-03';
+      const items=distinctStamps(), remaining=items.filter(it=>!has(it)), delta=d=>Math.round((Date.parse(d)-Date.parse(now))/864e5);
+      const batches=[['2026-11-25','11/28–12/4','2026-12-04'],['2026-12-02','12/5–11','2026-12-11'],['2026-12-09','12/12–18','2026-12-18'],['2026-12-16','12/19–27','2026-12-27']];
+      const openings=[
+        ...batches.map((batch,i)=>({name:'艺术插画展 · 第'+(i+1)+'批',date:batch[0]+'T15:00',end:batch[2],label:fmt(batch[0])+' 15:00 · '+batch[1]+'入场',desc:i===0?'免费预约入场。':'批次时间据公开活动资讯，请核对官方预约页。',url:'https://www.pokemon.cn/tcg/campaign/24810.html',ids:['s5-1'],batch:true})),
+        {name:'卡牌赛事',date:'2026-11-26T00:00',end:'2026-12-20',label:'11/26起 · 事前报名',desc:'卡牌会员小程序报名抽选，具体场次以官方为准。',url:'https://www.pokemon.cn/tcg/event/24869.html',ids:['s1-2','s3-2','s2-2']},
+        {name:'筑梦工坊',date:'2026-11-27T15:00',end:'2026-12-18',label:'11/27 15:00 · 开放预约',desc:'卡牌会员小程序 → 特别活动。',url:'https://www.pokemon.cn/tcg/campaign/24816.html',ids:['s1-4','s2-4','s3-4','s4-2']},
+        {name:'冬日庆典工坊',date:null,start:'2026-12-19',end:'2027-01-03',label:'12/19–1/3 · 活动期',desc:'预约开放时间请以官方说明为准。',url:'https://www.pokemon.cn/tcg/campaign/24816.html',ids:['s1-5','s2-5','s3-5','s4-3']},
+        {name:'冬日双人赛',date:null,start:'2026-12-21',end:'2026-12-26',label:'12/21–26 · 活动期',desc:'报名时间和场次请查官方小程序。',url:'https://www.pokemon.cn/tcg/campaign/24854.html',ids:['s1-6','s2-6','s3-6']}
+      ];
+      const active=openings.filter(o=>o.end>=now&&o.ids.some(id=>remaining.some(it=>it.id===id))&&delta(o.date?o.date.slice(0,10):o.start)<=7&&(!o.batch||!openings.some(p=>p.batch&&p.date>o.date&&p.date<=local&&p.end>=now)));
+      active.sort((a,b)=>{const priority=o=>o.date&&local<o.date?0:1;return priority(a)-priority(b)||(a.date||a.start).localeCompare(b.date||b.start)});
+      const deadlines=remaining.filter(it=>delta(it.end)>=0&&delta(it.end)<=7).sort((a,b)=>a.end.localeCompare(b.end));
+      const groups=[...new Set(deadlines.map(it=>it.end))].map(end=>{const days=delta(end),list=deadlines.filter(it=>it.end===end);return '<div class="home-urgent '+(days<=3?'urgent-now':'')+'"><strong>'+(days===0?'今日截止':'还有'+days+'天截止')+' · '+list.length+'款</strong><small>'+list.map(it=>esc(it.stamp)).join('、')+'</small></div>'}).join('');
+      $('homeReminder').innerHTML=(before?'<p class="home-event-state">盛典11/28开启 · 先准备预约</p>':'')+groups+active.map(o=>{const day=o.date?o.date.slice(0,10):o.start,days=delta(day),upcoming=o.date&&local<o.date,tag=upcoming?(days===0?'今日开启':days+'天后开启'):o.date?(days===0?'今日起开放':'核对余位'):(days>0?days+'天后活动':'核对场次');return '<a class="home-notice-row '+(upcoming&&days===0?'urgent':'')+'" href="#" data-official="'+o.url+'"><div><div class="notice-title"><strong>'+o.name+'</strong><span class="notice-state">'+tag+'</span></div><b class="notice-time">'+o.label+'</b><small>'+o.desc+'</small></div><span aria-hidden="true">›</span></a>'}).join('')+(!active.length&&!deadlines.length?'<p class="muted">未来7天暂无待收录的预约或截止提醒。</p>':'')+'<p class="notice-source">按上海时间及个人未收录记录筛选；不代表实时余位或预约成功。</p>';
+      $('homeNotices').hidden=after;
+      // Before opening, booking reminders lead; during the event, today's action and registered sessions lead.
+      const home=$('home'),dashboard=$('homeDashboard'),notice=$('homeNotices'),book=$('homeTodayBookings'),saved=$('homeSaved');
+      if(before){home.prepend(notice,dashboard,book,saved)}else{home.prepend(dashboard,book,saved,notice)}
+      renderDashboard();
+      const registered=Object.keys(state.slots).map(k=>{const parts=k.split('@'),it=items.find(x=>x.id===parts[0]);return {it,day:parts[1],value:state.slots[k]}}).filter(x=>x.it&&x.day>=now).sort((a,b)=>(a.day+' '+a.value.time).localeCompare(b.day+' '+b.value.time));
+      const todays=registered.filter(x=>x.day===now),next=todays.length?todays:registered.slice(0,1);
+      book.hidden=!next.length;book.innerHTML=next.length?'<div class="flex"><h2>'+(todays.length?'今日已登记预约':'下一场已登记预约')+'</h2><button type="button" data-tab="bookings">管理 ›</button></div>'+next.map(x=>'<div class="home-session"><b>'+fmt(x.day)+' '+esc(x.value.time)+'</b><span>'+esc(x.it.stamp)+' · '+esc(x.it.places[0].name)+'</span></div>').join('')+'<p class="muted">个人登记记录，请以官方确认场次为准。</p>':'';
+      let t=state.saved;saved.hidden=!t;
+      if(t){let c=savedCounts();saved.innerHTML='<h2>'+(t.day===now?'今日行程':'已保存行程')+'</h2><p>'+fmt(t.day)+' · 已集 '+c.done+'/'+c.total+' 枚'+(c.left?' · 还剩 '+c.left+' 枚':'')+'</p><button type="button" class="primary" style="width:100%" data-resume-trip>继续集章 ›</button>'}
+    }
+    function renderBookings() {
+      let all = distinctStamps().filter((it) => it.kind !== "walk");
+      $("bookingList").innerHTML = all.map((it) => {
+        let keys = Object.keys(state.slots).filter((k) => k.startsWith(it.id + "@")).sort(), existing = keys.map((k) => '<div class="booked-row"><span>' + fmt(k.split("@")[1]) + " " + esc(state.slots[k].time) + " \xB7 " + state.slots[k].duration + '\u5206\u949F</span><button type="button" data-remove-book="' + esc(k) + '">\u5220\u9664</button></div>').join("");
+        let d = date();
+        if (d < it.start) d = it.start;
+        if (d > it.end) d = it.end;
+        return '<details class="booking-card"><summary><span><b>' + esc(it.stamp) + "</b> \xB7 " + pocketNames[it.kind] + "<small>" + esc(it.places[0].name) + " \xB7 " + fmt(it.start) + "\u2013" + fmt(it.end) + '</small></span><span class="booking-state">' + (has(it) ? "\u5DF2\u96C6" : keys.length ? "\u5DF2\u767B\u8BB0" : "\u672A\u767B\u8BB0") + "</span></summary>" + existing + '<div class="grid booking-fields"><label class="field">\u9884\u7EA6\u65E5\u671F<input data-bdate type="date" min="' + it.start + '" max="' + it.end + '" value="' + d + '"></label><label class="field">\u5F00\u59CB\u65F6\u95F4<input data-btime type="time"></label><label class="field">\u9884\u8BA1\u8017\u65F6\uFF08\u5206\u949F\uFF09<input data-bduration type="number" min="5" max="720" value="' + (it.kind === "card" ? 120 : it.kind === "workshop" ? 60 : 30) + '"></label></div><button type="button" class="primary" data-add-book="' + it.id + '">\u767B\u8BB0\u9884\u7EA6</button><p class="muted" data-berror aria-live="polite"></p></details>';
+      }).join("");
+    }
+    const chosenDays = /* @__PURE__ */ new Set();
+    let multiPreview = [];
+    let multiGeneration=0;
+    $("multiResult").addEventListener("click", (e) => {
+      let all = e.target.closest("[data-save-all]");
+      if (all) {
+        saveAllTrips(multiPreview);
+        return;
+      }
+      let b = e.target.closest("[data-save-day]");
+      if (b && multiPreview[Number(b.dataset.saveDay)]) saveOneTrip(multiPreview[Number(b.dataset.saveDay)]);
+    });
+    function renderCustomDays() {
+      $("customDays").innerHTML = eventDays("2026-11-28", "2027-01-03").map((d) => '<button type="button" data-custom="' + d + '" aria-pressed="' + chosenDays.has(d) + '" class="' + (chosenDays.has(d) ? "primary" : "") + '">' + fmt(d) + "<small>" + weekdayName(d) + "</small></button>").join("");
+    }
+    $("home").addEventListener("click", (e) => {
+      var _a;
+      let b = e.target.closest("[data-task]");
+      if (!b) return;
+      let task = b.dataset.task;
+      targetMode="total";
+      $("goal").value = task === "max" ? "0" : task === "all" ? "30" : String(((_a = REWARDS.find((r) => r[0] > state.done.length)) == null ? void 0 : _a[0]) || 30);
+      refreshGoal();
+      clearMulti();
+      switchTab("plan");
+      showPlan();
+      if (task === "all") $("multiBox").scrollIntoView({ block: "start" });
+    });
+    $("homeSaved").addEventListener("click", (e) => {
+      if (e.target.closest("[data-resume-trip]")) {
+        switchTab("plan");
+        $("savedTrip").scrollIntoView({ block: "start" });
+      }
+    });
+    $("savedTrip").addEventListener("change", (e) => {
+      let id = e.target.dataset.liveStamp;
+      if (IDS.has(id)) toggle(id, e.target.checked);
+    });
+    $("savedTrip").addEventListener("click", (e) => {
+      var _a;
+      let b = e.target.closest("button");
+      if (!b) return;
+      if (b.hasAttribute("data-clear-trip")) {
+        if (confirm("\u5220\u9664\u5F53\u524D\u65E5\u671F\u7684\u884C\u7A0B\uFF1F\u5176\u4ED6\u65E5\u671F\u4E0E\u5DF2\u96C6\u5370\u7AE0\u4F1A\u4FDD\u7559\u3002")) {
+          (_a = state.trips) == null ? true : delete _a[state.saved.day];
+          state.saved = Object.values(state.trips || {}).sort((a, b2) => a.day.localeCompare(b2.day))[0] || null;
+          save();
+          renderSaved();
+          renderHome();
+        }
+      } else if (b.dataset.skip !== void 0 && state.saved) {
+        let st = state.saved.stops[Number(b.dataset.skip)];
+        if (st) {
+          st.skip = !st.skip;
+          save();
+          renderSaved();
+          renderHome();
+        }
+      }
+    });
+    $("bookingList").addEventListener("click", (e) => {
+      let b = e.target.closest("button");
+      if (!b) return;
+      if (b.dataset.removeBook) {
+        delete state.slots[b.dataset.removeBook];
+        save();
+        renderBookings();
+        renderList();
+        renderDates();
+        renderQuickDates();
+        invalidate();
+        clearMulti();
+        return;
+      }
+      let id = b.dataset.addBook, it = distinctStamps().find((x) => x.id === id);
+      if (!it) return;
+      let card = b.closest(".booking-card"), d = card.querySelector("[data-bdate]").value, t = card.querySelector("[data-btime]").value, dur = Number(card.querySelector("[data-bduration]").value), err = card.querySelector("[data-berror]");
+      if (!d || !inDate(it, d) || !t || time(t) < 600 || time(t) + dur > 1320 || !Number.isInteger(dur) || dur < 5 || dur > 720) {
+        err.textContent = "\u8BF7\u586B\u5199\u6709\u6548\u573A\u6B21\uFF0C\u65F6\u95F4\u987B\u5728\u6D3B\u52A8\u5F00\u653E\u8303\u56F4\u5185\u3002";
+        return;
+      }
+      let clash = Object.entries(state.slots).some(([k, v]) => k !== id + "@" + d && k.endsWith("@" + d) && time(t) < time(v.time) + v.duration && time(v.time) < time(t) + dur);
+      if (clash) {
+        err.textContent = "\u4E0E\u5DF2\u767B\u8BB0\u573A\u6B21\u91CD\u53E0\uFF0C\u8BF7\u6838\u5BF9\u65F6\u95F4\u3002";
+        return;
+      }
+      state.slots[id + "@" + d] = { time: t, duration: dur };
+      save();
+      renderBookings();
+      renderList();
+      renderDates();
+      renderQuickDates();
+      invalidate();
+      clearMulti();
+    });
+    $("customDays").addEventListener("click", (e) => {
+      let b = e.target.closest("[data-custom]");
+      if (!b) return;
+      let d = b.dataset.custom;
+      chosenDays.has(d) ? chosenDays.delete(d) : chosenDays.add(d);
+      renderCustomDays();
+      clearMulti();
+    });
+    $("clearCustomDays").onclick = () => {
+      chosenDays.clear();
+      renderCustomDays();
+      clearMulti();
+    };
+    $("timePresets").addEventListener("click", (e) => {
+      let b = e.target.closest("[data-time]");
+      if (!b) return;
+      let [a, z] = b.dataset.time.split("|");
+      $("start").value = a;
+      $("end").value = z;
+      invalidate();
+      clearMulti();
+      showPlan();
+    });
+    $("utilityToggle").onclick = () => {
+      let el = $("utilities");
+      el.hidden = !el.hidden;
+      if (!el.hidden) el.scrollIntoView({ block: "start" });
+    };
+    let nowDay = new Date(Date.now() + 288e5).toISOString().slice(0, 10);
+    if (nowDay >= "2026-11-28" && nowDay <= "2027-01-03") $("date").value = nowDay;
+    function renderMust() {
+      let chosen = state.must || [];
+      $("mustCount").textContent = chosen.length ? " \xB7 " + chosen.length + "\u679A" : "";
+      $("mustGrid").innerHTML = distinctStamps().map((it) => '<button type="button" data-must="' + it.id + '" aria-pressed="' + chosen.includes(it.id) + '" class="' + (chosen.includes(it.id) ? "primary" : "") + '">' + esc(it.stamp) + (has(it) ? " \u2713" : "") + "</button>").join("");
+    }
+    function toggleMust(id) {
+      let set = new Set(state.must || []);
+      set.has(id) ? set.delete(id) : set.add(id);
+      state.must = [...set];
+      save();
+      renderMust();
+      renderPocket();
+      renderSeries();
+      invalidate();
+      clearMulti();
+    }
+    function planWarnings(p) {
+      let items = p.best.steps.flatMap((st) => st.items), ids = new Set(items.map((it) => it.id)), wanted = distinctStamps().filter((it) => (state.must || []).includes(it.id) && !has(it)), miss = wanted.filter((it) => !ids.has(it.id));
+      let booked = distinctStamps().filter((it) => !has(it) && slot(it, p.d) && !ids.has(it.id));
+      const why = (it) => !inDate(it, p.d) ? "\u5F53\u5929\u672A\u5F00\u653E" : it.kind !== "walk" && !slot(it, p.d) ? "\u5C1A\u672A\u767B\u8BB0\u9884\u7EA6" : it.kind !== "walk" && !$("useSlots").checked ? "\u672A\u542F\u7528\u9884\u7EA6" : "\u5F53\u524D\u8DEF\u7EBF\u672A\u80FD\u5B89\u6392";
+      return (wanted.length ? '<div class="route-check"><strong>\u5FC5\u96C6\u5370\u7AE0 ' + (wanted.length - miss.length) + "/" + wanted.length + "</strong>" + miss.map((it) => "<p>" + esc(it.stamp) + " \xB7 " + why(it) + "</p>").join("") + "</div>" : "") + (booked.length ? '<div class="route-check warn"><strong>\u6709 ' + booked.length + " \u9879\u767B\u8BB0\u9884\u7EA6\u672A\u6392\u5165</strong>" + booked.map((it) => "<p>" + esc(it.stamp) + " \xB7 " + esc(slot(it, p.d).time) + "</p>").join("") + "<p>\u8BF7\u68C0\u67E5\u65F6\u95F4\u3001\u4EA4\u901A\u53CA\u8DEF\u7EBF\u8303\u56F4\u3002</p></div>" : "");
+    }
+    function editControls(p) {
+      return p.best.steps.map((st, i) => '<div class="edit-row"><strong>' + (i + 1) + ". " + esc(st.v.name) + '</strong><button type="button" data-edit="' + i + '" data-move="up" ' + (i === 0 ? "disabled" : "") + ' aria-label="\u4E0A\u79FB">\u2191</button><button type="button" data-edit="' + i + '" data-move="down" ' + (i === p.best.steps.length - 1 ? "disabled" : "") + ' aria-label="\u4E0B\u79FB">\u2193</button><button type="button" data-edit="' + i + '" data-move="remove">\u5220\u9664</button></div>').join("");
+    }
+    function recalcRoute(p, specs) {
+      let mask = 0, t = p.st, travel = 0, last = p.origin, steps = [], idBit = {};
+      [...IDS].forEach((id, i) => idBit[id] = 1 << i);
+      for (let spec of specs) {
+        let v = V[spec.venue], available = eligible(v, p.d, $("useSlots").checked).filter((it) => spec.ids.includes(it.id) && !(mask & idBit[it.id]));
+        if (!available.length) continue;
+        let tr = transfer(last, v, p.mode), options = visitOptions(v, t + tr, mask, available, p.d, p.limit, Number($("dwell").value), idBit).filter((op2) => op2.items.length === available.length).sort((a, b) => a.end - b.end);
+        if (!options.length) return null;
+        let op = options[0];
+        steps.push(__spreadValues({ v, tr }, op));
+        mask = op.mask;
+        t = op.end;
+        travel += tr;
+        last = v;
+      }
+      if(p.firstId!=null&&(!steps.length||steps[0].v.id!==p.firstId))return null;
+      return steps.length ? __spreadProps(__spreadValues({}, p), { districtBaseline:null, best: { last, mask, steps, t, travel, count: steps.reduce((n, st) => n + st.gain, 0) } }) : null;
+    }
+    $("mustGrid").addEventListener("click", (e) => {
+      let b = e.target.closest("[data-must]");
+      if (b) toggleMust(b.dataset.must);
+    });
+    $("clearMust").onclick = () => {
+      state.must = [];
+      save();
+      renderMust();
+      renderPocket();
+      invalidate();
+      clearMulti();
+    };
+    $("route").addEventListener("click", (e) => {
+      let b = e.target.closest("[data-edit],[data-add-venue]");
+      if (!b || !lastPlan || lastPlan.error) return;
+      let p = lastPlan, specs = p.best.steps.map((st) => ({ venue: st.v.id, ids: st.items.map((it) => it.id) }));
+      if (b.hasAttribute("data-add-venue")) {
+        let val = $("addVenue").value;
+        if (val === "") return;
+        let v = V[Number(val)];
+        if (!v || specs.some((x) => x.venue === v.id)) return;
+        specs.push({ venue: v.id, ids: eligible(v, p.d, $("useSlots").checked).map((it) => it.id) });
+      } else {
+        let i = Number(b.dataset.edit), move = b.dataset.move;
+        if (move === "remove") specs.splice(i, 1);
+        else {
+          let j = i + (move === "up" ? -1 : 1);
+          if (j < 0 || j >= specs.length) return;
+          [specs[i], specs[j]] = [specs[j], specs[i]];
+        }
+      }
+      let changed = recalcRoute(p, specs);
+      if (!changed) {
+        $("editError").textContent = "\u8C03\u6574\u540E\u65E0\u6CD5\u5728\u6240\u9009\u65F6\u95F4\u5185\u5B8C\u6210\uFF0C\u6216\u9884\u7EA6\u573A\u6B21\u51B2\u7A81\u3002\u539F\u8DEF\u7EBF\u5DF2\u4FDD\u7559\u3002";
+        return;
+      }
+      renderPlan(changed);
+      let panel = $("route").querySelector(".edit-route");
+      if (panel) panel.open = true;
+    });
+    function renderClaims() {
+      let c = state.claimed || [];
+      $("claimRecords").innerHTML = "<h3>\u5B9E\u7269\u5956\u52B1\u9886\u53D6\u8BB0\u5F55</h3>" + REWARDS.filter((r) => r[0] <= 6).map((r) => '<label class="claim-record"><input type="checkbox" data-claimed="' + r[0] + '" ' + (c.includes(r[0]) ? "checked" : "") + " " + (!c.includes(r[0]) && state.done.length < r[0] ? "disabled" : "") + "><span>" + esc(r[1]) + "<small>" + (c.includes(r[0]) ? "\u5DF2\u9886\u53D6" : state.done.length >= r[0] ? "\u5DF2\u8FBE\u6807 \xB7 \u672A\u9886\u53D6" : "\u8FD8\u5DEE " + (r[0] - state.done.length) + " \u679A") + "</small></span></label>").join("") + '<p class="muted">\u4EC5\u8BB0\u5F55\u4E2A\u4EBA\u9886\u53D6\u60C5\u51B5\uFF0C\u4E0D\u4F5C\u4E3A\u5B98\u65B9\u5151\u6362\u51ED\u8BC1\u3002</p>';
+    }
+    $("claimRecords").addEventListener("change", (e) => {
+      let n = Number(e.target.dataset.claimed);
+      if (n !== 3 && n !== 6) return;
+      let c = new Set(state.claimed || []);
+      if (e.target.checked && state.done.length >= n) c.add(n);
+      else c.delete(n);
+      state.claimed = [...c];
+      save();
+      renderClaims();
+    });
+    let exploreSelected = null;
+    function exploreItems(v) {
+      let d = $("mapDate").value, k = $("mapKind").value, all = $("mapRemaining").value === "all";
+      return v.items.filter((it) => inDate(it, d) && (!k || it.kind === k) && (all || !has(it)));
+    }
 
-function eventDays(from,to,mode='all'){let out=[];if(!from||!to||from>to)return out;for(let d=new Date(from+'T12:00:00Z');d.toISOString().slice(0,10)<=to;d.setUTCDate(d.getUTCDate()+1)){let w=d.getUTCDay(),weekend=w===0||w===6;if(mode==='weekend'&&!weekend||mode==='weekday'&&weekend)continue;out.push(d.toISOString().slice(0,10))}return out}
-function weekdayName(d){return '周'+'日一二三四五六'[new Date(d+'T12:00:00Z').getUTCDay()]}
-function refreshGoal(){let g=Number($('goal').value),n=state.done.length;$('goalHint').textContent=g?(n>=g?'已达到 '+g+' 枚目标':'已集 '+n+' 枚，距离目标还差 '+(g-n)+' 枚。'):'按当天条件尽可能多集未完成的印章。';$('claimOption').hidden=!(g===3||g===6);for(let b of $('goalOptions').querySelectorAll('button')){let a=Number(b.dataset.goal)===g;b.classList.toggle('primary',a);b.setAttribute('aria-pressed',String(a))}}
-function clearMulti(){multiPreview=[];if($('multiResult'))$('multiResult').innerHTML=''}
-function renderReminders(){let d=date();if(!d)return;let today=new Date(Date.now()+28800000).toISOString().slice(0,10);let rows=[];if(today<'2026-11-27')rows.push('卡牌赛事11月26日起报名，工坊11月27日15:00起预约；插画展分批预约。');else rows.push('预约及赛事报名请查看「宝可梦卡牌会员」小程序，插画展另有安排。');let ends=new Map();for(let v of V)for(let it of v.items){if(has(it))continue;let diff=(Date.parse(it.end)-Date.parse(d))/86400000;if(diff>=0&&diff<=2&&inDate(it,d))ends.set(it.id,it)}let names=[...ends.values()].map(x=>x.stamp);$('reminders').innerHTML='<details'+(names.length?' open':'')+'><summary>出发前提醒'+(names.length?' <span class="deadline-label">'+names.length+'枚即将截止</span>':'')+'</summary><p>'+rows[0]+'</p><p>首次领取手册须现场拍照并带指定话题发布小红书笔记。展览、工坊和卡牌赛请核对具体场次。</p>'+(names.length?'<p class="deadline-label">'+fmt(d)+'起三天内截止：'+names.map(esc).join('、')+'</p>':'')+'<a href="#" data-official="https://www.pokemon.cn/tcg/campaign/24854.html">查看活动公告 ↗</a></details>'}
-function multiPlan(){let from=date(),to=$('lastDay').value,mode=$('dayMode').value,g=Number($('goal').value)||30,excluded=new Set(state.done),days=eventDays(from,to,mode).filter(d=>!chosenDays.size||chosenDays.has(d)),used=new Set(),out=[];if(!days.length||to>'2027-01-03'){return {error:'请选择有效的出行日期范围。'}}if(excluded.size>=g&&!(state.must||[]).some(id=>!excluded.has(id)))return {error:'已经达到所选目标。'};let use=$('useSlots').checked,region=$('region').value;
-while((excluded.size<g||(state.must||[]).some(id=>!excluded.has(id)))&&out.length<days.length){let bySignature=new Map();for(let day of days){if(used.has(day))continue;let signature=V.filter(v=>!region||region===v.district).map(v=>v.id+':'+eligible(v,day,use,excluded).map(it=>it.id+(it.kind!=='walk'?'@'+slot(it,day).time+'/'+slot(it,day).duration:'')).join(',')).join('|');if(!bySignature.has(signature))bySignature.set(signature,day)}let best=null;for(let day of bySignature.values()){let p=plan({day,excluded,goal:g,beam:100,deadline:g===30});if(p.error)return p;if(!p.best.count||excluded.size>=g&&!p.best.steps.some(st=>st.items.some(it=>(state.must||[]).includes(it.id)&&!excluded.has(it.id))))continue;let reaches=excluded.size+p.best.count>=g,prev=best&&excluded.size+best.best.count>=g;let urgency=q=>q.best.steps.flatMap(st=>st.items).filter(it=>it.kind!=='walk'&&(Date.parse(it.end)-Date.parse(q.d))/86400000<=7).length;let mustScore=q=>q.best.steps.flatMap(st=>st.items).filter(it=>(state.must||[]).includes(it.id)&&!excluded.has(it.id)).length;let m=best?mustScore(p)-mustScore(best):0;let u=m|| (best&&g===30?urgency(p)-urgency(best):0);if(!best||u>0||u===0&&((reaches&&!prev)||reaches===prev&&(reaches?(p.best.t<best.best.t||p.best.t===best.best.t&&day<best.d):(p.best.count>best.best.count||p.best.count===best.best.count&&(p.best.t<best.best.t||p.best.t===best.best.t&&day<best.d)))))best=p}
-if(!best)break;used.add(best.d);for(let step of best.best.steps)for(let it of step.items)excluded.add(it.id);out.push(best)}
-return {out:out.sort((a,b)=>a.d.localeCompare(b.d)),g,final:excluded.size,missingMust:(state.must||[]).filter(id=>!excluded.has(id))}}
-function showMulti(){let out=$('multiResult');out.textContent='正在计算行程…';setTimeout(()=>{try{let r=multiPlan();if(r.error){out.textContent=r.error;return}multiPreview=r.out;let n=state.done.length;out.innerHTML='<p class="target-result">'+(r.out.length?'建议 '+r.out.length+' 天 · ':'')+'预计集到 '+r.final+'/'+r.g+' 枚'+(r.final<r.g?'，还差 '+(r.g-r.final)+' 枚（部分活动需预约）':'')+'</p>'+(r.missingMust.length?'<p class="warn">仍未安排的必集印章：'+distinctStamps().filter(it=>r.missingMust.includes(it.id)).map(it=>esc(it.stamp)).join('、')+'</p>':'')+(r.out.length?'<button type="button" class="primary save-all-trips" data-save-all>保存全部 '+r.out.length+' 天行程</button>':'')+r.out.map((p,i)=>'<details class="day-plan"><summary>'+fmt(p.d)+' '+weekdayName(p.d)+' · '+p.best.count+'枚 · '+clock(p.st)+'–'+clock(p.best.t)+'</summary>'+p.best.steps.map((st,i)=>'<p><b>'+(i+1)+'. '+esc(st.v.name)+'</b> '+clock(st.arrival)+'–'+clock(st.end)+'<br><small>'+st.items.map(it=>esc(it.stamp)).join('、')+' · <a href="'+mapLink(st.v)+'">地图</a></small></p>') .join('')+'<button type="button" data-save-day="'+i+'">保存这一天的行程</button></details>').join('')+'<p class="muted">每天只计未集印章；按现有预约和估算交通安排，不保证天数最少。周末选项仅按星期筛选，不含调休。</p>'}catch(e){out.textContent='未能生成行程，请缩短日期范围或调整设置。'}},20)}
-$('goalOptions').addEventListener('click',e=>{let b=e.target.closest('button[data-goal]');if(!b)return;$('goal').value=b.dataset.goal;refreshGoal();clearMulti();showPlan()});$('calendarKind').onchange=renderDates;$('calendarDays').onchange=renderDates;$('multiCompute').onclick=showMulti;$('lastDay').onchange=clearMulti;$('dayMode').onchange=clearMulti;
+    const MAP_LABELS=[[190,164],[299,62],[65,60],[143,184],[233,193],[166,132],[198,207],[106,161],[323,152],[272,132],[289,166],[239,116],[160,160],[256,168],[228,150]];
+    function mapNumber(v){return String(v.id+1).padStart(2,'0');}
+    function renderExplore() {
+      const region=$('mapRegion').value,venues=V.filter(v=>(!region||region===v.district)&&exploreItems(v).length);
+      if(!venues.length){$('exploreMap').innerHTML='';$('exploreList').innerHTML='<p class="empty">没有符合条件的集章点。</p>';$('exploreDetail').innerHTML='';exploreSelected=null;return;}
+      if(!venues.some(v=>v.id===exploreSelected))exploreSelected=null;
+      const px=v=>28+(v.lon-121.3)/.245*310,py=v=>230-(v.lat-31.17)/.16*205;
+      const leaders=venues.map(v=>{const [x,y]=MAP_LABELS[v.id];return Math.hypot(x-px(v),y-py(v))>3?'<path d="M'+px(v)+' '+py(v)+' L'+x+' '+y+'" stroke="#8ba5ad" stroke-width="1.2" stroke-dasharray="2 2"/><circle cx="'+px(v)+'" cy="'+py(v)+'" r="2" fill="#698895"/>':''}).join('');
+      $('exploreMap').innerHTML='<div class="map"><svg viewBox="0 0 370 255" role="group" aria-label="集章地点示意图，数字为地点编号"><rect width="370" height="255" fill="#edf2f2"/><path d="M265 0 Q225 75 292 130 Q323 190 275 255" stroke="#c5dce8" stroke-width="18" fill="none"/>'+leaders+venues.map(v=>{const [x,y]=MAP_LABELS[v.id],selected=exploreSelected===v.id;return '<g class="explore-pin'+(selected?' selected':'')+'" data-explore="'+v.id+'" role="button" tabindex="0" aria-pressed="'+selected+'" aria-label="'+mapNumber(v)+' '+esc(v.name)+'，'+exploreItems(v).length+'枚符合筛选的印章"><circle cx="'+x+'" cy="'+y+'" r="12.5" fill="'+(selected?'#c9403b':'#365d78')+'" stroke="white" stroke-width="1.8"/><text class="map-pin-number" x="'+x+'" y="'+(y+3.7)+'" font-size="10.5" font-weight="700" text-anchor="middle" fill="white">'+mapNumber(v)+'</text></g>'}).join('')+'</svg><div class="map-legend">地点编号 01–15 · 虚线连接示意位置</div></div>';
+      $('exploreList').innerHTML=venues.map(v=>'<div class="map-venue-row"><button type="button" class="explore-row'+(exploreSelected===v.id?' selected':'')+'" data-explore="'+v.id+'" aria-pressed="'+(exploreSelected===v.id)+'"><span class="map-site-number">'+mapNumber(v)+'</span><span class="map-site-name"><strong>'+esc(v.name)+'</strong><small>'+esc(v.district)+' · '+exploreItems(v).filter(it=>it.kind==='walk').length+'枚直接打卡</small></span><b>'+exploreItems(v).length+'枚 ›</b></button><button type="button" class="map-direct-plan" data-map-plan="'+v.id+'" aria-label="从'+esc(v.name)+'出发规划路线">从此出发 ›</button></div>').join('');
+      if(exploreSelected!==null)showExploreDetail(exploreSelected);else $('exploreDetail').innerHTML='';
+    }
+    function showExploreDetail(id) {
+      const v=V[id];if(!v||!exploreItems(v).length)return;
+      exploreSelected=id;
+      document.querySelectorAll('#exploreMap [data-explore],#exploreList [data-explore]').forEach(el=>{const selected=Number(el.dataset.explore)===id;el.classList.toggle('selected',selected);el.setAttribute('aria-pressed',String(selected));const circle=el.querySelector('circle');if(circle)circle.setAttribute('fill',selected?'#c9403b':'#365d78');});
+      const d=$('mapDate').value,items=exploreItems(v);
+      $('exploreDetail').innerHTML='<div class="tile-detail"><h3><span class="map-site-number">'+mapNumber(v)+'</span> '+esc(v.name)+'</h3><p>'+esc(v.address)+'</p><div class="map-plan-actions"><button type="button" class="primary map-start-plan" data-map-plan="'+id+'">从这里出发 · 规划路线</button><a href="'+mapLink(v)+'">查看地址</a></div><p class="map-site-count">符合当前筛选 · '+items.length+'枚</p>'+items.map(it=>'<p>'+esc(it.stamp)+' · '+(has(it)?'已收录':it.kind==='walk'?'直接打卡':slot(it,d)?'已登记预约':'需预约')+'</p>').join('')+'</div>';
+    }
+    $("mapRegion").innerHTML = '<option value="">\u5168\u4E0A\u6D77</option>' + [...new Set(V.map((v) => v.district))].map((x) => "<option>" + esc(x) + "</option>").join("");
+    for (let id of ["mapDate", "mapRegion", "mapKind", "mapRemaining"]) $(id).onchange = () => {
+      exploreSelected = null;
+      renderExplore();
+    };
+    function mapControl(node, attr, root) {
+      while(node && node!==root){if(node.getAttribute && node.hasAttribute(attr))return node;node=node.parentNode;}
+      return null;
+    }
+    for (let id of ["exploreMap", "exploreList"]) {
+      $(id).addEventListener("click", (e) => {
+        let b = mapControl(e.target, "data-explore", $(id));
+        if (b) {
+          showExploreDetail(Number(b.dataset.explore));
+          try{$("exploreDetail").scrollIntoView({block:"start"});}catch(err){$("exploreDetail").scrollIntoView(true);}
+        }
+      });
+      $(id).addEventListener("keydown", (e) => {
+        if ((e.key === "Enter" || e.key === " ") && e.target.closest("[data-explore]")) {
+          e.preventDefault();
+          showExploreDetail(Number(e.target.closest("[data-explore]").dataset.explore));
+        }
+      });
+    }
+    $("map").addEventListener("click", (e) => {
+      const b=mapControl(e.target,"data-map-plan",$("map"));if(!b)return;
+      const id=b.getAttribute("data-map-plan"),anchor=ROUTE_ANCHORS.find(v=>v.id===id),venue=anchor||V[Number(id)];if(!venue&&id!=="any")return;
+      e.preventDefault();$("date").value=$("mapDate").value;$("originSource").value="manual";$("origin").value=id;$("region").value=$("mapRegion").value;
+      $("firstPolicy").value=venue&&!anchor&&eligible(venue,date(),$("useSlots").checked).length?"fixed":"nearest";$("firstVenue").value=!venue||anchor?"":id;
+      invalidate();renderQuickDates();renderReminders();clearMulti();updateFirstControls();switchTab("plan");
+      const status=document.createElement("p");status.className="map-origin-status";status.textContent="出发地点："+(venue?venue.name:"不限起点")+" · "+date()+" · 已按当前行程设置规划";$("route").insertBefore(status,$("route").firstChild);
+      document.documentElement.scrollTop=0;document.body.scrollTop=0;window.scrollTo(0,0);
+    });
+    let dexFilter = "all", toastTimer;
+    function dexNo(id) {
+      return "#" + String(DEX[id]).padStart(4, "0");
+    }
+    function dexStamps() {
+      return distinctStamps().sort((a, b) => DEX[a.id] - DEX[b.id]);
+    }
+    const LOCAL_ART={"1":"data:image/png;base64,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","4":"data:image/png;base64,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","7":"data:image/png;base64,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","25":"data:image/png;base64,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","52":"data:image/png;base64,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","60":"data:image/png;base64,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","61":"data:image/png;base64,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","90":"data:image/png;base64,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","132":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAETElEQVR4AeyZwVHjMBSGlS0BaqAJDtypgxsV0AHMUAN3euAEB5qAGWa4QwtZfZq8jAjETiKSX979d/wiWbL04u+z7Jj9k/xPSsACpPhTsgALEBMQp/cKsAAxAXF6rwALEBMQp/cKsAAxAXH6/3MFiKHX6S2gpiGoW4AAep3SAmoagroFCKDXKS2gpiGoW4AAep3SAmoagroFCKDXKS2gpiGoW4AAep3ygALqtK4HAQsIEqLSAkTgI60FBAlRaQEi8JHWAoKEqLQAEfhIawFBQlRagAh8pLWAICEqLWDP4Memt4AxQnvun5SAq6ur+enp6TwzicjVaW+TEQD8y8vLdH9/n+7u7tLt7S3kEUGZVsQs20tnxx/dCwAscX5+XjC+vb2V8uPjI2UpBTz9iHl/f0+Pj4/f5JQBnX50JSADnRMAjYDbxcVFen19TQ8PD6WkLYK+6+vr2C3l0dHRZCR0IwDw3GIIgAI2olCtPj4/P9Px8XE6OTkprchhZRDUS+NEProQAPy4xWzCjSucqI8FPBFt9S0q2nosuxDw9PRUbi1cwUQNshXa2dlZeU60zrOv8V0IeH5+LucHeKLsrHxwO1ppGtzl9hS3KcbWz5TBgQfu7EJAPucZkHK5duOn57rOdWPr2xTHEIhYN4+ivRcBg+f+8vIy2P9NzsDRSMjd3bwn9CRg7SrgdgJk4I3JyHAntfUkYBAc8JHAQZTsR7A/VTGTEQB4gtUAeKBHsE87/WOBqPwcGDvsYP1dCTgEmJubm5R/dc0ORngkUTcCMvw5V/LI9925m7dnrv780tfVe0E3AnYmu+FA3ow3PPSgh/UiYK9XP0R5KaMkeDvOZRc/RXsQMOdhmoHsdatfykiUb3kU8pAKyBD48/NBIPAMqBOxCshftynqUgFxwjwco76v8qdnABJyPumt6BcF5FPZYuPqWwAoo5CwepWWjl/4YO510/CrKPfJJMgE5N/i+by/blylwFqNbcQwlllXS9p6DJmAbWAgZuj4EAR03ojrcmhcD31KATPeSjeFANQAXY+hDUH0Tw0+56EUQP6tIkADO4K2mIQ26lFSHwv+Ny4fI/vThFpAWQWrK4F9AjhEBrTTxljmIajXk9BG5GeRDD7fRy2A7wCApQig5MbS1gIH4IvxZa48Z2Jugr68v2zPddnWg4A4+QBCGW3lL5cAA9yycaDCccQC/vLIxT5zzxb1ZZ+y0pOAtRwWwL6sEiD/FHmSAjmXk9gmIaAiGXCHyurw/qtTE9Ad0dYvZAGtBBvHW0AjwNbhFtBKsHG8BTQCbB1uAa0EG8dbQCPA1uEW0EqwcbwFNAJsHW4BrQQbx1tAI8DW4dMU0HrWHY23ALEMC7AAMQFxeq8ACxATEKf3CrAAMQFxeq8ACxATEKf3CpiOAPE3/UfTewWIxVqABYgJiNN7BViAmIA4vVeABYgJiNN7BViAmIA4vVfAiIB9d/8FAAD//81LkRgAAAAGSURBVAMAKouP0K5FhgUAAAAASUVORK5CYII=","144":"data:image/png;base64,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","145":"data:image/png;base64,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","146":"data:image/png;base64,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","149":"data:image/png;base64,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","158":"data:image/png;base64,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","225":"data:image/png;base64,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","234":"data:image/png;base64,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","235":"data:image/png;base64,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","319":"data:image/png;base64,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","363":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAF1ElEQVR4AeyasU7sOhCGnfsAtEg0CBokeAIEBRKiooOOkhIaCih4BiiBBgk6OuioEBIN8AQg0YBoQDzFXn8+O5E3a8jeczYZ7z2DMmt7xrE3/5exkxX/OPtTVcAAqMrvnAEwAMoKKE9vGWAAlBVQnt4ywAAoK6A8vWWAAVBWQHn6vzMDlEWPpzcAsRoKdQOgIHo8pQGI1VCoGwAF0eMpDUCshkLdACiIHk9pAGI1FOoGQEH0eEoDEKuhUDcACqLHU7YIIJ7W6qKAARAllEoDoCS8TGsARAml0gAoCS/TGgBRQqk0AErCy7QGQJRQKg2AkvAyrQEQJZTKbAGsrq52xJS0Gcq0dYNkCeDg4KCzubnpsKWlJScgKLe2tjpVq7vInOPZAUD86enpoNnZ2Zm7u7tzSx4CMLDl5WUX29TUlIuBhBNH6CM7AAj++vrqbm9vQwbs7++7+fl5Nz4+3icrfej//v5eQhEYfZ0zdWQFgCVmcnLSkQHc5VXR4zbi04es4ByyBY3xYYCgnbtlA0DER7xBRKMfEMgW6tVz8DFm1Z9bOxsACHNychKWHurY19cXRWnVNiKXwUSF7MgdQhYAEOn6+tp1Op0+GRFdrC/oHSxXZAJi+2bfwQbO+H2BTBzqAFirEX9jY8MVRRE205Q2LDXr6+sOQ/C4T10msEfkCkEVAOIjnhfHXVxcuMvLy1jXnvre3l6ZISxVPcGowUa9trYWeX5VgfyrltenGgARHzlYPhC/emcTi60oCkemxL5qfWFhIbiqEPx8+PvXOLyKpgaAZ/fqdZMN4qvC8C9oIUSmdMUM7eTHCDnVAKCRiMz6jtFmjeeZPoZBXzZbsgQjRl/8dfb29lbXRTWuBsCvyQVZgOC7u7vhbZe1/ePjw52enobNFigpdfBz7tjYmMPiPldXV6F5f38fyviDzPH7TVbLkBqAo6Ojzs7OTqnP4uKiQ3xxUGfj5U7HEB2jjh9Ic3NzDktB4NGV/jKelB68VLMo1QBw9YiH0EVR9IhPTOz4+DhsvIiOSZZInJJxqhDwj4KpAXh4eCj1AULZSFQkO+iHJbr0ZAJPQDyO5r7+cx1qAJi8zhC7KL7Pjp/Ol8dRfq6ue3T9aZymY1kD4OKBQDmIsRR9fn667e3tYJzDT9mUuULIHgDi/Ynx3sD5j4+PFGI8CWHSVivVAHhhiomJiaFf+MzMjJudne0Z18/l4v2Ax1HMd1KHoAbAX/zQj6enp9ox/XtA6MN7RLcOhPAPACHQ8scQAfzeNx9EtN8b+eezeB/gV1IyAev2Bka32k6hDaBYWVlxw4AwyBjc9YiekvY7f6rvMH2qAPyTSXnHDSJgfOHSnxKLY3V1QER3fV33RuNqABD/8PAwvAGTBVwlQmLUUyYxSh45pUz1rfoQnbtcymqcN2zvK7y1eqgAEPHlSm9ubpxAwIewKZNYLD798Iu9vLy45+dnafaVQKg6tcTne6gAYGIRjvL8/Dz83hNDoM93xjnEpKT+kyFwVXh8Yv7c1u98P2c4VAD45/Kw+fIegOi0Mf+Ngh+frycP7vBUAIjE4rtfBOZxk6VH2pR+DEQX802dQwVA91Ll4im7rlDQLkFUYcQ/4oXe/oMlif1EYgiM+VAYyz9yFpi0u6Uv9A9NAHVXH8TznXpg+Ezp2S8Q3/cpj1j40plxJWcAsWwlDO8MdcmMeB8gC/wG77uMzjEqAFKKlpmRCrbl+9N5RhkA1x6ygc1czC9R+IiNhI06ABEZ0cXENxLl/wXASIid+pIGIKVKiz4D0KLYqakMQEqVFn0GoEWxU1MZgJQqLfoMQItip6YyAClVWvSNJoAWBWp6KgPQtMI14xuAGoGaDhuAphWuGd8A1AjUdNgANK1wzfgGoEagpsMGoGmFa8Y3ADUCNR02AE0rXDO+AagRqOnwfwDQ9Ff5O8c3AMrcDYABUFZAeXrLAAOgrIDy9JYBBkBZAeXpLQMMgLICytNbBtQAaDr8LwAAAP//hF3c+wAAAAZJREFUAwBTGiXfgPTyJgAAAABJRU5ErkJggg==","438":"data:image/png;base64,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","730":"data:image/png;base64,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","840":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAEtUlEQVR4AeyasUokQRCGy8sFMTMwEwM1NNpQMPANFAPBwExMfAyfQTBSTAwEDYzNTDUyUXPxCXbvvoWC2macnfVutmr26uC/rq6unur9/plduJtfkn9cCaQBrvhF0oA0wJmAc/t8AtIAZwLO7fMJSAOcCTi3zycgDXAm4Nz+/3wCnKHb9mmApeEQpwEO0G3LNMDScIjTAAfotmUaYGk4xGmAA3TbMg2wNBziNMABum2ZBlgaDnEa4ADdtpyiAbZtxkogDVASTmMa4ARe26YBSsJpTAOcwGvbNEBJOI1pgBN4bRvagL29vQHSwzYd2aNquserLqQB/X5/CP7g4EAQMJsAog6xR8W8yV6vmpAG7O/vD8ErFGCOA8k6dUj3MTJnjTiiQhowKSgAA3rSfdOoH9ejMwYAGNDlByLHWpnvyrwzBnQF6KTnDG3A09OT7O7uCmPVB7N3PzVVtRcXF3J5eTlXtT9CLrQBZ2dn8vn5KYzA4qsG6MSlqLG15XrUeWgD6qBhBIbU1US/+zl7SAP4ygDe6empLC4uCiOHrRM1Ze39/X3dlhBrIQ2ADPA2Nzfl6upKGMnViRpby+/B19dX2O9+/SxhDQAeEPWgOq6vr0vd14/+GLNf90QewxoANCBWmcBaKcAjfozZV65HnYc2AGjAxATgMi9FHpHvGnzOHN6AXq83WFtbk7u7O+GHmUMjoCNi9Pz8LNRR3/uzh1wXFNYABbm9vS0bGxtDra6uCqAB+/7+LipyrGkde3Q/tZEVzgAFB0QEvKWlJUEPDw/y9vYm8/Pzwzk5xJw1YsQe9iKuxzyqQhkALKChKmDkkULWGubkdW5H8gsLCwObixSHMUDhWzjLy8tiZdcmiU9OTiSqCWEMKIEC/vDwcCRNbiQxA5MQBlTd/R8fH3J+fj6CmNxIomKiP8zlUtSnIIQBJSydA/zx8VEQsea/G4GvazbWXMQxjAElMOZIoREjnduRPLI5YnKIOKrCGAAgYKmYV0nX7VhVZ3Naa3NR4hAGvLy8ROEx9XP8QwOmfvaZaJgGONsYwgD+xfPm5sYZhU/7EAa0+dGPjo6Gl8dgjB5OAv0VzgAFNo5R07px1/FeD2MAdyd36d8C2draEpVei7nG0cYwBpRggGZl18kz11Fj5isrK6LSp+T4+FgwmLpoCmUAkHZ2dgRwClFHcgAGIDk7kieHyFu9vr7aabg4lAFK5ztoAMYIrWNkTp7Yimsg7n5eV+FNCrseJQ5nAE8B0H4KCOjI7uf/jnnPyOaixOEMAAwm8FVUgmStFDVWdh0jeWOuzbclbL+fxCEN4INgAgAt3KqY2lLsQ+Qjw+d8YQ3gcGrC7e0t01pRA3TEPqvajc6LoQ2ADSCvr6/nAFsnaqhF7OuKwhugIAFbJ63r2tgZA7oGtul504CmpFqqSwNaAtv0smlAU1It1aUBLYFtetk0oCmpluq6aUBLMDwumwZ4UDc90wADwyNMAzyom55pgIHhEaYBHtRNzzTAwPAI0wAP6qZnGmBgeIRpgAd10zMNMDA8wgkM8Dje7PdMA5w9TgPSAGcCzu3zCUgDnAk4t88nIA1wJuDcPp+ANMCZgHP7fALGGND28m8AAAD//7kb8YgAAAAGSURBVAMAJhgJ3+agHUgAAAAASUVORK5CYII=","845":"data:image/png;base64,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","869":"data:image/png;base64,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","872":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAEk0lEQVR4AeyYP0osQRCH23cCQfAIIoihmXgAU2MT8QYiiImZeAVjAxNNzUzEzFgQ8QSCoCfYt9+4NdQus84u7Wz1vPcTarum/0zPft/UjPon6SeUgASE4k9JAiQgmEDw9qoACQgmELy9KkACggkEb68KkIBgAsHb/58VEAzdby8BnkZALgEB0P2WEuBpBOQSEADdbykBnkZALgEB0P2WEuBpBOQSEADdbykBnkZALgEB0P2WCxTgt1VuBCTASAS1EhAE3raVACMR1EpAEHjbVgKMRFArAUHgbVsJMBJBrQQEgbdtJcBIBLUS0DH4ttNLQBuhjscloGPAbaeXgDZCHY9LQMeA204vAW2EOh7vnYCLi4uBRcdsFnL6Xgm4v78f7O/vJ2JrayshYiGUOtykNwKAv76+XqPwed05SpjbFzm9EABQ2K6urtLUQSV40OTM3dnZqaqE43pyoUkxAgBn0cQKqE391gdshDDv/f3duotvixAAPB4pwCMQQR/0aBkjbwILdObQUiHVHCb3JIoQYKwMHhIAOi9YW2/n60NblACAAZHgbuY3HeujJV5eXtJk+H7yq6urRJAjkbbUKELAycnJkgEzUEiwR48HbuO+NVFPT08VeI6poKOjo0QgwYdfG50XIaAJwtnZWSIQA1iLprnWB3iCY6Q9PDwkRHLshSwvLw/oKyGKEWBVYNDPz88TcXBwkHxsbm6mr6+vmdkhwiYjg7DjEtpiBADj7e2tgn58fJxWVlboaozt7e00qwgqx6qCk21sbKTPz88l8hKiCAE8nw8PDweXl5c/gp8Ehoh5qoHH2bDSJk8TehwuAPj+DoXGx8dHIsjbAgnT5vi7n0fRcK/6L+RhXsR7IFQAEIB/fX1dPXqATkwDOq2/qQo8fFv3/PxcpbyQiRJexqECKhq/8NFUBYi1UyODnCqgLSl+UcD8X2v4PF6yu3/+1eMrDPJ47/cRMvw4L2KihJdxqABevPyqCabT01OazgIJe3t7ycCXAJ8vGybAw+dCdnd30+PjI2kdHBN1xwyJv9ObppcC3q4tTIBdgLU8x+/u7uwwURH0EXXnKEHK2tra6Oi7Gb7Qq4Q7fZoEXsIlvHirCx19hAoA5Og6xhrg26NpbGB0wF/Go7Rqms4zKcH+r1QtKOgjTMDNzU2FAXgW9HFn01aDUz5eX18TYesQcnt7W8+mCjjgmU+UCp9rDBPAsxhwPugjuDDg0vqgz4etNfgeNI8kzkXw4rXg2J8zOg8TwBcHhg/6CPqASzV44IwRjBHkhL/LkUDQb8H5LKyvlDZUwE8QDBigJ8PGfGt3uLWM/XT+UsaKFWCAADkZNubbWeb4+aXkxQsoBdS068jtl4BcgpnrJSATYO5yCcglmLleAjIB5i6XgFyCmeslIBNg7nIJyCWYuV4CMgHmLpeAXIKZ6yUgE2Du8n4KyP3WBa2XgGAZEiABwQSCt1cFSEAwgeDtVQESEEwgeHtVgAQEEwjeXhXQHwHBV/qPbq8KCBYrARIQTCB4e1WABAQTCN5eFSABwQSCt1cFSEAwgeDtVQEtAroe/gsAAP//Bo1GiAAAAAZJREFUAwDAfRbflvIE+QAAAABJRU5ErkJggg==","924":"data:image/png;base64,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","957":"data:image/png;base64,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","958":"data:image/png;base64,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","959":"data:image/png;base64,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","976":"data:image/png;base64,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"};
+
+    function dexArt(id){return '<span class="dex-art"><span class="dex-fallback">'+dexNo(id)+'</span><img alt="" loading="lazy" src="'+LOCAL_ART[DEX[id]]+'" data-dex-art></span>';}
+    function closeDex() {
+      pocketSelected = null;
+      $("dexOverlay").hidden = true;
+      $("pocketDetail").innerHTML = "";
+    }
+    function notifyCollect(id, before, checked = true,unlocked=[]) {
+      let it = distinctStamps().find((x) => x.id === id);
+      if (!it) return;
+      let r = REWARDS.find((x) => before < x[0] && state.done.length >= x[0]);
+      undoStamp = { id, checked,unlocked };
+      $("collectToast").innerHTML = dexArt(id) + "<div><strong>" + (checked ? "\u6536\u5F55\u6210\u529F \xB7 " : "\u5DF2\u53D6\u6D88 \xB7 ") + dexNo(id) + "</strong><small>已收录 " + state.done.length + "/30" + (r ? " \xB7 " + esc(r[1]) + "\u5DF2\u8FBE\u6807" : "") + '</small>'+(unlocked.length?'<div class="achievement-unlocked"><strong>✦ 收藏挑战达成</strong><span>'+unlocked.map(esc).join(' · ')+'</span></div>':'')+'</div><button type="button" id="undoCollect">\u64A4\u9500</button>';
+      $("collectToast").hidden = false;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        $("collectToast").hidden = true;
+        undoStamp = null;
+      }, unlocked.length?7000:5000);
+    }
+    $("dexSearch").addEventListener("input", renderPocket);
+    $("dexDate").onchange = renderPocket;
+    $("dexClearSearch").onclick = () => {
+      $("dexSearch").value = "";
+      renderPocket();
+    };
+    $("dexFilters").addEventListener("click", (e) => {
+      let b = e.target.closest("[data-dex-filter]");
+      if (!b) return;
+      dexFilter = b.dataset.dexFilter;
+      for (let x of $("dexFilters").querySelectorAll("button")) {
+        let active = x === b;
+        x.classList.toggle("active", active);
+        x.setAttribute("aria-pressed", String(active));
+      }
+      renderPocket();
+    });
+    $("dexOverlay").addEventListener("click", (e) => {
+      if (e.target === $("dexOverlay")) closeDex();
+    });
+    $("pocketDetail").addEventListener("click", (e) => {
+      let b = e.target.closest("button");
+      if (!b) return;
+      if (b.hasAttribute("data-close-pocket")) {
+        closeDex();
+        return;
+      }
+      if (b.dataset.detailToggle) {
+        let id = b.dataset.detailToggle;
+        toggle(id, !has({ id }));
+        return;
+      }
+      if (b.dataset.detailMust) {
+        toggleMust(b.dataset.detailMust);
+        return;
+      }
+      if (b.hasAttribute("data-detail-book")) {
+        closeDex();
+        switchTab("bookings");
+        return;
+      }
+      if (b.dataset.detailMap !== void 0) {
+        let id = Number(b.dataset.detailMap);
+        $("mapDate").value = $("dexDate").value;
+        $("mapKind").value = "";
+        $("mapRegion").value = "";
+        $("mapRemaining").value = "all";
+        closeDex();
+        exploreSelected = id;
+        switchTab("map");
+        showExploreDetail(id);
+        return;
+      }
+      if (b.dataset.detailPlan) {
+        let id = b.dataset.detailPlan;
+        if (!(state.must || []).includes(id)) toggleMust(id);
+        $("date").value = $("dexDate").value;
+        closeDex();
+        invalidate();
+        renderQuickDates();
+        renderReminders();
+        switchTab("plan");
+      }
+    });
+    $("dexShare").onclick = openPoster;
+    $("closeShare").onclick = closePoster;
+    $("shareOverlay").addEventListener("click", (e) => {
+      if (e.target === $("shareOverlay")) closePoster();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeDex();
+        closePoster();
+      }
+    });
+    document.addEventListener("error", (e) => {
+      var _a, _b;
+      if ((_b = (_a = e.target) == null ? void 0 : _a.hasAttribute) == null ? void 0 : _b.call(_a, "data-dex-art")) e.target.hidden = true;
+    }, true);
+
+    const SPECIES_META={"1":[1,"草 毒"],"4":[1,"火"],"7":[1,"水"],"25":[1,"电"],"52":[1,"一般"],"60":[1,"水"],"61":[1,"水"],"90":[1,"水"],"132":[1,"一般"],"144":[1,"冰 飞行"],"145":[1,"电 飞行"],"146":[1,"火 飞行"],"149":[1,"龙 飞行"],"158":[2,"水"],"225":[2,"冰 飞行"],"234":[2,"一般"],"235":[2,"一般"],"319":[3,"水 恶"],"363":[3,"冰 水"],"438":[4,"岩石"],"730":[7,"水 妖精"],"840":[8,"草 龙"],"845":[8,"飞行 水"],"869":[8,"妖精"],"872":[8,"冰 虫"],"924":[9,"一般"],"957":[9,"妖精 钢"],"958":[9,"妖精 钢"],"959":[9,"妖精 钢"],"976":[9,"水 超能力"]};
+    const GEN_NAMES={1:'关都',2:'城都',3:'丰缘',4:'神奥',7:'阿罗拉',8:'伽勒尔',9:'帕底亚'};
+    const CAT_NAMES=['经典羁绊','世代图鉴','盛典探索'];
+    const idsByGen=g=>Object.keys(DEX).filter(id=>SPECIES_META[DEX[id]][0]===g);
+
+    const EVENT_STAMPS=distinctStamps();
+    const idsByKind=k=>EVENT_STAMPS.filter(it=>it.kind===k).map(it=>it.id);
+    const makeSeries=(name,cat,ids,desc,more={})=>({name,cat,ids,desc,...more});
+
+    const SERIES=[
+      makeSeries('初代御三家',0,['s9-1','s11-1','s10-1'],'关都草、火、水三位最初的伙伴。'),
+      makeSeries('三圣鸟',0,['s1-2','s3-2','s2-2'],'急冻鸟、闪电鸟、火焰鸟；需核对赛事报名及印章取得规则。'),
+      makeSeries('锻匠一家',0,['s1-4','s2-4','s3-4'],'小锻匠→巧锻匠→巨锻匠，完整三阶段进化线。'),
+      makeSeries('蚊香进化之旅',0,['s7-1','s3-1'],'本次登场的前两阶段；不包含蚊香泳士及蚊香蛙皇。'),
+      makeSeries('最初伙伴的传承',0,['s9-1','s11-1','s10-1','s3-3','starbucks'],'关都御三家、城都小锯鳄，以及球球海狮的最终进化西狮海壬。'),
+      makeSeries('小智的冒险回忆',0,['s5-1','s9-1','s11-1','s10-1','s3-3','s4-1'],'动画中曾与小智并肩冒险的六位伙伴，并非同一时期的队伍。'),
+      ...[1,2,3,8,9].map(g=>makeSeries(GEN_NAMES[g]+'收藏家',1,idsByGen(g),'收齐本次盛典全部第'+g+'世代印章。')),
+      makeSeries('七世代巡礼',1,Object.keys(DEX),'本次活动涉及七个非连续世代，每个世代任选一枚。',{buckets:Object.keys(GEN_NAMES).map(g=>({name:GEN_NAMES[g],ids:idsByGen(Number(g))}))}),
 
 
-function distinctStamps(){let m=new Map();for(let v of V)for(let it of v.items){if(!m.has(it.id))m.set(it.id,{...it,places:[]});m.get(it.id).places.push(v)}return [...m.values()].sort((a,b)=>a.start.localeCompare(b.start)||a.end.localeCompare(b.end)||a.id.localeCompare(b.id))}
-const pocketNames={walk:'打卡',exhibition:'展览',workshop:'工坊',card:'卡牌'};
-let pocketSelected=null;
-function renderPocket(){let all=dexStamps(),kind=$('pocketKind').value,day=$('dexDate').value||date(),q=$('dexSearch').value.trim().toLowerCase().replace(/^#|^no\.?\s*/g,''),items=all.filter(it=>{let chosen=(state.must||[]).includes(it.id),n=DEX[it.id];return (!q||it.stamp.includes(q)||String(n).padStart(4,'0').includes(q))&&(!kind||it.kind===kind)&&(dexFilter==='all'||dexFilter==='done'&&has(it)||dexFilter==='missing'&&!has(it)||dexFilter==='must'&&chosen||dexFilter==='today'&&!has(it)&&inDate(it,day)||dexFilter==='booking'&&it.kind!=='walk')});$('dexCount').textContent=state.done.length;$('dexProgress').style.width=state.done.length/30*100+'%';$('pocketSummary').innerHTML=Object.keys(pocketNames).map(k=>{let a=all.filter(it=>it.kind===k);return '<span><i class="k-'+k+'"></i>'+pocketNames[k]+' <b>'+a.filter(has).length+'/'+a.length+'</b></span>'}).join('');$('dexResults').textContent='显示 '+items.length+' / 30 款';$('pocketGrid').innerHTML=items.map(it=>{let chosen=(state.must||[]).includes(it.id),done=has(it),open=inDate(it,day),closing=open&&(Date.parse(it.end)-Date.parse(day))/86400000<=2;return '<article class="stamp-tile dex-tile '+(done?'is-done':'')+'"><button type="button" class="tile-check" data-info="'+it.id+'" aria-label="查看'+esc(it.stamp)+'详情"><span class="dex-id">'+dexNo(it.id)+'</span>'+dexArt(it.id)+'<strong>'+esc(it.stamp)+'</strong><small class="dex-state">'+(done?'✓ 已收录':'待收录')+'</small></button><button type="button" class="tile-favorite" data-star="'+it.id+'" aria-pressed="'+chosen+'" aria-label="'+(chosen?'取消必集':'加入必集')+esc(it.stamp)+'">'+(chosen?'★':'☆')+'</button><div class="dex-tile-footer"><span class="dex-kind"><i class="k-'+it.kind+'"></i>'+pocketNames[it.kind]+(closing?' · 将结束':'')+'</span><button class="tile-info" type="button" data-pocket="'+it.id+'" aria-pressed="'+done+'">'+(done?'✓ 已收录':'＋ 收录')+'</button></div></article>'}).join('')||'<p class="empty">没有符合条件的印章</p>';if(pocketSelected)renderPocketDetail(pocketSelected)}
-function renderPocketDetail(id){let it=distinctStamps().find(i=>i.id===id);if(!it)return;pocketSelected=id;let day=$('dexDate').value||date(),done=has(it),wanted=(state.must||[]).includes(id),open=inDate(it,day),status=done?'已收录':!open?(day<it.start?'尚未开始':'已结束'):it.kind==='walk'?'当天可直接打卡':slot(it,day)?'当天已登记预约':'当天开放 · 需预约';$('dexOverlay').hidden=false;$('pocketDetail').innerHTML='<div class="dex-sheet"><button type="button" data-close-pocket class="sheet-close" aria-label="关闭详情">关闭 ×</button><div class="dex-detail-hero '+(done?'is-done':'')+'"><span class="dex-id">'+dexNo(id)+'</span>'+dexArt(id)+'<h2>'+esc(it.stamp)+'</h2><p>'+status+'</p></div><div class="dex-detail-body"><div class="detail-facts"><span>开放日期<strong>'+fmt(it.start)+'–'+fmt(it.end)+'</strong></span><span>活动类型<strong>'+pocketNames[it.kind]+'</strong></span></div><h3>如何收录</h3><p>'+esc(it.activity)+'</p>'+(it.kind!=='walk'?'<p class="booking-notice">请先在官方渠道确认预约或报名，再登记场次。</p><button type="button" data-detail-book>登记预约 ›</button>':'')+'<h3>集章地点 '+it.places.length+'处</h3>'+it.places.map(v=>'<div class="detail-place"><strong>'+esc(v.name)+'</strong><p>'+esc(v.address)+'</p><div class="flex"><a href="'+mapLink(v)+'">查看地址</a><button type="button" data-detail-map="'+v.id+'">查看地点</button></div></div>').join('')+'<div class="detail-actions"><button type="button" data-detail-must="'+id+'" aria-pressed="'+wanted+'">'+(wanted?'★ 已加入必集':'☆ 加入必集')+'</button><button type="button" class="primary" data-detail-toggle="'+id+'">'+(done?'取消收录':'标记已收录')+'</button></div><button type="button" class="detail-plan" data-detail-plan="'+id+'">为这枚印章规划路线 ›</button><p class="muted">收录仅为个人记录，不代表官方盖章。</p></div></div>'}
-function renderQuickDates(){let d=date();$('quickDates').innerHTML=eventDays('2026-11-28','2027-01-03').map(day=>{let a=daily(day);return '<button type="button" data-quickday="'+day+'" class="'+(day===d?'selected':'')+'" aria-pressed="'+(day===d)+'"><small>'+weekdayName(day)+'</small><b>'+fmt(day)+'</b><small>'+a.total+'枚开放</small><small>'+a.normal+'直接集 · '+a.booked+'已登记</small></button>'}).join('');let active=$('quickDates').querySelector('.selected');if(active)$('quickDates').scrollLeft=Math.max(0,active.offsetLeft-$('quickDates').offsetLeft-18)}
-function selectTripDay(day){$('date').value=day;renderList();renderDates();renderReminders();renderQuickDates();clearMulti();switchTab('plan');showPlan();$('tabPlan').scrollIntoView({block:'nearest'})}
-function renderTimeline(){let kind=$('calendarKind').value,mode=$('calendarDays').value,days=eventDays('2026-11-28','2027-01-03',mode),items=distinctStamps().filter(it=>!kind||it.kind===kind);let html='<p class="muted">左右滑动查看完整排期。实心色块为开放日期，点击日期规划路线。</p><div class="schedule-scroll"><table class="schedule-table"><thead><tr><th scope="col">印章 / 地点</th>'+days.map(day=>'<th scope="col"><button type="button" data-scheduleday="'+day+'" class="'+(day===date()?'selected':'')+'">'+fmt(day)+'<small>'+weekdayName(day)+'</small></button></th>').join('')+'</tr></thead><tbody>';for(let it of items){html+='<tr><th scope="row" class="'+(has(it)?'schedule-done':'')+'"><strong>'+esc(it.stamp)+(has(it)?' ✓':'')+'</strong><small>'+esc(it.places[0].name)+(it.places.length>1?' 等3处':'')+'</small></th>'+days.map(day=>'<td'+(day===date()?' class="today-col"':'')+'>'+(inDate(it,day)?'<span class="schedule-cell k-'+it.kind+(has(it)?' faded':'')+'" title="'+esc(it.stamp+' '+fmt(day))+'"></span>':'')+'</td>').join('')+'</tr>'}$('scheduleView').innerHTML=html+'</tbody></table></div>'}
-function calendarMode(timeline){$('dateChart').hidden=timeline;$('scheduleView').hidden=!timeline;$('dailyView').classList.toggle('primary',!timeline);$('timelineView').classList.toggle('primary',timeline);$('dailyView').setAttribute('aria-pressed',String(!timeline));$('timelineView').setAttribute('aria-pressed',String(timeline));if(timeline)renderTimeline()}
+      makeSeries('免预约打卡全收录',2,idsByKind('walk'),'收齐15款免预约打卡印章；星巴克同款只计一次，不含预约入场的插画展。'),
+      makeSeries('卡牌赛事全收录',2,idsByKind('card'),'两期卡牌赛事共六枚；需确认资格及印章领取规则，不保证所有玩家均可集齐。'),
+      makeSeries('筑梦工坊全收录',2,idsByKind('workshop'),'两期工坊全部八枚。'),
+      makeSeries('筑梦启程',2,['s1-4','s2-4','s3-4','s4-2'],'首期筑梦工坊的四枚印章。'),
+      makeSeries('冬日庆典·工坊篇',2,['s1-5','s2-5','s3-5','s4-3'],'冬日庆典工坊的四枚印章。'),
+      makeSeries('冬日双人赛',2,['s1-6','s2-6','s3-6'],'海豹球、一对鼠、雪吞虫，12月21–26日赛事限定。'),
+      makeSeries('三大主题空间',2,['s1-3','s2-3','s3-3'],'巨牙鲨的跃动空间、大舌贝的流光庭园、小锯鳄的星光乐园。'),
+      makeSeries('三馆巡礼',2,['s1-1','s2-1','s3-1'],'三家官方卡牌道馆常驻打卡印章。'),
+      makeSeries('慢闪店巡礼',2,['s4-1','s6-1','s7-1','s8-1','s9-1','s10-1','s11-1'],'七家官方慢闪店的常驻打卡印章。')
+    ];
+    let seriesCat=0;
+    function seriesStat(g,owned=new Set(state.done)){
+      const units=g.buckets||g.ids.map(id=>({name:EVENT_STAMPS.find(it=>it.id===id).stamp,ids:[id]}));
+      const completed=units.filter(u=>u.ids.some(id=>owned.has(id))).length;
+      return {units,n:completed,total:units.length,complete:completed===units.length};
+    }
+    function seriesTargets(g){
+      if(!g.buckets)return g.ids.filter(id=>!state.done.includes(id));
+      const owned=new Set(state.done),out=[],d=$('date').value;
+      const remaining=g.buckets.filter(u=>!u.ids.some(id=>owned.has(id)));
+      while(remaining.length){const candidates=[...new Set(remaining.flatMap(u=>u.ids))];candidates.sort((a,b)=>{
+        const score=id=>{let it=EVENT_STAMPS.find(i=>i.id===id);return remaining.filter(u=>u.ids.includes(id)).length*100+(it.start<=d&&d<=it.end?10:0)+(it.kind==='walk'?5:0)};
+        return score(b)-score(a)||DEX[a]-DEX[b];
+      });const id=candidates[0];out.push(id);for(let i=remaining.length-1;i>=0;i--)if(remaining[i].ids.includes(id))remaining.splice(i,1);}
+      return out;
+    }
+    let undoStamp = null;
+    function validateTrips(a) {
+      let trips = {};
+      for (let t of Object.values(a.trips && typeof a.trips === "object" ? a.trips : {}).slice(0, 37)) {
+        let v = validateSaved(t);
+        if (v) trips[v.day] = v;
+      }
+      let saved = validateSaved(a.saved);
+      if (saved) trips[saved.day] = saved;
+      return { trips, saved: saved || Object.values(trips).sort((x, y) => x.day.localeCompare(y.day))[0] || null };
+    }
+    function renderTripShelf() {
+      let el = $("tripShelf"), trips = Object.values(state.trips || {}).sort((a, b) => a.day.localeCompare(b.day));
+      if (!trips.length && state.saved) trips = [state.saved];
+      el.hidden = !trips.length;
+      el.innerHTML = trips.length ? '<div class="flex"><h2>\u6211\u7684\u6536\u5F55\u8BA1\u5212</h2><small>' + trips.length + '\u5929</small></div><div class="trip-days">' + trips.map((t) => {
+        var _a;
+        let ids = t.stops.flatMap((st) => st.ids), n = ids.filter((id) => state.done.includes(id)).length;
+        return '<button type="button" data-trip-day="' + t.day + '" class="' + (((_a = state.saved) == null ? void 0 : _a.day) === t.day ? "active" : "") + '"><strong>' + fmt(t.day) + " " + weekdayName(t.day) + "</strong><small>" + n + "/" + ids.length + "\u679A</small></button>";
+      }).join("") + "</div>" : "";
+    }
+    function saveAllTrips(plans) {
+      let packed = plans.map(packPlan).filter(Boolean);
+      if (!packed.length) return;
+      let conflicts = packed.filter((t) => {
+        var _a;
+        return (_a = state.trips) == null ? void 0 : _a[t.day];
+      });
+      if (conflicts.length && !confirm("\u66FF\u6362\u4EE5\u4E0B\u65E5\u671F\u7684\u884C\u7A0B\uFF1A" + conflicts.map((t) => fmt(t.day)).join("\u3001") + "\uFF1F\u5176\u4ED6\u65E5\u671F\u4E0D\u53D8\u3002")) return;
+      state.trips = __spreadValues({}, state.trips || {});
+      if (state.saved) state.trips[state.saved.day] = state.saved;
+      for (let t of packed) state.trips[t.day] = t;
+      state.saved = packed[0];
+      save();
+      renderSaved();
+      renderHome();
+      $("tripShelf").scrollIntoView({ block: "start" });
+    }
 
-$('pocketKind').onchange=renderPocket;$('pocketRemaining').onchange=renderPocket;
-$('pocketGrid').addEventListener('click',e=>{let b=e.target.closest('button');if(!b)return;if(b.dataset.pocket){let id=b.dataset.pocket;toggle(id,!state.done.includes(id));let target=$('pocketGrid').querySelector('[data-pocket="'+id+'"]');if(target)target.focus({preventScroll:true})}else if(b.dataset.star)toggleMust(b.dataset.star);else if(b.dataset.info)renderPocketDetail(b.dataset.info)});
+    function renderSeries() {
+      const done=SERIES.filter(g=>seriesStat(g).complete).length;
+      $('seriesCount').textContent=done+'/'+SERIES.length+'组';$('dexSeriesCount').textContent=done+'/'+SERIES.length;
+      $('seriesTabs').innerHTML=CAT_NAMES.map((name,i)=>{let a=SERIES.filter(g=>g.cat===i);return '<button type="button" class="'+(seriesCat===i?'active':'')+'" data-series-cat="'+i+'" aria-pressed="'+(seriesCat===i)+'">'+name+'<small>'+a.filter(g=>seriesStat(g).complete).length+'/'+a.length+'</small></button>'}).join('');
+      $('seriesGrid').innerHTML=SERIES.map((g,i)=>{if(g.cat!==seriesCat)return '';const st=seriesStat(g);return '<article class="series-achievement '+(st.complete?'series-earned':'')+'"><div class="series-row"><div><strong>'+esc(g.name)+'</strong><small>'+st.n+'/'+st.total+' · '+(st.complete?'✓ 已集齐':'待收录')+'</small></div><button type="button" data-series="'+i+'" '+(st.complete?'disabled':'')+'>'+(st.complete?'已解锁':g.buckets?'推荐必集':'加入必集')+'</button></div><div class="series-track"><i style="width:'+st.n/st.total*100+'%"></i></div><p class="series-desc">'+esc(g.desc)+'</p><div class="series-members">'+st.units.map(u=>{let done=u.ids.some(id=>state.done.includes(id));return g.buckets?'<span class="series-member '+(done?'member-done':'')+'">'+(done?'✓ ':'○ ')+esc(u.name)+'</span>':'<button type="button" class="series-member '+(done?'member-done':'')+'" data-series-detail="'+u.ids[0]+'">'+(done?'✓ ':'○ ')+dexNo(u.ids[0])+'</button>'}).join('')+'</div></article>'}).join('');
+    }
+    function addSeries(i) {
+      let g = SERIES[i];
+      if (!g) return;
+      state.must = [.../* @__PURE__ */ new Set([...state.must || [], ...seriesTargets(g)])];
+      save();
+      renderMust();
+      renderPocket();
+      renderSeries();
+      invalidate();
+      clearMulti();
+    }
+    function shToday() {
+      return new Date(Date.now() + 288e5).toISOString().slice(0, 10);
+    }
+    function renderDashboard() {
+      const now=shToday(),before=now<'2026-11-28',after=now>'2027-01-03',d=before?'2026-11-28':now,a=daily(d),items=distinctStamps().filter(it=>inDate(it,d)&&!has(it)),newItems=items.filter(it=>it.start===d);
+      const loc=V.filter(v=>v.items.some(it=>inDate(it,d)&&!has(it))).length;
+      $('homeDashboard').innerHTML='<div class="flex"><h2>'+(before?'首日集章预览':after?'活动已结束':'今日集章')+'</h2><small>'+fmt(d)+' '+weekdayName(d)+'</small></div>'+(after?'<p class="muted">仍可查看个人收藏图鉴及历史记录。</p>':'<div class="dashboard-stats home-stats"><div><strong>'+a.normal+'</strong><small>直接可集</small></div><div><strong>'+a.reserve+'</strong><small>预约类开放</small></div><div><strong>'+a.booked+'</strong><small>已登记场次</small></div></div><p class="muted">'+(before?'11/28首日预计开放：':'当前排期：')+a.total+'款未收录 · 涉及'+loc+'处地点（含预约类）'+(a.uncertain?' · '+a.uncertain+'款日期待确认':'')+'。开放不代表预约成功。</p>'+(newItems.length?'<details class="home-new"><summary>'+(before?'首日开放':'今日新增开放')+' · '+newItems.length+'款</summary><p>'+newItems.map(it=>esc(it.stamp)).join('、')+'</p></details>':'')+'<div class="home-daily-actions"><button type="button" data-dashboard-dex>查看'+(before?'首日':'今日')+'印章</button><button type="button" class="primary" data-dashboard-plan="'+d+'">规划'+(before?'首日':'今日')+'路线 ›</button></div>')+(after?'<button type="button" data-dashboard-dex>查看图鉴 ›</button>':'');
+    }
+    function applyPreset(type) {
+      targetMode="total";
+      $("goal").value = type === "3" || type === "6" ? type : type === "birds" ? "3" : "0";
+      $("region").value = type === "changning" ? "\u957F\u5B81\u533A" : type === "center" ? "\u9EC4\u6D66\u533A" : "";
+      $("start").value = type === "center" ? "13:00" : "10:00";
+      $("end").value = type === "changning" ? "14:00" : type === "center" ? "18:00" : "22:00";
+      $("firstPolicy").value="nearest";updateFirstControls();
+      $("routeStyle").value = type === "3" || type === "6" ? "smooth" : "max";
+      $("useSlots").checked = type !== "walk";
+      if (type === "birds") addSeries(1);
+      refreshGoal();
+      invalidate();
+      clearMulti();
+      switchTab("plan");
+      showPlan();
+    }
+    $("seriesTabs").addEventListener("click",e=>{let b=e.target.closest("[data-series-cat]");if(b){seriesCat=Number(b.dataset.seriesCat);renderSeries()}});
+    $("seriesGrid").addEventListener("click", (e) => {
+      let member=e.target.closest("[data-series-detail]");if(member){renderPocketDetail(member.dataset.seriesDetail);return;}
+      let b = e.target.closest("[data-series]");
+      if (b) addSeries(Number(b.dataset.series));
+    });
+    $("shortcuts").addEventListener("click", (e) => {
+      let b = e.target.closest("[data-preset]");
+      if (b) applyPreset(b.dataset.preset);
+    });
+    $("homeDashboard").addEventListener("click", (e) => {
+      let planButton=e.target.closest("[data-dashboard-plan]");
+      if(planButton){$('date').value=planButton.dataset.dashboardPlan;invalidate();clearMulti();renderQuickDates();renderReminders();switchTab('plan');showPlan();return;}
+      if (!e.target.closest("[data-dashboard-dex]")) return;
+      $("dexDate").value = shToday() < "2026-11-28" ? "2026-11-28" : shToday() > "2027-01-03" ? "2027-01-03" : shToday();
+      dexFilter = shToday() > "2027-01-03" ? "all" : "today";
+      $("dexSearch").value = "";
+      $("pocketKind").value = "";
+      for (let b of $("dexFilters").querySelectorAll("button")) {
+        let a = b.dataset.dexFilter === dexFilter;
+        b.classList.toggle("active", a);
+        b.setAttribute("aria-pressed", String(a));
+      }
+      switchTab("list");
+    });
+    $("tripShelf").addEventListener("click", (e) => {
+      var _a;
+      let b = e.target.closest("[data-trip-day]");
+      if (!b) return;
+      let t = (_a = state.trips) == null ? void 0 : _a[b.dataset.tripDay];
+      if (t) {
+        state.saved = t;
+        save();
+        renderSaved();
+        renderHome();
+      }
+    });
+    $("collectToast").addEventListener("click", (e) => {
+      if (!e.target.closest("#undoCollect") || !undoStamp) return;
+      let { id, checked,unlocked=[] } = undoStamp;
+      undoStamp = null;
+      let a = new Set(state.done), prior=new Set(a);
+      checked ? a.delete(id) : a.add(id);
+      state.done = [...a];
+      const restored=SERIES.filter(g=>seriesStat(g,a).complete&&!seriesStat(g,prior).complete).map(g=>g.name);
+      state.seenSeries=SERIES.filter(g=>seriesStat(g,a).complete).map(g=>g.name);
+      save();
+      refreshProgress();
+      renderList();
+      renderDates();
+      invalidate();
+      $("collectToast").hidden = true;
+      if(restored.length)openAchievement(restored);
+    });
+    $("keyDates").innerHTML = [["11/28", "\u76DB\u5178\u5F00\u59CB"], ["12/01", "\u661F\u5DF4\u514B\u5370\u7AE0\u5F00\u653E"], ["12/05", "\u90E8\u5206\u4E3B\u9898\u7A7A\u95F4\u4E0E\u5DE5\u574A\u5F00\u653E"], ["12/09", "\u4E2D\u5C71\u516C\u56ED\u4E3B\u9898\u7A7A\u95F4\u4E0E\u5C0F\u953B\u5320\u5F00\u653E"], ["12/18", "\u9996\u671F\u7B51\u68A6\u5DE5\u574A\u6700\u540E\u4E00\u5929"], ["12/19", "\u51AC\u65E5\u5E86\u5178\u5F00\u59CB"], ["12/20", "\u9996\u671F\u5361\u724C\u8D5B\u4E8B\u6700\u540E\u4E00\u5929"], ["12/21", "\u51AC\u65E5\u53CC\u4EBA\u8D5B\u5F00\u59CB"], ["12/26", "\u51AC\u65E5\u53CC\u4EBA\u8D5B\u6700\u540E\u4E00\u5929"], ["12/27", "\u63D2\u753B\u5C55\u4E0E\u661F\u5DF4\u514B\u6700\u540E\u4E00\u5929"], ["01/03", "\u76DB\u5178\u6700\u540E\u4E00\u5929"]].map(([d, t]) => '<div class="key-date"><strong>' + d + "</strong><span>" + t + "</span></div>").join("");
+    $("dexDate").value = date();
+    $("mapDate").value = date();
+    renderCustomDays();
+    state.seenSeries=[...new Set([...(state.seenSeries||[]),...SERIES.filter(g=>seriesStat(g).complete).map(g=>g.name)])];
+    refreshProgress();
+    firstRender=false;
+    $("scriptNotice").hidden = true;
 
-$('quickDates').addEventListener('click',e=>{let b=e.target.closest('[data-quickday]');if(b)selectTripDay(b.dataset.quickday)});
-$('scheduleView').addEventListener('click',e=>{let b=e.target.closest('[data-scheduleday]');if(b)selectTripDay(b.dataset.scheduleday)});
-$('dailyView').onclick=()=>calendarMode(false);$('timelineView').onclick=()=>calendarMode(true);
-function focusRouteStop(e){let b=e.target.closest('[data-stop]');if(!b)return;let stop=$('stop-'+b.dataset.stop);if(stop){stop.focus({preventScroll:true});stop.scrollIntoView({block:'center'})}}
-$('route').addEventListener('click',focusRouteStop);$('route').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.closest('[data-stop]')){e.preventDefault();focusRouteStop(e)}});
+    function timed(p, ms) { return new Promise(function(resolve,reject){var timer=setTimeout(function(){reject(Error('timeout'));},ms);Promise.resolve(p).then(function(v){clearTimeout(timer);resolve(v);},function(e){clearTimeout(timer);reject(e);});}); }
+    function setupLayout(){
+      var root=document.documentElement;
+      try { var f=document.createElement('div');f.style.position='absolute';f.style.visibility='hidden';f.style.display='flex';f.style.flexDirection='column';f.style.rowGap='1px';f.appendChild(document.createElement('div'));f.appendChild(document.createElement('div'));document.body.appendChild(f);var gap=f.scrollHeight===1;document.body.removeChild(f);if(!gap)document.body.classList.add('no-flex-gap'); } catch(e){document.body.classList.add('no-flex-gap');}
+      function apply(info){if(!info||!info.safeArea)return;var top=Number(info.safeArea.top)||0,b=info.menuButtons||{},cap=b.capsule;var rects=cap&&cap.width>0&&cap.height>0?[cap]:[b.back,b.me,b.share];rects.forEach(function(r){if(r&&r.width>0&&r.height>0&&Number.isFinite(r.bottom))top=Math.max(top,r.bottom);});root.style.setProperty('--content-top',Math.max(0,top+8)+'px');}
+      var x=window.xhs,opts=x&&x.launchOptions,env=opts&&opts.miniToolEnv;apply(env&&env.windowInfo);
+      function measure(){if(mini&&clientVersion!==null&&clientVersion>=9490&&typeof mini.getWindowInfo==='function'){timed(mini.getWindowInfo(),2500).then(apply,function(){});}}
+      measure();var resizeTimer;window.addEventListener('resize',function(){clearTimeout(resizeTimer);resizeTimer=setTimeout(measure,200);});
+      var vv=window.visualViewport;if(vv&&typeof vv.addEventListener==='function'){var update=function(){root.style.setProperty('--app-height',vv.height+'px');};vv.addEventListener('resize',update);update();}
+    }
+    function storageStatus(t) {
+      $("saveStatus").textContent = t;
+      let e = $("nativeStorageStatus");
+      if (e) e.textContent = t;
+    }
+    function readVersion(o) {
+      let raw = o && o.miniToolEnv && o.miniToolEnv.buildVersion;
+      return /^[1-9]\d{6,}$/.test(String(raw)) && Number.isSafeInteger(Number(raw)) ? Math.floor(Number(raw) / 1e3) : null;
+    }
+    async function initStorage(){
+      const x=window.xhs;mini=x&&x.miniTool;clientVersion=readVersion(x&&x.launchOptions);
+      if(clientVersion===null&&mini&&typeof mini.getLaunchOptions==='function'){try{clientVersion=readVersion(await timed(mini.getLaunchOptions(),1000));}catch(e){}}
+      if(clientVersion===null||clientVersion<9460||!mini||typeof mini.getStorage!=='function'||typeof mini.setStorage!=='function'){storageStatus('当前环境不支持持久保存，仅本次使用有效');return;}
+      try{const r=await timed(mini.getStorage({key:KEY}),1500);if(!r||r.errMsg!=='getStorage:ok'||!('data' in r))throw Error('读取失败');if(r.data!==null&&r.data!=='')state=validate(typeof r.data==='string'?JSON.parse(r.data):r.data);storageReady=true;storageStatus('集章记录已载入');}
+      catch(e){storageStatus('读取记录失败：本次不覆盖已有记录');}
+    }
+    function showText(title, t, editing, hint) {
+      $("nativeTitle").textContent = title;
+      $("nativeHint").textContent = hint || "";
+      $("nativeText").value = t;
+      $("nativeText").readOnly = !editing;
+      $("nativeImport").hidden = !editing;
+      $("nativeSheet").hidden = false;
+    }
+
+    let posterSequence=0;
+    function loadPosterArt(id){return new Promise(resolve=>{const im=new Image();let done=false;const finish=v=>{if(!done){done=true;resolve(v)}};im.onload=()=>finish(im);im.onerror=()=>finish(null);im.src=LOCAL_ART[DEX[id]]||'';setTimeout(()=>finish(null),1800)})}
+    async function reportCanvas(){
+      const stamps=dexStamps(),acquired=new Set(state.done),n=acquired.size,earned=SERIES.filter(g=>seriesStat(g,acquired).complete),arts=await Promise.all(stamps.map(it=>loadPosterArt(it.id)));
+      const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1440;const c=canvas.getContext('2d');if(!c)throw Error('无法生成海报');
+      const rr=(x,y,w,h,r,fill,stroke)=>{c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();c.fillStyle=fill;c.fill();if(stroke){c.strokeStyle=stroke;c.lineWidth=2;c.stroke()}};
+      const ink='#263e50',muted='#526c79',red='#c9403b',green='#2f7154';
+      c.fillStyle='#f7f3e5';c.fillRect(0,0,1080,1440);c.fillStyle=red;c.fillRect(0,0,1080,146);c.fillStyle='#9d3331';c.fillRect(0,146,1080,7);
+      c.fillStyle='#f7d66b';c.fillRect(54,30,12,12);c.fillStyle='#fff7e6';c.font='bold 22px sans-serif';c.fillText('SHANGHAI 2026 / STAMP DEX',80,43);c.font='bold 46px sans-serif';c.fillText('我的上海盛典图鉴',54,110);
+      rr(54,175,972,151,14,'#e4eceb','#b6c9ce');c.fillStyle=muted;c.font='bold 22px sans-serif';c.fillText('训练家收藏记录',74,210);
+      c.fillStyle=green;c.font='bold 80px sans-serif';c.fillText(n+' / 30',74,291);
+      let r=REWARDS.find(x=>x[0]>n);c.textAlign='right';c.fillStyle=ink;c.font='bold 25px sans-serif';c.fillText(Math.round(n/30*100)+'% 完成',1006,220);c.font='22px sans-serif';c.fillText(r?'距离'+r[1]+'还差 '+(r[0]-n)+' 枚':'30枚全部收录',1006,261,540);c.textAlign='left';rr(74,302,932,8,4,'#c3d2d1');if(n)rr(74,302,932*n/30,8,4,'#498f70');
+      const tint=document.createElement('canvas');tint.width=128;tint.height=76;const t=tint.getContext('2d');
+      stamps.forEach((it,i)=>{let x=54+i%5*196,y=350+Math.floor(i/5)*148,done=acquired.has(it.id),im=arts[i];rr(x,y,184,138,10,done?'#d5edda':'#e9eeef',done?'#8fbea5':'#bfcdd1');c.fillStyle=done?green:muted;c.font='bold 17px sans-serif';c.textAlign='left';c.fillText(dexNo(it.id),x+11,y+23);
+      if(im&&t){let k=Math.min(120/im.naturalWidth,72/im.naturalHeight),w=im.naturalWidth*k,h=im.naturalHeight*k;t.clearRect(0,0,128,76);t.globalCompositeOperation='source-over';t.imageSmoothingEnabled=false;c.imageSmoothingEnabled=false;t.drawImage(im,(128-w)/2,(76-h)/2,w,h);c.drawImage(tint,x+28,y+27);}
+      c.textAlign='center';c.fillStyle=done?'#285d49':ink;c.font='bold 21px sans-serif';if(done){c.textAlign='right';c.fillStyle=green;c.fillText('✓',x+172,y+23)}c.textAlign='left';});
+      rr(54,1247,972,101,12,'#fae8ae','#d9bd6c');c.fillStyle='#74531b';c.font='bold 25px sans-serif';c.fillText('收藏挑战 '+earned.length+'/'+SERIES.length+'组',74,1284);c.fillStyle=ink;c.font='22px sans-serif';c.fillText(earned.length?earned.slice(0,4).map(g=>g.name).join(' · ')+(earned.length>4?' 等'+earned.length+'组':''):'继续收录，解锁你的收藏挑战',74,1322,932);
+      c.fillStyle=muted;c.font='20px sans-serif';c.fillText('非官方 · 个人收录记录',54,1392);c.textAlign='right';c.fillText(new Date().toLocaleDateString('zh-CN'),1026,1392);return canvas.toDataURL('image/png');
+    }
 
 
-function canClaim(p){let last=p.steps[p.steps.length-1];return !!last&&(last.v.id<=3||last.v.id>=5&&last.v.id<=10||last.v.id===4&&last.items.some(it=>it.kind==='exhibition'))}
-function validateSaved(a){if(!a||!/^202[67]-\d\d-\d\d$/.test(a.day)||a.day<'2026-11-28'||a.day>'2027-01-03'||!Array.isArray(a.stops))return null;let seen=new Set(),stops=[];for(let st of a.stops.slice(0,15)){let v=V[st?.venue];if(!v||!Number.isInteger(st.venue)||!Array.isArray(st.ids)||!Number.isFinite(st.arrival)||!Number.isFinite(st.end)||st.arrival<600||st.end>1320||st.end<st.arrival)continue;let ids=st.ids.filter(id=>v.items.some(it=>it.id===id&&inDate(it,a.day))&&!seen.has(id));ids.forEach(id=>seen.add(id));if(ids.length)stops.push({venue:v.id,arrival:st.arrival,end:st.end,ids:[...new Set(ids)],skip:!!st.skip})}return stops.length?{day:a.day,stops}:null}
-function saveOneTrip(p){let packed=packPlan(p);if(!packed)return;if(state.trips?.[packed.day]&&!confirm('替换 '+fmt(packed.day)+' 的行程？其他日期、已集印章和预约不变。'))return;state.saved=packed;save();renderSaved();renderHome();$('savedTrip').scrollIntoView({block:'start'})}
-function packPlan(p){return validateSaved({day:p.d,stops:p.best.steps.map(st=>({venue:st.v.id,arrival:st.arrival,end:st.end,ids:st.items.map(it=>it.id),skip:false}))})}
-function savedCounts(){let t=state.saved;if(!t)return {total:0,done:0,left:0};let ids=t.stops.flatMap(st=>st.ids),done=ids.filter(id=>state.done.includes(id)).length;return {total:ids.length,done,left:t.stops.filter(st=>!st.skip).flatMap(st=>st.ids).filter(id=>!state.done.includes(id)).length}}
-function renderSaved(){renderTripShelf();let el=$('savedTrip'),t=state.saved;el.hidden=!t;if(!t){el.innerHTML='';return}let c=savedCounts(),next=t.stops.findIndex(st=>!st.skip&&st.ids.some(id=>!state.done.includes(id)));el.innerHTML='<div class="flex"><h2>已保存行程</h2><button type="button" data-clear-trip>删除</button></div><p class="muted">'+fmt(t.day)+' '+weekdayName(t.day)+' · 已集 '+c.done+'/'+c.total+' 枚</p><div class="saved-bar"><i style="width:'+c.done/c.total*100+'%"></i></div>'+(next>=0?'<div class="next-card"><small>下一站 · 第 '+(next+1)+'/'+t.stops.length+' 站</small><h3>'+esc(V[t.stops[next].venue].name)+'</h3><p>'+clock(t.stops[next].arrival)+'–'+clock(t.stops[next].end)+' · '+esc(V[t.stops[next].venue].address)+'</p><p>待集：'+t.stops[next].ids.filter(id=>!state.done.includes(id)).map(id=>esc(V[t.stops[next].venue].items.find(it=>it.id===id).stamp)).join('、')+'</p><a class="next-nav" href="'+mapLink(V[t.stops[next].venue])+'">查看下一站地址</a></div>':'<p class="target-result">本行程已无待执行站点。</p>')+'<details class="saved-all" '+(next<0?'':'open')+'><summary>完整行程</summary><div class="saved-stops">'+t.stops.map((st,i)=>{let v=V[st.venue],complete=st.ids.every(id=>state.done.includes(id));return '<article class="saved-stop '+(complete?'finished':st.skip?'skipped':i===next?'next-stop':'')+'"><div class="flex"><strong>'+(i+1)+'. '+esc(v.name)+'</strong><small>'+(complete?'已完成':st.skip?'已跳过':i===next?'下一站':clock(st.arrival)+'–'+clock(st.end))+'</small></div><p class="muted">'+esc(v.address)+'</p>'+st.ids.map(id=>{let it=v.items.find(x=>x.id===id);return '<label class="live-check"><input type="checkbox" data-live-stamp="'+id+'" '+(state.done.includes(id)?'checked':'')+'><span>'+esc(it.stamp)+'<small>'+esc(it.activity)+'</small></span></label>'}).join('')+'<div class="flex"><a class="live-nav" href="'+mapLink(v)+'">查看地址</a>'+(!complete?'<button type="button" data-skip="'+i+'">'+(st.skip?'恢复本站':'跳过本站')+'</button>':'')+'</div></article>'}).join('')+'</div></details><p class="muted">勾章不会清除行程；跳过不算已集。原预约及预计时间请自行核对。</p>'}
-function renderHome(){renderDashboard();let el=$('homeSaved'),t=state.saved;el.hidden=!t;if(t){let c=savedCounts();el.innerHTML='<h2>继续上次行程</h2><p>'+fmt(t.day)+' · 已集 '+c.done+'/'+c.total+' 枚'+(c.left?' · 还剩 '+c.left+' 枚':'')+'</p><button type="button" class="primary" style="width:100%" data-resume-trip>查看已保存行程</button>'}let now=new Date(Date.now()+28800000).toISOString().slice(0,10),soon=distinctStamps().filter(it=>!has(it)&&it.end>=now&&(Date.parse(it.end)-Date.parse(now))/86400000<=2);$('homeReminder').innerHTML='<p class="home-reminder-text">'+(now<'2026-11-27'?'卡牌赛事11月26日起报名；工坊11月27日15:00起预约。插画展分批预约。':'工坊、卡牌赛事及插画展请先核对预约场次。')+'</p>'+(soon.length?'<p class="deadline-label">三天内截止：'+soon.map(it=>esc(it.stamp)).join('、')+'</p>':'')+'<p class="muted">首次领取手册：现场打卡拍照，带话题 #宝可梦30周年上海盛典 发布小红书笔记。手册共20万本，每人限领1本，先到先得。</p>'}
-function renderBookings(){let all=distinctStamps().filter(it=>it.kind!=='walk');$('bookingList').innerHTML=all.map(it=>{let keys=Object.keys(state.slots).filter(k=>k.startsWith(it.id+'@')).sort(),existing=keys.map(k=>'<div class="booked-row"><span>'+fmt(k.split('@')[1])+' '+esc(state.slots[k].time)+' · '+state.slots[k].duration+'分钟</span><button type="button" data-remove-book="'+esc(k)+'">删除</button></div>').join('');let d=date();if(d<it.start)d=it.start;if(d>it.end)d=it.end;return '<details class="booking-card"><summary><span><b>'+esc(it.stamp)+'</b> · '+pocketNames[it.kind]+'<small>'+esc(it.places[0].name)+' · '+fmt(it.start)+'–'+fmt(it.end)+'</small></span><span class="booking-state">'+(has(it)?'已集':keys.length?'已登记':'未登记')+'</span></summary>'+existing+'<div class="grid booking-fields"><label class="field">预约日期<input data-bdate type="date" min="'+it.start+'" max="'+it.end+'" value="'+d+'"></label><label class="field">开始时间<input data-btime type="time"></label><label class="field">预计耗时（分钟）<input data-bduration type="number" min="5" max="720" value="'+(it.kind==='card'?120:it.kind==='workshop'?60:30)+'"></label></div><button type="button" class="primary" data-add-book="'+it.id+'">登记预约</button><p class="muted" data-berror aria-live="polite"></p></details>'}).join('')}
-const chosenDays=new Set();let multiPreview=[];$('multiResult').addEventListener('click',e=>{let all=e.target.closest('[data-save-all]');if(all){saveAllTrips(multiPreview);return}let b=e.target.closest('[data-save-day]');if(b&&multiPreview[Number(b.dataset.saveDay)])saveOneTrip(multiPreview[Number(b.dataset.saveDay)])});
-function renderCustomDays(){$('customDays').innerHTML=eventDays('2026-11-28','2027-01-03').map(d=>'<button type="button" data-custom="'+d+'" aria-pressed="'+chosenDays.has(d)+'" class="'+(chosenDays.has(d)?'primary':'')+'">'+fmt(d)+'<small>'+weekdayName(d)+'</small></button>').join('')}
-$('home').addEventListener('click',e=>{let b=e.target.closest('[data-task]');if(!b)return;let task=b.dataset.task;$('goal').value=task==='max'?'0':task==='all'?'30':String(REWARDS.find(r=>r[0]>state.done.length)?.[0]||30);refreshGoal();clearMulti();switchTab('plan');showPlan();if(task==='all')$('multiBox').scrollIntoView({block:'start'})});
-$('homeSaved').addEventListener('click',e=>{if(e.target.closest('[data-resume-trip]')){switchTab('plan');$('savedTrip').scrollIntoView({block:'start'})}});
-$('savedTrip').addEventListener('change',e=>{let id=e.target.dataset.liveStamp;if(IDS.has(id))toggle(id,e.target.checked)});
-$('savedTrip').addEventListener('click',e=>{let b=e.target.closest('button');if(!b)return;if(b.hasAttribute('data-clear-trip')){if(confirm('删除当前日期的行程？其他日期与已集印章会保留。')){delete state.trips?.[state.saved.day];state.saved=Object.values(state.trips||{}).sort((a,b)=>a.day.localeCompare(b.day))[0]||null;save();renderSaved();renderHome()}}else if(b.dataset.skip!==undefined&&state.saved){let st=state.saved.stops[Number(b.dataset.skip)];if(st){st.skip=!st.skip;save();renderSaved();renderHome()}}});
-$('bookingList').addEventListener('click',e=>{let b=e.target.closest('button');if(!b)return;if(b.dataset.removeBook){delete state.slots[b.dataset.removeBook];save();renderBookings();renderList();renderDates();renderQuickDates();invalidate();clearMulti();return}let id=b.dataset.addBook,it=distinctStamps().find(x=>x.id===id);if(!it)return;let card=b.closest('.booking-card'),d=card.querySelector('[data-bdate]').value,t=card.querySelector('[data-btime]').value,dur=Number(card.querySelector('[data-bduration]').value),err=card.querySelector('[data-berror]');if(!d||!inDate(it,d)||!t||time(t)<600||time(t)+dur>1320||!Number.isInteger(dur)||dur<5||dur>720){err.textContent='请填写有效场次，时间须在活动开放范围内。';return}let clash=Object.entries(state.slots).some(([k,v])=>k!==id+'@'+d&&k.endsWith('@'+d)&&time(t)<time(v.time)+v.duration&&time(v.time)<time(t)+dur);if(clash){err.textContent='与已登记场次重叠，请核对时间。';return}state.slots[id+'@'+d]={time:t,duration:dur};save();renderBookings();renderList();renderDates();renderQuickDates();invalidate();clearMulti()});
-$('customDays').addEventListener('click',e=>{let b=e.target.closest('[data-custom]');if(!b)return;let d=b.dataset.custom;chosenDays.has(d)?chosenDays.delete(d):chosenDays.add(d);renderCustomDays();clearMulti()});
-$('clearCustomDays').onclick=()=>{chosenDays.clear();renderCustomDays();clearMulti()};
-$('timePresets').addEventListener('click',e=>{let b=e.target.closest('[data-time]');if(!b)return;let [a,z]=b.dataset.time.split('|');$('start').value=a;$('end').value=z;invalidate();clearMulti();showPlan()});
-$('utilityToggle').onclick=()=>{let el=$('utilities');el.hidden=!el.hidden;if(!el.hidden)el.scrollIntoView({block:'start'})};
+    let currentPosterData=null,posterSaving=false;
+    async function generatePoster(){
+      const ticket=++posterSequence,status=$('posterStatus'),img=$('posterImage'),download=$('posterDownload'),retry=$('posterRetry'),loading=$('posterLoading');
+      status.textContent='正在生成图片…';img.hidden=true;download.hidden=true;retry.hidden=true;loading.hidden=false;loading.textContent='正在生成图片…';currentPosterData=null;
+      try{const data=await reportCanvas();if(ticket!==posterSequence)return;currentPosterData=data;img.src=data;img.hidden=false;loading.hidden=true;download.hidden=false;status.textContent='收藏海报';$('posterHint').textContent='保存图片到相册';}
+      catch(e){if(ticket!==posterSequence)return;status.textContent='生成失败';loading.textContent='暂时无法生成图片';retry.hidden=false;}
+    }
+    function openPoster(){$('shareOverlay').hidden=false;document.body.classList.add('poster-opened');$('posterPreview').scrollTop=0;generatePoster();}
+    function closePoster(){posterSequence++;currentPosterData=null;$('posterImage').removeAttribute('src');$('shareOverlay').hidden=true;document.body.classList.remove('poster-opened');}
+    function openSeries(){switchTab('list');$('seriesPanel').open=true;$('seriesPanel').scrollIntoView({block:'start'});}
+    async function saveNativeImage(data,button,hint){
+      if(!data||button.disabled)return;
+      if(!mini||typeof mini.saveImageToPhotosAlbum!=='function'||clientVersion===null||clientVersion<9420){hint.textContent='当前客户端暂不支持保存相册，请升级或截图保存。';return;}
+      const original=button.textContent;button.disabled=true;button.textContent='保存中…';
+      try{let path=data;if(data.length>136000&&typeof mini.writeTempFile==='function'){try{const temp=await timed(mini.writeTempFile({data}),5000);if(temp&&temp.errMsg==='writeTempFile:ok'&&temp.filePath)path=temp.filePath;}catch(e){}}
+        const r=await timed(mini.saveImageToPhotosAlbum({filePath:path}),45000);if(!r||r.errMsg!=='saveImageToPhotosAlbum:ok')throw Error('save failed');hint.textContent='图片已保存到相册';}
+      catch(e){hint.textContent='未能保存图片，请确认相册权限后重试。';}
+      finally{button.disabled=false;button.textContent=original;}
+    }
+    $('posterDownload').addEventListener('click',async e=>{e.preventDefault();if(posterSaving||!currentPosterData)return;posterSaving=true;try{await saveNativeImage(currentPosterData,$('posterDownload'),$('posterHint'));}finally{posterSaving=false;}});
+    $('posterRetry').onclick=generatePoster;
+    document.addEventListener("click", (e) => {
+      if(e.target.closest("[data-open-series]")){openSeries();return;}if(e.target.closest("[data-open-poster]")){openPoster();return;}let b = e.target.closest("[data-tab]");
+      if (b) {
+        switchTab(b.dataset.tab);
+        return;
+      }
+      let a = e.target.closest("a");
+      if (!a) return;
+      let h = a.getAttribute("href") || "";
+      if(h.startsWith("#leg-")){e.preventDefault();try{const q=JSON.parse(decodeURIComponent(h.slice(5)));showText('本段交通',q.from+' → '+q.to+'\n'+q.detail+'\n预计 '+q.minutes+' 分钟 · 步行约 '+q.walk+' 米',false,'离线估算，出发前请在地图 App 核对。');}catch(e){}return;}
+      if (h.indexOf("#venue-") === 0) {
+        e.preventDefault();
+        let v = V[Number(h.slice(7))];
+        if (v) showText(v.name, v.address, false, "\u8BF7\u5728\u5730\u56FE App \u4E2D\u624B\u52A8\u641C\u7D22\u5730\u70B9\uFF1B\u5C0F\u5DE5\u5177\u65E0\u6CD5\u6253\u5F00\u5916\u90E8\u5BFC\u822A\u3002");
+        return;
+      }
+      if (a.hasAttribute("data-official")) {
+        e.preventDefault();
+        showText("官方公告",a.getAttribute("data-official"),false,"小工具内无法打开站外链接，请在官方渠道核对公告。");
+      }
+    });
+    $("nativeClose").onclick = () => {
+      $("nativeSheet").hidden = true;
+    };
+    $("nativeImport").onclick = () => {
+      try {
+        let v = validate(JSON.parse($("nativeText").value));
+        if (!confirm("\u66FF\u6362\u5F53\u524D\u8BB0\u5F55\uFF1F")) return;
+        state = v;
+        state.seenSeries=[...new Set([...(state.seenSeries||[]),...SERIES.filter(g=>seriesStat(g).complete).map(g=>g.name)])];
+        save();
+        refreshProgress();
+        renderList();
+        renderDates();
+        invalidate();
+        $("nativeSheet").hidden = true;
+      } catch (e) {
+        alert("\u5907\u4EFD\u683C\u5F0F\u9519\u8BEF\uFF0C\u539F\u8BB0\u5F55\u672A\u6539\u53D8\u3002");
+      }
+    };
 
-let nowDay=new Date(Date.now()+28800000).toISOString().slice(0,10);if(nowDay>='2026-11-28'&&nowDay<='2027-01-03')$('date').value=nowDay;
-function renderMust(){let chosen=state.must||[];$('mustCount').textContent=chosen.length?' · '+chosen.length+'枚':'';$('mustGrid').innerHTML=distinctStamps().map(it=>'<button type="button" data-must="'+it.id+'" aria-pressed="'+chosen.includes(it.id)+'" class="'+(chosen.includes(it.id)?'primary':'')+'">'+esc(it.stamp)+(has(it)?' ✓':'')+'</button>').join('')}
-function toggleMust(id){let set=new Set(state.must||[]);set.has(id)?set.delete(id):set.add(id);state.must=[...set];save();renderMust();renderPocket();renderSeries();invalidate();clearMulti()}
-function planWarnings(p){let items=p.best.steps.flatMap(st=>st.items),ids=new Set(items.map(it=>it.id)),wanted=distinctStamps().filter(it=>(state.must||[]).includes(it.id)&&!has(it)),miss=wanted.filter(it=>!ids.has(it.id));let booked=distinctStamps().filter(it=>!has(it)&&slot(it,p.d)&&!ids.has(it.id));const why=it=>!inDate(it,p.d)?'当天未开放':it.kind!=='walk'&&!slot(it,p.d)?'尚未登记预约':it.kind!=='walk'&&!$('useSlots').checked?'未启用预约':'当前路线未能安排';return (wanted.length?'<div class="route-check"><strong>必集印章 '+(wanted.length-miss.length)+'/'+wanted.length+'</strong>'+miss.map(it=>'<p>'+esc(it.stamp)+' · '+why(it)+'</p>').join('')+'</div>':'')+(booked.length?'<div class="route-check warn"><strong>有 '+booked.length+' 项登记预约未排入</strong>'+booked.map(it=>'<p>'+esc(it.stamp)+' · '+esc(slot(it,p.d).time)+'</p>').join('')+'<p>请检查时间、交通及路线范围。</p></div>':'')}
-function editControls(p){return p.best.steps.map((st,i)=>'<div class="edit-row"><strong>'+(i+1)+'. '+esc(st.v.name)+'</strong><button type="button" data-edit="'+i+'" data-move="up" '+(i===0?'disabled':'')+' aria-label="上移">↑</button><button type="button" data-edit="'+i+'" data-move="down" '+(i===p.best.steps.length-1?'disabled':'')+' aria-label="下移">↓</button><button type="button" data-edit="'+i+'" data-move="remove">删除</button></div>').join('')}
-function recalcRoute(p,specs){let mask=0,t=p.st,travel=0,last=p.origin,steps=[],idBit={};[...IDS].forEach((id,i)=>idBit[id]=1<<i);for(let spec of specs){let v=V[spec.venue],available=eligible(v,p.d,$('useSlots').checked).filter(it=>spec.ids.includes(it.id)&&!(mask&idBit[it.id]));if(!available.length)continue;let tr=transfer(last,v,p.mode),options=visitOptions(v,t+tr,mask,available,p.d,p.limit,Number($('dwell').value),idBit).filter(op=>op.items.length===available.length).sort((a,b)=>a.end-b.end);if(!options.length)return null;let op=options[0];steps.push({v,tr,...op});mask=op.mask;t=op.end;travel+=tr;last=v}return steps.length?{...p,best:{last,mask,steps,t,travel,count:steps.reduce((n,st)=>n+st.gain,0)}}:null}
-$('mustGrid').addEventListener('click',e=>{let b=e.target.closest('[data-must]');if(b)toggleMust(b.dataset.must)});$('clearMust').onclick=()=>{state.must=[];save();renderMust();renderPocket();invalidate();clearMulti()};
-$('route').addEventListener('click',e=>{let b=e.target.closest('[data-edit],[data-add-venue]');if(!b||!lastPlan||lastPlan.error)return;let p=lastPlan,specs=p.best.steps.map(st=>({venue:st.v.id,ids:st.items.map(it=>it.id)}));if(b.hasAttribute('data-add-venue')){let val=$('addVenue').value;if(val==='')return;let v=V[Number(val)];if(!v||specs.some(x=>x.venue===v.id))return;specs.push({venue:v.id,ids:eligible(v,p.d,$('useSlots').checked).map(it=>it.id)})}else{let i=Number(b.dataset.edit),move=b.dataset.move;if(move==='remove')specs.splice(i,1);else{let j=i+(move==='up'?-1:1);if(j<0||j>=specs.length)return;[specs[i],specs[j]]=[specs[j],specs[i]]}}let changed=recalcRoute(p,specs);if(!changed){$('editError').textContent='调整后无法在所选时间内完成，或预约场次冲突。原路线已保留。';return}renderPlan(changed);let panel=$('route').querySelector('.edit-route');if(panel)panel.open=true});
-function renderClaims(){let c=state.claimed||[];$('claimRecords').innerHTML='<h3>实物奖励领取记录</h3>'+REWARDS.filter(r=>r[0]<=6).map(r=>'<label class="claim-record"><input type="checkbox" data-claimed="'+r[0]+'" '+(c.includes(r[0])?'checked':'')+' '+(!c.includes(r[0])&&state.done.length<r[0]?'disabled':'')+'><span>'+esc(r[1])+'<small>'+(c.includes(r[0])?'已领取':state.done.length>=r[0]?'已达标 · 未领取':'还差 '+(r[0]-state.done.length)+' 枚')+'</small></span></label>').join('')+'<p class="muted">仅记录个人领取情况，不作为官方兑换凭证。</p>'}
-$('claimRecords').addEventListener('change',e=>{let n=Number(e.target.dataset.claimed);if(n!==3&&n!==6)return;let c=new Set(state.claimed||[]);if(e.target.checked&&state.done.length>=n)c.add(n);else c.delete(n);state.claimed=[...c];save();renderClaims()});
-let exploreSelected=null;
-function exploreItems(v){let d=$('mapDate').value,k=$('mapKind').value,all=$('mapRemaining').value==='all';return v.items.filter(it=>inDate(it,d)&&(!k||it.kind===k)&&(all||!has(it)))}
-function renderExplore(){let region=$('mapRegion').value,venues=V.filter(v=>(!region||region===v.district)&&exploreItems(v).length);if(!venues.length){$('exploreMap').innerHTML='';$('exploreList').innerHTML='<p class="empty">没有符合条件的集章点。</p>';$('exploreDetail').innerHTML='';return}let px=v=>28+(v.lon-121.30)/.245*310,py=v=>230-(v.lat-31.17)/.16*205;$('exploreMap').innerHTML='<div class="map"><svg viewBox="0 0 370 255" role="img" aria-label="集章地点示意图"><rect width="370" height="255" fill="#edf5f7"/><path d="M265 0 Q225 75 292 130 Q323 190 275 255" stroke="#bcdfe9" stroke-width="18" fill="none"/>'+venues.map(v=>'<g data-explore="'+v.id+'" role="button" tabindex="0" aria-label="'+esc(v.name)+'"><circle cx="'+px(v)+'" cy="'+py(v)+'" r="11" fill="'+(exploreSelected===v.id?'#a57920':'#215ca5')+'" stroke="white" stroke-width="2"/><text x="'+px(v)+'" y="'+(py(v)+4)+'" font-size="10" text-anchor="middle" fill="white">'+exploreItems(v).length+'</text></g>').join('')+'</svg></div>';$('exploreList').innerHTML=venues.map(v=>'<button type="button" class="explore-row" data-explore="'+v.id+'"><span><strong>'+esc(v.name)+'</strong><small>'+esc(v.district)+' · '+exploreItems(v).filter(it=>it.kind==='walk').length+'枚直接打卡</small></span><b>'+exploreItems(v).length+'枚 ›</b></button>').join('');if(venues.some(v=>v.id===exploreSelected))showExploreDetail(exploreSelected);else $('exploreDetail').innerHTML=''}
-function showExploreDetail(id){let v=V[id];if(!v)return;exploreSelected=id;let d=$('mapDate').value;$('exploreDetail').innerHTML='<div class="tile-detail"><h3>'+esc(v.name)+'</h3><p>'+esc(v.address)+'</p>'+exploreItems(v).map(it=>'<p>'+esc(it.stamp)+' · '+(has(it)?'已集':it.kind==='walk'?'直接打卡':slot(it,d)?'已登记预约':'需预约')+'</p>').join('')+'<div class="flex"><a href="'+mapLink(v)+'">查看地址</a><button type="button" data-map-plan="'+id+'">从这里出发</button></div></div>'}
-$('mapRegion').innerHTML='<option value="">全上海</option>'+[...new Set(V.map(v=>v.district))].map(x=>'<option>'+esc(x)+'</option>').join('');
-for(let id of ['mapDate','mapRegion','mapKind','mapRemaining'])$(id).onchange=()=>{exploreSelected=null;renderExplore()};
-for(let id of ['exploreMap','exploreList']){$(id).addEventListener('click',e=>{let b=e.target.closest('[data-explore]');if(b){showExploreDetail(Number(b.dataset.explore));$('exploreDetail').scrollIntoView({block:'nearest'})}});$(id).addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.closest('[data-explore]')){e.preventDefault();showExploreDetail(Number(e.target.closest('[data-explore]').dataset.explore))}})}
-$('exploreDetail').addEventListener('click',e=>{let b=e.target.closest('[data-map-plan]');if(!b)return;$('date').value=$('mapDate').value;$('origin').value=b.dataset.mapPlan;invalidate();renderQuickDates();renderReminders();clearMulti();switchTab('plan')});
-
-
-let dexFilter='all',toastTimer;
-function dexNo(id){return '#'+String(DEX[id]).padStart(4,'0')}
-function dexStamps(){return distinctStamps().sort((a,b)=>DEX[a.id]-DEX[b.id])}
-function dexArt(id){return '<span class="dex-art"><span class="number-medal">'+dexNo(id)+'</span></span>'}
-function closeDex(){pocketSelected=null;$('dexOverlay').hidden=true;$('pocketDetail').innerHTML=''}
-function notifyCollect(id,before,checked=true){let it=distinctStamps().find(x=>x.id===id);if(!it)return;let r=REWARDS.find(x=>before<x[0]&&state.done.length>=x[0]);undoStamp={id,checked};$('collectToast').innerHTML=dexArt(id)+'<div><strong>'+(checked?'收录成功 · ':'已取消 · ')+esc(it.stamp)+'</strong><small>已收录 '+state.done.length+'/30'+(r?' · '+esc(r[1])+'已达标':'')+'</small></div><button type="button" id="undoCollect">撤销</button>';$('collectToast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{$('collectToast').hidden=true;undoStamp=null},5000)}
-function renderDexShare(){let n=state.done.length,r=REWARDS.find(x=>x[0]>n);$('dexShareCard').innerHTML='<div class="share-report"><small>2026 · SHANGHAI COLLECTION</small><h2>我的上海盛典图鉴</h2><div class="share-count">'+n+'<small> / 30</small></div><p>'+(r?'距离'+esc(r[1])+'还差 '+(r[0]-n)+' 枚':'30枚全部收录')+'</p><div class="share-stamps">'+dexStamps().map(it=>'<div class="'+(has(it)?'is-done':'')+'">'+dexArt(it.id)+'<small>'+esc(it.stamp)+'</small></div>').join('')+'</div><p class="share-foot">非官方 · 个人收录记录</p></div>'}
-$('dexSearch').addEventListener('input',renderPocket);$('dexDate').onchange=renderPocket;$('dexClearSearch').onclick=()=>{$('dexSearch').value='';renderPocket()};
-$('dexFilters').addEventListener('click',e=>{let b=e.target.closest('[data-dex-filter]');if(!b)return;dexFilter=b.dataset.dexFilter;for(let x of $('dexFilters').querySelectorAll('button')){let active=x===b;x.classList.toggle('active',active);x.setAttribute('aria-pressed',String(active))}renderPocket()});
-$('dexOverlay').addEventListener('click',e=>{if(e.target===$('dexOverlay'))closeDex()});
-$('pocketDetail').addEventListener('click',e=>{let b=e.target.closest('button');if(!b)return;if(b.hasAttribute('data-close-pocket')){closeDex();return}if(b.dataset.detailToggle){let id=b.dataset.detailToggle;toggle(id,!has({id}));return}if(b.dataset.detailMust){toggleMust(b.dataset.detailMust);return}if(b.hasAttribute('data-detail-book')){closeDex();switchTab('bookings');return}if(b.dataset.detailMap!==undefined){let id=Number(b.dataset.detailMap);$('mapDate').value=$('dexDate').value;$('mapKind').value='';$('mapRegion').value='';$('mapRemaining').value='all';closeDex();exploreSelected=id;switchTab('map');showExploreDetail(id);return}if(b.dataset.detailPlan){let id=b.dataset.detailPlan;if(!(state.must||[]).includes(id))toggleMust(id);$('date').value=$('dexDate').value;closeDex();invalidate();renderQuickDates();renderReminders();switchTab('plan')}});
-$('dexShare').onclick=()=>{renderDexShare();$('shareOverlay').hidden=false};$('closeShare').onclick=()=>{$('shareOverlay').hidden=true};$('shareOverlay').addEventListener('click',e=>{if(e.target===$('shareOverlay'))$('shareOverlay').hidden=true});$('shareCopy').onclick=()=>copy('上海盛典图鉴｜已收录 '+state.done.length+'/30 枚\n'+dexStamps().filter(has).map(it=>dexNo(it.id)+' '+it.stamp).join('、')+'\n个人集章记录');
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDex();$('shareOverlay').hidden=true}});
-document.addEventListener('error',e=>{if(e.target?.hasAttribute?.('data-dex-art'))e.target.hidden=true},true);
-
-
-const SERIES=[{name:'初代御三家',ids:['s9-1','s11-1','s10-1']},{name:'三圣鸟',ids:['s1-2','s2-2','s3-2']},{name:'锻匠一家',ids:['s1-4','s2-4','s3-4']},{name:'蚊香家族',ids:['s7-1','s3-1']},{name:'冬日庆典',ids:['s1-5','s2-5','s3-5','s4-3']},{name:'全部普通打卡',ids:distinctStamps().filter(it=>it.kind==='walk').map(it=>it.id)},{name:'全部卡牌赛事',ids:distinctStamps().filter(it=>it.kind==='card').map(it=>it.id)}];
-let undoStamp=null;
-function validateTrips(a){let trips={};for(let t of Object.values(a.trips&&typeof a.trips==='object'?a.trips:{}).slice(0,37)){let v=validateSaved(t);if(v)trips[v.day]=v}let saved=validateSaved(a.saved);if(saved)trips[saved.day]=saved;return {trips,saved:saved||Object.values(trips).sort((x,y)=>x.day.localeCompare(y.day))[0]||null}}
-function renderTripShelf(){let el=$('tripShelf'),trips=Object.values(state.trips||{}).sort((a,b)=>a.day.localeCompare(b.day));if(!trips.length&&state.saved)trips=[state.saved];el.hidden=!trips.length;el.innerHTML=trips.length?'<div class="flex"><h2>我的收录计划</h2><small>'+trips.length+'天</small></div><div class="trip-days">'+trips.map(t=>{let ids=t.stops.flatMap(st=>st.ids),n=ids.filter(id=>state.done.includes(id)).length;return '<button type="button" data-trip-day="'+t.day+'" class="'+(state.saved?.day===t.day?'active':'')+'"><strong>'+fmt(t.day)+' '+weekdayName(t.day)+'</strong><small>'+n+'/'+ids.length+'枚</small></button>'}).join('')+'</div>':''}
-function saveAllTrips(plans){let packed=plans.map(packPlan).filter(Boolean);if(!packed.length)return;let conflicts=packed.filter(t=>state.trips?.[t.day]);if(conflicts.length&&!confirm('替换以下日期的行程：'+conflicts.map(t=>fmt(t.day)).join('、')+'？其他日期不变。'))return;state.trips={...(state.trips||{})};if(state.saved)state.trips[state.saved.day]=state.saved;for(let t of packed)state.trips[t.day]=t;state.saved=packed[0];save();renderSaved();renderHome();$('tripShelf').scrollIntoView({block:'start'})}
-function renderSeries(){let done=SERIES.filter(g=>g.ids.every(id=>state.done.includes(id))).length;$('seriesCount').textContent=done+'/'+SERIES.length+'组';$('seriesGrid').innerHTML=SERIES.map((g,i)=>{let n=g.ids.filter(id=>state.done.includes(id)).length;return '<div class="series-row"><div><strong>'+esc(g.name)+'</strong><small>'+n+'/'+g.ids.length+(n===g.ids.length?' · 已集齐':'')+'</small><div class="series-track"><i style="width:'+n/g.ids.length*100+'%"></i></div></div><button type="button" data-series="'+i+'" '+(n===g.ids.length?'disabled':'')+'>加入必集</button></div>'}).join('')}
-function addSeries(i){let g=SERIES[i];if(!g)return;state.must=[...new Set([...(state.must||[]),...g.ids.filter(id=>!state.done.includes(id))])];save();renderMust();renderPocket();renderSeries();invalidate();clearMulti()}
-function shToday(){return new Date(Date.now()+28800000).toISOString().slice(0,10)}
-function renderDashboard(){let now=shToday(),before=now<'2026-11-28',after=now>'2027-01-03',d=before?'2026-11-28':now,a=daily(d),loc=V.filter(v=>v.items.some(it=>inDate(it,d)&&!has(it))).length;$('homeDashboard').innerHTML='<div class="flex"><h2>'+(before?'首日预览':after?'活动已结束':'今日活动')+'</h2><small>'+fmt(d)+'</small></div><div class="dashboard-stats"><div><strong>'+a.normal+'</strong><small>直接可集</small></div><div><strong>'+a.booked+'</strong><small>已登记预约</small></div><div><strong>'+loc+'</strong><small>有未集印章的地点</small></div></div><p class="muted">'+(before?'活动尚未开始，以下为首日未集数据。':after?'活动已结束，仍可查看个人记录。':'按个人未收录印章统计，开放不代表预约成功。')+'</p><button class="reward-more" type="button" data-dashboard-dex>查看'+(after?'全部历史':before?'首日':'当天')+'开放印章 ›</button>'}
-function applyPreset(type){$('goal').value=type==='3'||type==='6'?type:type==='birds'?'3':'0';$('region').value=type==='changning'?'长宁区':type==='center'?'黄浦区':'';$('start').value=type==='center'?'13:00':'10:00';$('end').value=type==='changning'?'14:00':type==='center'?'18:00':'22:00';$('origin').value='any';$('routeStyle').value=type==='3'||type==='6'?'fast':'max';$('useSlots').checked=type!=='walk';if(type==='birds')addSeries(1);refreshGoal();invalidate();clearMulti();switchTab('plan');showPlan()}
-$('seriesGrid').addEventListener('click',e=>{let b=e.target.closest('[data-series]');if(b)addSeries(Number(b.dataset.series))});
-$('shortcuts').addEventListener('click',e=>{let b=e.target.closest('[data-preset]');if(b)applyPreset(b.dataset.preset)});
-$('homeDashboard').addEventListener('click',e=>{if(!e.target.closest('[data-dashboard-dex]'))return;$('dexDate').value=shToday()<'2026-11-28'?'2026-11-28':shToday()>'2027-01-03'?'2027-01-03':shToday();dexFilter=shToday()>'2027-01-03'?'all':'today';$('dexSearch').value='';$('pocketKind').value='';for(let b of $('dexFilters').querySelectorAll('button')){let a=b.dataset.dexFilter===dexFilter;b.classList.toggle('active',a);b.setAttribute('aria-pressed',String(a))}switchTab('list')});
-$('tripShelf').addEventListener('click',e=>{let b=e.target.closest('[data-trip-day]');if(!b)return;let t=state.trips?.[b.dataset.tripDay];if(t){state.saved=t;save();renderSaved();renderHome()}});
-$('collectToast').addEventListener('click',e=>{if(!e.target.closest('#undoCollect')||!undoStamp)return;let {id,checked}=undoStamp;undoStamp=null;let a=new Set(state.done);checked?a.delete(id):a.add(id);state.done=[...a];save();refreshProgress();renderList();renderDates();invalidate();$('collectToast').hidden=true});
-$('keyDates').innerHTML=[['11/28','盛典开始'],['12/01','星巴克印章开放'],['12/05','部分主题空间与工坊开放'],['12/09','中山公园主题空间与小锻匠开放'],['12/18','首期筑梦工坊最后一天'],['12/19','冬日庆典开始'],['12/20','首期卡牌赛事最后一天'],['12/21','冬日双人赛开始'],['12/26','冬日双人赛最后一天'],['12/27','插画展与星巴克最后一天'],['01/03','盛典最后一天']].map(([d,t])=>'<div class="key-date"><strong>'+d+'</strong><span>'+t+'</span></div>').join('');
-
-$('dexDate').value=date();$('mapDate').value=date();renderCustomDays();refreshProgress();renderList();renderDates();$('scriptNotice').hidden=true;
+    document.addEventListener('load',function(e){var im=e.target;if(im&&im.hasAttribute&&im.hasAttribute('data-dex-art')&&im.parentElement)im.parentElement.classList.add('art-loaded');},true);
+    Array.prototype.forEach.call(document.querySelectorAll('[data-dex-art]'),function(im){if(im.complete&&im.naturalWidth>0&&im.parentElement)im.parentElement.classList.add('art-loaded');});
+    Array.prototype.forEach.call(document.querySelectorAll('[data-boot-disabled]'),function(el){el.disabled=false;el.removeAttribute('data-boot-disabled');});
+    document.body.classList.remove('booting');
 
 
-function storageStatus(t){$('saveStatus').textContent=t;let e=$('nativeStorageStatus');if(e)e.textContent=t}
-function readVersion(o){let raw=o&&o.miniToolEnv&&o.miniToolEnv.buildVersion;return /^[1-9]\d{6,}$/.test(String(raw))&&Number.isSafeInteger(Number(raw))?Math.floor(Number(raw)/1000):null}
-async function initStorage(){let x=window.xhs;mini=x&&x.miniTool;clientVersion=readVersion(x&&x.launchOptions);if(clientVersion===null&&mini&&typeof mini.getLaunchOptions==='function'){try{clientVersion=readVersion(await mini.getLaunchOptions())}catch(e){}}if(clientVersion===null||clientVersion<9460||!mini||typeof mini.getStorage!=='function'||typeof mini.setStorage!=='function'){storageStatus('当前环境不支持持久保存，仅本次使用有效');return}try{let r=await mini.getStorage({key:KEY});if(!r||r.errMsg!=='getStorage:ok'||!('data' in r))throw Error('读取失败');if(r.data!==null&&r.data!=='')state=validate(JSON.parse(r.data));storageReady=true;storageStatus('集章记录已载入')}catch(e){storageStatus('读取记录失败：本次不覆盖已有记录')}}
-function showText(title,t,editing,hint){$('nativeTitle').textContent=title;$('nativeHint').textContent=hint||'';$('nativeText').value=t;$('nativeText').readOnly=!editing;$('nativeImport').hidden=!editing;$('nativeSheet').hidden=false}
-function reportCanvas(){let canvas=document.createElement('canvas');canvas.width=900;canvas.height=1200;let c=canvas.getContext('2d');if(!c)throw Error('无法生成战报');c.fillStyle='#10263e';c.fillRect(0,0,900,1200);c.fillStyle='#91e3d3';c.font='bold 28px sans-serif';c.fillText('SHANGHAI · COLLECTION',52,70);c.fillStyle='#fff';c.font='bold 50px sans-serif';c.fillText('我的上海盛典图鉴',52,140);c.fillStyle='#91e3d3';c.font='bold 108px sans-serif';c.fillText(state.done.length+' / 30',52,260);c.fillStyle='#385772';c.fillRect(52,282,796,12);c.fillStyle='#91e3d3';c.fillRect(52,282,796*state.done.length/30,12);let r=REWARDS.find(x=>x[0]>state.done.length);c.fillStyle='#d4e6ee';c.font='28px sans-serif';c.fillText(r?'距离'+r[1]+'还差 '+(r[0]-state.done.length)+' 枚':'30枚全部收录',52,345);dexStamps().forEach((it,i)=>{let x=52+(i%5)*160,y=380+Math.floor(i/5)*113,done=has(it);c.fillStyle=done?'#b8e8dd':'#203e56';c.fillRect(x,y,148,100);c.fillStyle=done?'#20535b':'#c6d6e2';c.font='bold 22px sans-serif';c.textAlign='center';c.fillText(dexNo(it.id),x+74,y+28);c.font='20px sans-serif';c.fillText(it.stamp,x+74,y+57,140);c.font='16px sans-serif';c.fillText(done?'已收录':'待收录',x+74,y+81);c.textAlign='left'});c.fillStyle='#adc5d5';c.font='22px sans-serif';c.fillText('非官方 · 个人收录记录',52,1110);return canvas.toDataURL('image/png')}
-async function shareNative(kind){let method=kind==='album'?'saveImageToPhotosAlbum':'postNote';if(!mini||typeof mini[method]!=='function'||clientVersion===null||kind==='album'&&clientVersion<9420){alert('当前客户端暂不支持此功能，可截图保存。');return}try{let data=reportCanvas(),opts=kind==='album'?{filePath:data}:{title:'我的上海盛典集章战报',content:'已收录 '+state.done.length+'/30 枚。个人集章记录。',pageType:'photo_publish',mediaInfo:{image_resources:[{url:data}]}};let r=await mini[method](opts);if(!r||r.errMsg!==method+':ok')throw Error('操作未确认');if(kind==='album')alert('图片已保存到相册')}catch(e){alert('操作未完成，可截图保存或重试。')}}
-document.addEventListener('click',e=>{let b=e.target.closest('[data-tab]');if(b){switchTab(b.dataset.tab);return}let a=e.target.closest('a');if(!a)return;let h=a.getAttribute('href')||'';if(h.indexOf('#venue-')===0){e.preventDefault();let v=V[Number(h.slice(7))];if(v)showText(v.name,v.address,false,'请在地图 App 中手动搜索地点；小工具无法打开外部导航。');return}if(a.hasAttribute('data-official')){e.preventDefault();showText('官方公告',a.getAttribute('data-official'),false,'小工具内无法打开站外链接，请在官方渠道核对公告。')}});
-$('nativeClose').onclick=()=>{$('nativeSheet').hidden=true};$('nativeImport').onclick=()=>{try{let v=validate(JSON.parse($('nativeText').value));if(!confirm('替换当前记录？'))return;state=v;save();refreshProgress();renderList();renderDates();invalidate();$('nativeSheet').hidden=true}catch(e){alert('备份格式错误，原记录未改变。')}};
-$('shareAlbum').onclick=()=>shareNative('album');$('shareNote').onclick=()=>shareNative('note');
-$('startupGate').hidden=true;
+    // V5.2.1 — personal achievement cards.
+    const achievementNames={'最初的伙伴传承':'最初伙伴的传承','跨越七个世代':'七世代巡礼','普通打卡全收录':'免预约打卡全收录','冬日庆典':'冬日庆典·工坊篇'};
+    function achievementMembers(g){
+      const owned=new Set(state.done);
+      return g.buckets?g.buckets.map(b=>b.ids.filter(id=>owned.has(id)).sort((a,b)=>DEX[a]-DEX[b])[0]).filter(Boolean):g.ids.filter(id=>owned.has(id));
+    }
+    let achievementQueue=[],achievementIndex=0,achievementTicket=0,achievementData=null,achievementFocus=null,achievementBusy=false;
+    const achievementOverlay=document.createElement('div');achievementOverlay.id='achievementOverlay';achievementOverlay.hidden=true;
+    achievementOverlay.innerHTML='<section class="achievement-dialog" role="dialog" aria-modal="true" aria-labelledby="achievementTitle"><header class="achievement-head"><div><small>COLLECTION ACHIEVEMENT</small><h2 id="achievementTitle">收藏成就已解锁</h2></div><button type="button" id="achievementClose" aria-label="关闭成就卡">×</button></header><div class="achievement-body" id="achievementBody"><p id="achievementMessage" role="status">正在生成成就卡…</p><img id="achievementImage" alt="个人收藏成就卡" hidden></div><footer class="achievement-footer"><div id="achievementNav" hidden><button type="button" id="achievementPrev">‹ 上一张</button><span id="achievementPosition"></span><button type="button" id="achievementNext">下一张 ›</button></div><button type="button" id="achievementSave" disabled>下载成就图片</button><p id="achievementHint">非官方个人收藏记录</p></footer></section>';
+    document.body.appendChild(achievementOverlay);
+    function achievementRound(c,x,y,w,h,r,fill,stroke){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();c.fillStyle=fill;c.fill();if(stroke){c.strokeStyle=stroke;c.lineWidth=2;c.stroke();}}
+    async function achievementCanvas(g){
+      if(!seriesStat(g).complete)throw Error('成就尚未完成');
+      const ids=achievementMembers(g),arts=await Promise.all(ids.map(loadPosterArt));
+      if(arts.some(im=>!im))throw Error('像素图加载失败');
+      const cols=ids.length<=3?ids.length:ids.length===4?2:ids.length<=9?3:5,rows=Math.ceil(ids.length/cols),step=Math.min(310,Math.floor(954/cols)),tileH=ids.length<=3?320:cols>=5?180:240,top=394,h=Math.max(900,top+rows*tileH+170);
+      const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=h;const c=canvas.getContext('2d');if(!c)throw Error('无法生成图片');
+      const ink='#263544',red='#C9403B',cream='#FFF8E8',gold='#A77522',green='#286952';
+      c.fillStyle=red;c.fillRect(0,0,1080,h);achievementRound(c,25,25,1030,h-50,42,cream);achievementRound(c,45,45,990,h-90,28,'#FCF8ED','#D9C9A5');
+      c.textAlign='center';c.fillStyle=red;c.font='bold 24px sans-serif';c.fillText('SHANGHAI 2026  /  STAMP DEX',540,101);
+      c.fillStyle=gold;c.beginPath();c.arc(540,167,44,0,Math.PI*2);c.fill();c.fillStyle=cream;c.font='bold 45px sans-serif';c.fillText('✓',540,184);
+      c.fillStyle=ink;c.font='bold 55px sans-serif';c.fillText(g.name,540,263,920);c.fillStyle=green;c.font='bold 29px sans-serif';c.fillText(CAT_NAMES[g.cat]+'  ·  '+ids.length+'/'+seriesStat(g).total+' 已解锁',540,315,900);
+      c.strokeStyle='#D8C8A9';c.lineWidth=2;c.beginPath();c.moveTo(95,345);c.lineTo(985,345);c.stroke();
+      c.fillStyle='#67717A';c.font='25px sans-serif';c.fillText(g.buckets?'每个登场世代任选一枚 · 本卡展示已收录代表物种':g.desc,540,378,930);
+      const tint=document.createElement('canvas');tint.width=240;tint.height=175;const t=tint.getContext('2d');
+      ids.forEach((id,i)=>{const row=Math.floor(i/cols),n=Math.min(cols,ids.length-row*cols),x=(1080-n*step)/2+(i%cols)*step+8,y=top+row*tileH+8,w=step-16,th=tileH-16,im=arts[i];achievementRound(c,x,y,w,th,18,'#E5EFDF','#ADC5A5');
+        c.fillStyle=green;c.font='bold 19px sans-serif';c.fillText(dexNo(id),x+w/2,y+28);
+        t.clearRect(0,0,240,175);t.globalCompositeOperation='source-over';const k=Math.min(218/im.naturalWidth,155/im.naturalHeight);const iw=im.naturalWidth*k,ih=im.naturalHeight*k;t.imageSmoothingEnabled=false;c.imageSmoothingEnabled=false;t.drawImage(im,(240-iw)/2,(175-ih)/2,iw,ih);const scale=Math.min((w-14)/240,(th-65)/175,1.1),aw=240*scale,ah=175*scale;c.drawImage(tint,x+(w-aw)/2,y+31+(th-65-ah)/2,aw,ah);
+        c.fillStyle=ink;c.font='bold '+(cols>=5?22:27)+'px sans-serif';
+      });
+      c.fillStyle=gold;c.font='bold 26px sans-serif';c.fillText('30周年上海盛典 · 我的收藏成就',540,h-104,920);c.fillStyle='#68737A';c.font='22px sans-serif';c.fillText('非官方个人收藏记录 · 不代表官方奖励或凭证',540,h-65,940);return canvas.toDataURL('image/png');
+    }
+    function closeAchievement(){achievementTicket++;achievementData=null;achievementOverlay.hidden=true;document.body.classList.remove('achievement-open');$('achievementImage').removeAttribute('src');if(achievementFocus&&document.contains(achievementFocus))achievementFocus.focus();}
+    async function showAchievementCard(){
+      const g=achievementQueue[achievementIndex],ticket=++achievementTicket;if(!g||!seriesStat(g).complete){closeAchievement();return;}achievementData=null;
+      $('achievementTitle').textContent=g.name;$('achievementPosition').textContent=(achievementIndex+1)+' / '+achievementQueue.length;$('achievementNav').hidden=achievementQueue.length<2;$('achievementPrev').disabled=achievementIndex===0;$('achievementNext').disabled=achievementIndex===achievementQueue.length-1;
+      $('achievementImage').hidden=true;$('achievementImage').removeAttribute('src');$('achievementMessage').hidden=false;$('achievementMessage').textContent='正在生成成就卡…';$('achievementSave').disabled=true;$('achievementHint').textContent='非官方个人收藏记录';$('achievementBody').scrollTop=0;
+      try{const data=await achievementCanvas(g);if(ticket!==achievementTicket)return;achievementData=data;$('achievementImage').src=data;$('achievementImage').hidden=false;$('achievementMessage').hidden=true;$('achievementSave').disabled=false;}
+      catch(e){if(ticket===achievementTicket)$('achievementMessage').textContent='像素图片暂时无法生成，请关闭后从已解锁成就重新打开。';}
+    }
+    function openAchievement(names){const groups=SERIES.filter(g=>names.includes(g.name)&&seriesStat(g).complete);if(!groups.length)return;achievementQueue=groups;achievementIndex=0;achievementFocus=document.activeElement;achievementOverlay.hidden=false;document.body.classList.add('achievement-open');$('achievementClose').focus();showAchievementCard();}
+    $('achievementClose').onclick=closeAchievement;achievementOverlay.addEventListener('click',e=>{if(e.target===achievementOverlay)closeAchievement();});
+    $('achievementPrev').onclick=()=>{if(achievementIndex>0){achievementIndex--;showAchievementCard();}};$('achievementNext').onclick=()=>{if(achievementIndex+1<achievementQueue.length){achievementIndex++;showAchievementCard();}};
+    $('achievementSave').onclick=()=>saveNativeImage(achievementData,$('achievementSave'),$('achievementHint'));
+    document.addEventListener('keydown',e=>{if(!achievementOverlay.hidden&&e.key==='Escape'){e.preventDefault();closeAchievement();}});
+    const baseRenderSeries=renderSeries;renderSeries=function(){baseRenderSeries();$('seriesGrid').querySelectorAll('.series-earned [data-series]').forEach(b=>{const i=b.dataset.series;b.removeAttribute('data-series');b.dataset.achievementView=i;b.disabled=false;b.textContent='查看成就卡';});};
+    $('seriesGrid').addEventListener('click',e=>{const b=e.target.closest('[data-achievement-view]');if(b){const g=SERIES[Number(b.dataset.achievementView)];if(g)openAchievement([g.name]);}});
+    state.seenSeries=[...new Set((state.seenSeries||[]).map(n=>achievementNames[n]||n))];renderSeries();
 
-})().catch(function(){var e=document.getElementById('startupGate');if(e)e.textContent='初始化失败，请关闭后重新打开。'});
+    function syncVenuePickers(){for(const p of venuePickers){p.toggle.textContent='列表选择 · '+(p.select.options[p.select.selectedIndex]?.textContent.split(' · ')[0]||'请选择');p.toggle.disabled=p.select.disabled;p.list.querySelectorAll('button').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.pickValue===p.select.value));});}}
+    function installVenuePicker(id){const select=$(id),box=document.createElement('div'),toggle=document.createElement('button'),list=document.createElement('div');box.className='venue-picker';toggle.type='button';toggle.className='venue-picker-toggle';toggle.setAttribute('aria-expanded','false');list.className='venue-picker-list';list.hidden=true;for(const opt of select.options){const b=document.createElement('button');b.type='button';b.dataset.pickValue=opt.value;b.textContent=opt.textContent;b.disabled=opt.disabled;list.appendChild(b);}box.append(toggle,list);const label=select.closest('label');if(label){const group=document.createElement('div');group.className='venue-picker-group';if(label.id){group.id=label.id;label.removeAttribute('id');}group.hidden=label.hidden;label.hidden=false;label.replaceWith(group);group.append(label,box);}else select.insertAdjacentElement('afterend',box);venuePickers.push({select,toggle,list});toggle.addEventListener('click',()=>{list.hidden=!list.hidden;toggle.setAttribute('aria-expanded',String(!list.hidden));syncVenuePickers();});list.addEventListener('click',e=>{const b=e.target.closest('[data-pick-value]');if(!b||b.disabled)return;select.value=b.dataset.pickValue;list.hidden=true;toggle.setAttribute('aria-expanded','false');syncVenuePickers();select.dispatchEvent(new Event('change',{bubbles:true}));});}
+    ['origin','firstPolicy','firstVenue','nearbyScope','region','mapRegion'].forEach(installVenuePicker);
+    document.addEventListener('change',syncVenuePickers);
+    updateFirstControls();
+    $("startupGate").hidden = true;
+  })().catch(function() {
+    var e = document.getElementById("startupGate");
+    if (e) e.textContent = "\u521D\u59CB\u5316\u5931\u8D25\uFF0C\u8BF7\u5173\u95ED\u540E\u91CD\u65B0\u6253\u5F00\u3002";
+  });
+})();
