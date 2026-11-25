@@ -60,7 +60,10 @@
       storageQueue=storageQueue.then(async()=>{if(!storageReady)return;try{const r=await timed(mini.setStorage({key:KEY,data:snapshot}),5000);if(!r||r.errMsg!=='setStorage:ok')throw Error('未确认写入');storageStatus('进度已保存');}catch(e){storageReady=false;storageStatus('保存未确认，请查看备份文本');}});
     }
     function inDate(s, d) {
-      return s.start <= d && d <= s.end;
+      if(!(s.start<=d&&d<=s.end))return false;
+      // Official 2026 qualifier dates, not a continuous window.
+      if(["s1-2","s2-2","s3-2"].includes(s.id))return [["2026-11-28","2026-11-29"],["2026-12-02","2026-12-06"],["2026-12-09","2026-12-13"],["2026-12-16","2026-12-20"]].some(([a,b])=>a<=d&&d<=b);
+      return true;
     }
     function has(s) {
       return state.done.includes(s.id);
@@ -289,7 +292,7 @@
       const h=Math.sin(dlat/2)**2+Math.cos(a.lat*rad)*Math.cos(b.lat*rad)*Math.sin(dlon/2)**2;
       return 6371*2*Math.asin(Math.sqrt(Math.max(0,Math.min(1,h))));
     }
-    // V5.6.19 — Shanghai rail network: https://github.com/Naptie/openmetro/tree/main/data/cn-shanghai (2026-09).
+    // V5.6.22 — Shanghai rail network: https://github.com/Naptie/openmetro/tree/main/data/cn-shanghai (2026-09).
     // Station coordinates converted GCJ-02 -> WGS84. Missing track distances and street walking are estimates.
     const RAIL_STATIONS=[["爱国路",31.281915,121.548378],["爱辉路",31.34598,121.444717],["鞍山新村",31.275257,121.505269],["安亭",31.290367,121.157427],["白银路",31.347333,121.240914],["宝安公路",31.371348,121.426266],["宝山路",31.25345,121.471767],["宝杨路",31.397198,121.475041],["北蔡",31.182302,121.547747],["北桥",31.047044,121.405419],["北新泾",31.218258,121.369373],["北洋泾路",31.241289,121.548039],["北中路",31.18495,121.557107],["博兴路",31.265702,121.582476],["漕宝路",31.170224,121.428515],["漕河泾开发区",31.172509,121.393125],["曹路",31.273375,121.678846],["漕溪路",31.178628,121.43379],["曹杨路",31.241135,121.413052],["漕盈路",31.162341,121.09228],["世纪大道",31.230768,121.522863],["世纪公园",31.211575,121.546633],["长风公园",31.227093,121.391672],["昌平路",31.23561,121.437999],["长清路",31.176447,121.483289],["长寿路",31.242711,121.433646],["常熟路",31.215406,121.444538],["昌邑路",31.246053,121.535794],["场中路",31.305486,121.408801],["陈春路",31.177281,121.55394],["成山路",31.172757,121.491764],["陈翔公路",31.308425,121.302294],["赤峰路",31.283178,121.477915],["中华艺术宫",31.187249,121.48916],["川沙",31.188831,121.693882],["春申路",31.100161,121.381189],["大柏树",31.291363,121.478704],["大场镇",31.295068,121.411502],["大渡河路",31.233589,121.389783],["大华三路",31.275868,121.418301],["大连路",31.25997,121.508686],["大木桥路",31.195978,121.458712],["丹阳路",31.2559,121.526821],["打浦桥",31.208237,121.46413],["大世界",31.229337,121.474662],["德平路",31.247563,121.55999],["淀山湖大道",31.136356,121.07754],["定边路",31.258253,121.357787],["滴水湖",30.909609,121.925497],["迪士尼",31.143433,121.663692],["东安路",31.192723,121.45031],["东宝兴路",31.26182,121.475683],["东城一路",31.032595,121.527776],["东川路",31.020149,121.415272],["洞泾",31.086579,121.22605],["东靖路",31.292856,121.584522],["东兰路",31.157702,121.387279],["东陆路",31.2847,121.5749],["东明路",31.174711,121.506465],["昌吉东路",31.295565,121.195902],["华东理工大学",31.146145,121.424359],["航头东",31.057207,121.613304],["华夏东路",31.198691,121.676675],["惠南东",31.028598,121.789486],["康桥东",31.149047,121.610698],["南京东路",31.240057,121.480126],["三林东",31.148574,121.518641],["武威东路",31.277466,121.387444],["殷高东路",31.323755,121.502366],["周浦东",31.1123,121.602704],["芳甸路",31.234004,121.554172],["芳华路",31.195271,121.545838],["芳芯路",31.193338,121.554973],["繁荣路",31.104799,121.566324],["封浜",31.26946,121.292535],["奉浦大道",30.944087,121.444404],["枫桥路",31.24368,121.40675],["奉贤新城",30.916085,121.491856],["丰翔路",31.310034,121.37623],["丰庄",31.244432,121.350548],["复旦大学",31.298324,121.495074],["富锦路",31.39404,121.420004],["抚顺路",31.285693,121.511398],["复兴岛",31.282922,121.557059],["港城路",31.35536,121.570781],["高桥",31.354741,121.558713],["高青路",31.161994,121.511403],["共富新村",31.356883,121.42942],["共康路",31.320769,121.442447],["广兰路",31.213253,121.616867],["光明路",31.298025,121.112566],["顾村公园",31.346406,121.368375],["顾戴路",31.142772,121.387212],["桂林公园",31.168854,121.415005],["桂林路",31.176655,121.413421],["桂桥路",31.25159,121.630865],["古浪路",31.286325,121.387566],["国帆路",31.341548,121.508759],["国权路",31.291285,121.505608],["顾唐路",31.268204,121.652209],["海伦路",31.261261,121.484207],["海天三路",31.170535,121.792558],["航津路",31.337528,121.589761],["航头",31.039608,121.591895],["航中路",31.167333,121.350749],["汉中路",31.243771,121.454117],["合川路",31.168418,121.380138],["衡山路",31.206409,121.441816],["鹤沙航城",31.080076,121.60705],["鹤涛路",31.074138,121.581762],["红宝石路",31.200714,121.393725],["虹漕路",31.1659,121.405908],["虹口足球场",31.273318,121.47463],["虹梅路",31.162221,121.392607],["虹桥1号航站楼",31.19328,121.342798],["虹桥2号航站楼",31.196014,121.319921],["虹桥火车站",31.195991,121.314441],["虹桥路",31.199378,121.416171],["虹莘路",31.139347,121.375722],["后滩",31.173876,121.469223],["花木路",31.213389,121.558507],["环城东路",30.933236,121.458661],["黄兴公园",31.297463,121.529048],["黄兴路",31.280881,121.524051],["黄杨路",31.236195,121.586807],["华宁路",31.009424,121.390626],["华鹏路",31.178385,121.522219],["花桥",31.3006,121.099784],["汇金路",31.163139,121.147099],["惠南",31.055936,121.757319],["汇臻路",31.027432,121.520216],["呼兰路",31.341514,121.433075],["国际客运中心",31.25215,121.493702],["嘉定新城",31.332043,121.24986],["剑川路",31.028428,121.411951],["江川路",31.007389,121.418849],["江宁路",31.246142,121.440216],["江浦公园",31.26663,121.519332],["江浦路",31.276986,121.513994],["江苏路",31.222262,121.426006],["江湾体育场",31.306306,121.508908],["江湾镇",31.307495,121.480557],["江月路",31.086359,121.504199],["交通大学",31.204078,121.430625],["嘉善路",31.20473,121.456131],["嘉怡路",31.261084,121.341122],["基隆路",31.353461,121.586194],["静安寺",31.225103,121.441924],["景洪路",31.111744,121.439706],["景西路",31.101631,121.414124],["金海湖",30.930954,121.488057],["金海路",31.265301,121.634402],["金吉路",31.266476,121.624525],["锦江乐园",31.144096,121.409465],["金京路",31.281999,121.61127],["金科路",31.206427,121.59779],["金平路",31.013234,121.405554],["金桥",31.263036,121.607132],["金桥路",31.259265,121.577599],["锦秋路",31.321994,121.377121],["金沙江路",31.233981,121.40855],["锦绣路",31.189732,121.535736],["金粤路",31.244273,121.624802],["金运路",31.242933,121.314794],["九亭",31.13925,121.314917],["巨峰路",31.28286,121.584152],["康恒路",31.156417,121.549435],["康桥",31.136462,121.563075],["康文路",31.337114,121.414671],["康新公路",31.132686,121.613003],["蓝村路",31.213767,121.52328],["岚皋路",31.258026,121.417291],["蓝天路",31.243212,121.573773],["老西门",31.220976,121.479289],["乐秀路",31.267308,121.309598],["联航路",31.075685,121.506198],["莲花路",31.132785,121.398267],["莲溪路",31.171313,121.562178],["临港大道",30.925885,121.90677],["凌空路",31.19491,121.719732],["凌兆新村",31.143319,121.485186],["临平路",31.262867,121.496248],["临洮路",31.264974,121.326318],["临沂新村",31.195274,121.512311],["刘行",31.359409,121.357759],["李子园",31.270843,121.385321],["龙柏新村",31.178769,121.365864],["龙漕路",31.171353,121.439774],["隆昌路",31.277324,121.540393],["隆德路",31.232349,121.418932],["龙华",31.174581,121.448368],["龙溪路",31.196266,121.375403],["龙阳路",31.205746,121.553376],["龙耀路",31.16165,121.45513],["娄山关路",31.213002,121.399408],["鲁班路",31.201169,121.470618],["芦恒路",31.121126,121.493816],["陆家浜路",31.213761,121.48162],["陆家嘴",31.240266,121.497689],["罗南新村",31.390652,121.352859],["罗山路",31.155497,121.588953],["罗秀路",31.133454,121.431185],["马当路",31.211469,121.472731],["马陆",31.32165,121.272459],["美兰湖",31.403719,121.345298],["创新中路",31.215993,121.669429],["淮海中路",31.221967,121.459798],["华夏中路",31.177979,121.578899],["嘉松中路",31.166136,121.21948],["龙华中路",31.186291,121.452483],["杨高中路",31.229651,121.544381],["延吉中路",31.290624,121.530611],["闵行开发区",31.002613,121.365113],["民雷路",31.270443,121.663847],["闵瑞路",31.050146,121.525998],["民生路",31.237976,121.539228],["南陈路",31.323538,121.393761],["南大路",31.301083,121.375705],["南浦大桥",31.210518,121.495278],["南翔",31.298868,121.318614],["国家会展中心",31.190373,121.294735],["嫩江路",31.316867,121.527612],["宁国路",31.270656,121.528016],["嘉定北",31.393505,121.232906],["江杨北路",31.409651,121.435181],["梅岭北路",31.245132,121.392347],["四川北路",31.253983,121.479703],["外高桥保税区北",31.349951,121.582706],["西藏北路",31.265355,121.464262],["杨高北路",31.282272,121.598755],["中山北路",31.260772,121.454622],["东方绿舟",31.100591,121.015106],["东方体育中心",31.155351,121.475794],["潘广路",31.366013,121.35124],["蟠龙路",31.188359,121.274207],["蟠祥路·国家会计学院",31.183414,121.281696],["彭浦新村",31.308445,121.44403],["人民广场",31.234619,121.470575],["平凉路",31.261109,121.522346],["浦电路",31.22225,121.525009],["浦东1号2号航站楼",31.153056,121.801291],["浦东大道",31.242366,121.514923],["浦东足球场",31.243837,121.611226],["浦航路",31.043188,121.526268],["浦江镇",31.098682,121.501859],["浦三路",31.153017,121.5347],["祁安路",31.293376,121.380168],["七宝",31.157219,121.344647],["祁华路",31.324207,121.368896],["祁连山路",31.273486,121.371403],["青浦新城",31.16081,121.121068],["七莘路",31.133556,121.357863],["曲阜路",31.244225,121.466998],["曲阳路",31.278482,121.486655],["三林",31.145307,121.507399],["三鲁公路",31.058285,121.523054],["三门路",31.315209,121.503916],["商城路",31.232311,121.511886],["上大路",31.316768,121.404027],["上海汽车城",31.287316,121.176222],["上海儿童医学中心",31.205364,121.519121],["上海赛车场",31.333864,121.22165],["上海马戏城",31.281753,121.447421],["上海体育馆",31.184691,121.432801],["上海国际旅游度假区",31.158321,121.675439],["上海图书馆",31.209836,121.439751],["自然博物馆",31.238349,121.457794],["上海火车站",31.251515,121.453354],["上海科技馆",31.220955,121.540144],["上海松江站",30.986963,121.22647],["上海南站",31.156462,121.42541],["上海体育场",31.187491,121.438917],["上海游泳馆",31.181008,121.436809],["上海大学",31.32239,121.384233],["上海财经大学",31.309633,121.491865],["上海西站",31.264514,121.396272],["上海动物园",31.192129,121.363524],["上南路",31.150884,121.50203],["沈杜公路",31.063557,121.507883],["申江路",31.282398,121.622648],["沈梅路",31.093378,121.576383],["佘山",31.106172,121.225261],["世博大道",31.18477,121.479814],["市光路",31.324784,121.527591],["石龙路",31.159848,121.438595],["双柏路",31.085129,121.417117],["双江路",31.35567,121.535104],["水产路",31.383214,121.483745],["水城路",31.201336,121.387615],["曙建路",31.092534,121.413261],["书院",30.961553,121.846348],["泗泾",31.12035,121.255829],["四平路",31.27687,121.497042],["一大会址·黄陂南路",31.225828,121.468364],["一大会址·新天地",31.218307,121.47065],["淞滨路",31.372856,121.488333],["淞发路",31.347095,121.495934],["淞虹路",31.220108,121.354936],["松江体育中心",31.018132,121.226129],["松江大学城",31.05609,121.228158],["松江新城",31.032413,121.226321],["宋园路",31.198391,121.407432],["长江南路",31.333999,121.486995],["虹梅南路",31.105753,121.428437],["灵岩南路",31.150696,121.490838],["浦东南路",31.235375,121.511022],["浦东南路",31.239925,121.506276],["祁连山南路",31.239487,121.362659],["三林南",31.128057,121.482369],["陕西南路",31.217048,121.454161],["外高桥保税区南",31.323742,121.597754],["西藏南路",31.203954,121.485073],["杨高南路",31.189711,121.520183],["台儿庄路",31.255016,121.593253],["塘桥",31.211832,121.514312],["唐镇",31.216261,121.652018],["桃浦新村",31.283475,121.345038],["天潼路",31.245762,121.47781],["铁力路",31.409953,121.456549],["提篮桥",31.255533,121.502376],["铜川路",31.25256,121.392385],["通河新村",31.33295,121.436918],["同济大学",31.284087,121.501928],["通南路",31.339579,121.475109],["外环路",31.122793,121.388383],["望园路",30.934061,121.4791],["威宁路",31.21672,121.382644],["文井路",31.005568,121.37616],["汶水路",31.294405,121.445644],["长江西路",31.347658,121.47072],["高科西路",31.187817,121.505437],["高桥西",31.353582,121.544988],["华夏西路",31.151966,121.510151],["嘉定西",31.379059,121.223405],["金沙江西路",31.243069,121.330606],["南京西路",31.231749,121.455393],["延安西路",31.211462,121.412415],["殷高西路",31.321928,121.480347],["友谊西路",31.383082,121.4233],["野生动物园",31.052487,121.6949],["世博会博物馆",31.199538,121.477083],["武定路",31.229158,121.431529],["五角场",31.300063,121.510232],["五莲路",31.274204,121.583653],["武宁路",31.236191,121.425867],["武威路",31.278495,121.360063],["吴中路",31.186202,121.409259],["五洲大道",31.304736,121.584998],["下南路",31.181439,121.535885],["向城路",31.224387,121.527747],["翔殷路",31.307068,121.527633],["小南门",31.218872,121.493946],["萧塘",30.967894,121.437261],["下沙",31.056686,121.584794],["西岑",31.072747,120.95993],["西渡",30.991329,121.427828],["歇浦路",31.252865,121.547228],["新场",31.047817,121.644755],["新村路",31.26568,121.41802],["行知路",31.286312,121.41712],["星中路",31.160008,121.364291],["新江湾城",31.330481,121.50252],["新闸路",31.240284,121.463596],["莘庄",31.113057,121.380743],["秀沿路",31.140375,121.594195],["学林路",31.185697,121.610164],["徐家汇",31.197384,121.431978],["徐泾北城",31.177563,121.237245],["徐盈路",31.180148,121.249555],["延长路",31.273543,121.450736],["杨树浦路",31.253981,121.512823],["杨思",31.163073,121.488978],["姚虹路",31.193403,121.401757],["耀华路",31.180526,121.490143],["伊犁路",31.200729,121.39925],["银都路",31.091258,121.385631],["殷高路",31.323658,121.491089],["迎春路",31.223151,121.546721],["宜山路",31.188581,121.422557],["永德路",31.041112,121.438603],["邮电新村",31.270402,121.489776],["友谊路",31.405887,121.471378],["远东大道",31.201414,121.750927],["元江路",31.064751,121.427281],["源深路",31.243409,121.526677],["源深体育中心",31.235108,121.530316],["云锦路",31.168412,121.453943],["云山路",31.25314,121.566919],["云顺路",31.239262,121.596134],["云台路",31.184241,121.495997],["御桥",31.160347,121.566687],["豫园",31.229973,121.482934],["张华浜",31.359966,121.494208],["张江高科",31.204082,121.583283],["张江路",31.191336,121.624972],["兆丰路",31.290904,121.145735],["肇嘉浜路",31.201326,121.445613],["赵巷",31.163239,121.187793],["真北路",31.234082,121.377311],["真光路",31.255113,121.379521],["镇坪路",31.248208,121.42514],["真如",31.252592,121.402566],["真新新村",31.257414,121.367324],["中春路",31.151728,121.330055],["中科路",31.181088,121.598268],["中宁路",31.246888,121.40989],["中山公园",31.21979,121.411125],["中潭路",31.256417,121.436378],["中兴路",31.255135,121.464472],["洲海路",31.314393,121.585181],["周浦",31.116363,121.563384],["颛桥",31.068933,121.397231],["朱家角",31.102563,121.044466],["朱梅路",31.126273,121.433187],["紫藤路",31.171573,121.360225],["紫竹高新区",31.025178,121.446639],["醉白池",31.003259,121.224944]];
     const RAIL_NODES=[[0,"12"],[1,"18"],[2,"8"],[3,"11"],[4,"11"],[5,"1"],[6,"3"],[6,"4"],[7,"3"],[8,"13"],[9,"5"],[10,"2"],[11,"6"],[12,"18"],[13,"6"],[14,"1"],[14,"12"],[15,"9"],[16,"9"],[17,"3"],[18,"11"],[18,"14"],[18,"3"],[18,"4"],[19,"17"],[20,"2"],[20,"4"],[20,"6"],[20,"9"],[21,"2"],[22,"15"],[23,"7"],[24,"13"],[24,"7"],[25,"13"],[25,"7"],[26,"1"],[26,"7"],[27,"14"],[27,"18"],[28,"7"],[29,"13"],[30,"13"],[30,"8"],[31,"11"],[32,"3"],[33,"8"],[34,"2"],[35,"5"],[36,"3"],[37,"7"],[38,"13"],[38,"15"],[39,"7"],[40,"12"],[40,"4"],[41,"12"],[41,"4"],[42,"18"],[43,"9"],[44,"14"],[44,"8"],[45,"6"],[46,"17"],[47,"14"],[48,"16"],[49,"11"],[50,"4"],[50,"7"],[51,"3"],[52,"41"],[53,"5"],[54,"9"],[55,"6"],[56,"12"],[57,"12"],[58,"13"],[58,"6"],[59,"11"],[60,"15"],[61,"16"],[62,"2"],[63,"16"],[64,"51"],[65,"10"],[65,"2"],[66,"11"],[67,"15"],[68,"10"],[69,"16"],[70,"9"],[71,"7"],[72,"18"],[73,"18"],[74,"14"],[75,"5"],[76,"11"],[77,"5"],[78,"15"],[79,"13"],[80,"18"],[81,"1"],[82,"18"],[83,"12"],[84,"10"],[84,"6"],[85,"10"],[86,"6"],[87,"1"],[88,"1"],[89,"2"],[90,"11"],[91,"15"],[91,"7"],[92,"12"],[93,"12"],[93,"15"],[94,"15"],[94,"9"],[95,"14"],[96,"15"],[97,"10"],[98,"10"],[98,"18"],[99,"9"],[100,"10"],[100,"4"],[101,"2"],[102,"6"],[103,"18"],[104,"10"],[105,"1"],[105,"12"],[105,"13"],[106,"9"],[107,"1"],[108,"16"],[109,"18"],[110,"15"],[111,"12"],[112,"3"],[112,"8"],[113,"12"],[114,"10"],[115,"10"],[115,"2"],[115,"51"],[116,"10"],[116,"17"],[116,"2"],[117,"10"],[117,"3"],[117,"4"],[118,"12"],[119,"7"],[120,"7"],[121,"5"],[122,"8"],[123,"8"],[124,"14"],[125,"5"],[126,"13"],[127,"11"],[128,"17"],[129,"16"],[130,"41"],[131,"1"],[131,"18"],[132,"12"],[133,"11"],[134,"5"],[135,"5"],[136,"13"],[137,"12"],[137,"18"],[138,"18"],[138,"8"],[139,"11"],[139,"2"],[140,"10"],[141,"3"],[142,"8"],[143,"10"],[143,"11"],[144,"12"],[144,"9"],[145,"14"],[146,"10"],[147,"14"],[147,"2"],[147,"7"],[148,"15"],[148,"51"],[149,"15"],[150,"5"],[151,"12"],[151,"9"],[152,"9"],[153,"1"],[154,"12"],[155,"2"],[156,"5"],[157,"9"],[158,"6"],[159,"15"],[160,"13"],[160,"3"],[160,"4"],[161,"7"],[162,"14"],[163,"13"],[164,"9"],[165,"12"],[165,"6"],[166,"11"],[167,"18"],[168,"18"],[169,"11"],[170,"4"],[170,"6"],[171,"7"],[172,"14"],[172,"9"],[173,"10"],[173,"8"],[174,"14"],[175,"8"],[176,"1"],[177,"13"],[177,"18"],[178,"16"],[179,"2"],[180,"8"],[181,"4"],[182,"14"],[183,"6"],[184,"7"],[185,"11"],[186,"10"],[187,"12"],[187,"3"],[188,"12"],[189,"11"],[189,"13"],[190,"11"],[190,"12"],[191,"10"],[192,"16"],[192,"18"],[192,"2"],[192,"7"],[193,"11"],[194,"15"],[194,"2"],[195,"4"],[196,"8"],[197,"8"],[197,"9"],[198,"14"],[198,"2"],[199,"7"],[200,"11"],[200,"16"],[201,"15"],[202,"13"],[202,"9"],[203,"11"],[204,"7"],[205,"2"],[206,"13"],[207,"13"],[207,"16"],[208,"17"],[209,"12"],[209,"7"],[210,"18"],[210,"9"],[211,"8"],[212,"5"],[213,"9"],[214,"41"],[215,"18"],[215,"6"],[216,"7"],[217,"15"],[218,"4"],[219,"11"],[220,"17"],[220,"2"],[221,"8"],[222,"12"],[223,"11"],[224,"3"],[225,"15"],[226,"10"],[227,"6"],[228,"8"],[229,"12"],[230,"1"],[231,"17"],[232,"11"],[232,"6"],[232,"8"],[233,"7"],[234,"17"],[235,"2"],[236,"1"],[237,"1"],[237,"2"],[237,"8"],[238,"18"],[239,"6"],[240,"2"],[240,"51"],[241,"14"],[241,"4"],[242,"14"],[243,"41"],[244,"8"],[245,"11"],[246,"15"],[247,"9"],[248,"7"],[249,"11"],[250,"17"],[251,"12"],[252,"12"],[252,"8"],[253,"8"],[254,"11"],[255,"41"],[256,"10"],[257,"9"],[258,"7"],[259,"11"],[260,"6"],[261,"11"],[262,"1"],[263,"1"],[263,"4"],[264,"51"],[265,"10"],[266,"13"],[267,"1"],[267,"3"],[267,"4"],[268,"2"],[269,"9"],[270,"1"],[270,"15"],[270,"3"],[271,"4"],[272,"11"],[273,"7"],[274,"18"],[275,"11"],[275,"15"],[276,"10"],[277,"6"],[278,"41"],[278,"8"],[279,"12"],[280,"18"],[281,"9"],[282,"13"],[283,"8"],[284,"3"],[285,"15"],[286,"10"],[287,"3"],[288,"10"],[289,"15"],[290,"16"],[291,"9"],[292,"10"],[292,"8"],[293,"1"],[293,"14"],[294,"10"],[294,"13"],[295,"3"],[296,"3"],[297,"2"],[298,"9"],[299,"9"],[300,"9"],[301,"10"],[302,"18"],[302,"3"],[303,"15"],[304,"6"],[306,"14"],[305,"2"],[307,"13"],[308,"51"],[309,"1"],[309,"10"],[309,"12"],[310,"6"],[311,"4"],[311,"8"],[312,"7"],[313,"9"],[314,"4"],[315,"2"],[316,"11"],[317,"10"],[317,"12"],[318,"3"],[319,"12"],[320,"14"],[320,"15"],[321,"1"],[322,"10"],[323,"18"],[324,"1"],[325,"5"],[326,"2"],[327,"5"],[328,"1"],[329,"18"],[330,"6"],[330,"7"],[331,"10"],[332,"6"],[333,"11"],[334,"13"],[335,"12"],[335,"13"],[335,"2"],[336,"3"],[336,"4"],[337,"3"],[338,"1"],[339,"16"],[340,"13"],[341,"14"],[342,"10"],[343,"6"],[344,"13"],[344,"14"],[345,"11"],[346,"15"],[347,"6"],[348,"13"],[349,"4"],[350,"8"],[351,"9"],[352,"5"],[353,"18"],[354,"17"],[355,"5"],[356,"14"],[357,"16"],[358,"7"],[359,"7"],[360,"9"],[361,"10"],[362,"1"],[363,"1"],[363,"5"],[364,"11"],[365,"13"],[366,"1"],[366,"11"],[366,"9"],[367,"17"],[368,"17"],[369,"1"],[370,"4"],[371,"8"],[372,"15"],[373,"7"],[373,"8"],[374,"10"],[375,"5"],[376,"18"],[377,"18"],[378,"3"],[378,"4"],[378,"9"],[379,"15"],[380,"10"],[381,"3"],[382,"2"],[383,"15"],[384,"14"],[385,"6"],[386,"11"],[387,"14"],[387,"6"],[388,"14"],[389,"7"],[390,"11"],[390,"18"],[391,"10"],[391,"14"],[392,"3"],[393,"2"],[394,"13"],[395,"11"],[396,"7"],[396,"9"],[397,"17"],[398,"13"],[399,"14"],[400,"3"],[400,"4"],[400,"7"],[401,"11"],[401,"14"],[402,"14"],[403,"51"],[403,"9"],[404,"13"],[405,"14"],[406,"2"],[406,"3"],[406,"4"],[407,"3"],[407,"4"],[408,"8"],[409,"6"],[410,"18"],[411,"5"],[412,"17"],[413,"15"],[414,"10"],[415,"15"],[416,"9"]];
@@ -307,7 +310,7 @@
       if(p.lat<riverLine[0][0])return p.lon>riverLine[0][1];if(p.lat>=riverLine[riverLine.length-1][0])return p.lon>riverLine[riverLine.length-1][1];
       for(let i=1;i<riverLine.length;i++){const a=riverLine[i-1],b=riverLine[i];if(p.lat<=b[0])return p.lon>a[1]+(b[1]-a[1])*(p.lat-a[0])/(b[0]-a[0]);}return false;
     }
-    // V5.6.19: directed bus/rail graph. Bus stop positions are approximate WGS84 junction anchors,
+    // V5.6.22: directed bus/rail graph. Bus stop positions are approximate WGS84 junction anchors,
     // NOT surveyed stop coordinates. Published stop order and service window; omitted stops counted by ordinal gaps.
     // Sources: https://lucabus.com/shanghai/line/55/ ; https://lucabus.com/shanghai/line/65/
     // https://www.modiauto.com.cn/cx/bus_77391.html ; https://www.modiauto.com.cn/cx/bus_44274.html
@@ -358,7 +361,7 @@
     function walkSeconds(m){return Math.ceil(m/1.22);}
     function pointKey(p){return p.id+":"+p.lat+":"+p.lon;}
     const netPoints=RAIL_NODES.map(n=>railPoints[n[0]]),netMeta=RAIL_NODES.map(n=>({type:"rail",line:n[1],service:"rail"+n[1],wait:300,exit:120}));
-    const netAdj=railAdj.map(edges=>edges.map(e=>({to:e[1],seconds:e[2],meters:e[3],walk:e[4]?e[3]:0,ride:!e[4]})));
+    const netAdj=railAdj.map((edges,i)=>edges.map(e=>{const meters=Math.max(e[3],Math.ceil(km(netPoints[i],netPoints[e[1]])*1000),e[4]?60:0);return {to:e[1],seconds:e[2],meters,walk:e[4]?meters:0,ride:!e[4]};}));
     const railCount=netPoints.length;
     function addNetEdge(from,to,seconds,meters,walk,ride){netAdj[from].push({to,seconds,meters,walk,ride});}
     for(const [pi,p] of BUS_PATTERNS.entries()){
@@ -405,7 +408,40 @@
         else rides.push({...meta,start:from,end:to,board:netPoints[from].name,alight:netPoints[to].name});}
       return rides;
     }
-    function leg(a,b,mode){if(!a||a.id===b.id)return {seconds:0,minutes:0,meters:0,walk:0,label:"原地",rides:[]};
+    const distanceNetCache=new Map();
+    function distanceNet(a,base){
+      const key=base+"|"+pointKey(a);if(distanceNetCache.has(key))return distanceNetCache.get(key);
+      const n=base==="public"?netPoints.length:railCount,N=n*2,m=new Float64Array(N),t=new Float64Array(N),w=new Float64Array(N),prev=new Int32Array(N),ride=new Uint8Array(N),done=new Uint8Array(N);m.fill(Infinity);t.fill(Infinity);prev.fill(-1);
+      const heap=[];const less=(a,b)=>a[0]<b[0]||a[0]===b[0]&&a[1]<b[1];
+      const push=x=>{let i=heap.length;heap.push(x);while(i){let p=(i-1)>>1;if(!less(x,heap[p]))break;heap[i]=heap[p];i=p;}heap[i]=x;};
+      const pop=()=>{const top=heap[0],x=heap.pop();if(heap.length){let i=0;while(i*2+1<heap.length){let j=i*2+1;if(j+1<heap.length&&less(heap[j+1],heap[j]))j++;if(!less(heap[j],x))break;heap[i]=heap[j];i=j;}heap[i]=x;}return top;};
+      for(const x of access(a,base)){const i=x.i,seconds=walkSeconds(x.m)+netMeta[i].wait;if(x.m<m[i]||x.m===m[i]&&seconds<t[i]){m[i]=w[i]=x.m;t[i]=seconds;push([m[i],t[i],i]);}}
+      while(heap.length){const [dm,dt,i]=pop();if(done[i]||dm!==m[i]||dt!==t[i])continue;done[i]=1;const u=i%n,used=i>=n;
+        for(const e of netAdj[u]){if(e.to>=n)continue;const j=e.to+(used||e.ride?n:0),meters=Math.max(e.meters,Math.ceil(km(netPoints[u],netPoints[e.to])*1000)),nd=dm+meters,nt=dt+e.seconds;
+          if(nd<m[j]||nd===m[j]&&nt<t[j]){m[j]=nd;t[j]=nt;w[j]=w[i]+(e.ride?0:meters);prev[j]=i;ride[j]=Number(e.ride);push([nd,nt,j]);}
+        }}
+      const out={n,m,t,w,prev,ride};if(distanceNetCache.size>32)distanceNetCache.clear();distanceNetCache.set(key,out);return out;
+    }
+    function distanceTransit(a,b,base){
+      const q=distanceNet(a,base);let best=null;
+      for(const x of access(b,base)){const j=x.i+q.n,meters=q.m[j]+x.m,seconds=q.t[j]+walkSeconds(x.m)+netMeta[x.i].exit;if(!Number.isFinite(meters)||best&&(meters>best.meters||meters===best.meters&&seconds>=best.seconds))continue;
+        const states=[];for(let i=j;i>=0;i=q.prev[i])states.push(i);states.reverse();const rides=[];
+        for(let k=1;k<states.length;k++){const i=states[k];if(!q.ride[i])continue;const from=states[k-1]%q.n,to=i%q.n,meta=netMeta[from],last=rides[rides.length-1];if(last&&last.service===meta.service&&last.end===from){last.end=to;last.alight=netPoints[to].name;}else rides.push({...meta,start:from,end:to,board:netPoints[from].name,alight:netPoints[to].name});}
+        if(!rides.length)continue;
+        const label=rides.map(v=>v.type==="rail"?"地铁"+v.line+"号线":(/^\d+$/.test(v.line)?"公交"+v.line+"路":"公交"+v.line)).join("＋")+"＋步行";
+        best={seconds,minutes:Math.ceil(seconds/60),meters,walk:q.w[j]+x.m,label,board:rides[0].board,alight:rides[rides.length-1].alight,rides};
+      }return best;
+    }
+    function leg(a,b,mode){
+      if(mode.endsWith(":distance")){
+        const base=mode.split(":")[0];if(!a||a.id===b.id)return leg(a,b,base);
+        const key=mode+"|"+pointKey(a)+"|"+pointKey(b);if(transportCache.has(key))return transportCache.get(key);
+        const fast=leg(a,b,base),m=walkMeters(a,b),sec=walkSeconds(m)+60;
+        let best=fast;if(netBank(a)===netBank(b)&&m<=2500&&m<=fast.meters)best={seconds:sec,minutes:Math.ceil(sec/60),meters:m,walk:m,label:"步行估算",rides:[]};
+        if(base!=="taxi"){const q=distanceTransit(a,b,base);if(q&&(q.meters<best.meters||q.meters===best.meters&&q.seconds<best.seconds))best=q;}
+        transportCache.set(key,best);return best;
+      }
+      if(!a||a.id===b.id)return {seconds:0,minutes:0,meters:0,walk:0,label:"原地",rides:[]};
       const key=mode+"|"+pointKey(a)+"|"+pointKey(b);if(transportCache.has(key))return transportCache.get(key);
       const same=netBank(a)===netBank(b),dm=walkMeters(a,b);let best=same?{seconds:walkSeconds(dm)+60,meters:dm,walk:dm,label:"步行估算",rides:[]}:{seconds:Infinity,meters:Infinity,walk:0,label:"",rides:[]};
       if(mode==="taxi"){const m=Math.ceil(km(a,b)*1350),seconds=480+m/1000*3600/22+(same?0:480);if(seconds<best.seconds)best={seconds,meters:m,walk:0,label:"出租车估算",rides:[]};}
@@ -421,53 +457,58 @@
     }
     function transfer(a,b,mode){return leg(a,b,mode).minutes;}
     function transferLabel(a,b,mode){const q=leg(a,b,mode);return q.rides?.length?q.rides.map(v=>(v.type==="rail"?"地铁"+v.line+"号线":(/^\d+$/.test(v.line)?"公交"+v.line+"路":"公交"+v.line))+"（"+v.board+"→"+v.alight+(v.direction?"，开往"+v.direction:"")+"）").join("；换乘")+"＋步行":q.label;}
-    // Native container: show transportation details without external navigation.
     function mapLegLink(a,b,mode){return "#leg-"+encodeURIComponent(JSON.stringify({from:a.name,to:b.name,detail:transferLabel(a,b,mode),minutes:transfer(a,b,mode),walk:leg(a,b,mode).walk}));}
     function routeMeters(steps,origin,mode){let a=origin,total=0;for(const s of steps){total+=leg(a,s.v,mode).meters;a=s.v;}return total;}
     // One fewer visit is worth at most 15 minutes of elapsed time, not an unlimited detour.
     const FEW_STOP_PENALTY=12; // Weight actual transfer time twice in elapsed+travel; a saved stop cannot justify a large detour.
-    const DISTRICT_PAIRS=[[0,12,4,12,"中山公园商圈","同一地铁枢纽，短距离步行"],[9,10,3,35,"外滩连游","南京东路至外滩南段，连续集章"],[0,5,2,22,"中山公园·环球港","地铁3/4号线相邻站"],[5,12,1,22,"中山公园·环球港","同一轨道走廊"],[0,3,2,25,"长宁商圈","同片区短距离接驳"],[3,12,2,22,"长宁商圈","短距离步行"],[4,13,3,20,"新天地商圈","短距离步行，展览须有预约"],[4,14,2,24,"新天地商圈","淮海中路附近，展览须有预约"]];
-    function districtEdge(a,b,mode){return DISTRICT_PAIRS.find(([x,y,w,max])=>((a===x&&b===y)||(a===y&&b===x))&&Math.max(transfer(V[x],V[y],mode),transfer(V[y],V[x],mode))<=max);}
+    const DISTRICT_PAIRS=[[0,12,4,12,"中山公园商圈","同一地铁枢纽，短距离步行"],[9,10,3,35,"外滩连游","南京东路至外滩南段，连续集章"],[0,5,2,22,"中山公园·环球港","地铁3/4号线相邻站"],[5,12,1,22,"中山公园·环球港","同一轨道走廊"],[0,3,2,25,"长宁商圈","同片区短距离接驳"],[3,12,2,22,"长宁商圈","短距离步行"],[4,13,6,20,"新天地商圈","短距离步行，展览须有预约"],[4,14,5,24,"新天地商圈","淮海中路附近，展览须有预约"]];
+    // Named corridors are hints; discover additional short connections across all venues.
+    const districtCache=new Map();
+    function districtPairsFor(mode){if(districtCache.has(mode))return districtCache.get(mode);const out=[];
+      for(let a=0;a<V.length;a++)for(let b=a+1;b<V.length;b++){
+        const known=DISTRICT_PAIRS.find(([x,y])=>x===a&&y===b||x===b&&y===a),t=Math.max(transfer(V[a],V[b],mode),transfer(V[b],V[a],mode)),dist=km(V[a],V[b]);
+        if(known&&t<=Math.max(known[3],mode.endsWith(":distance")?36:0)){out.push(known);continue;}
+        if(new Set([...V[a].items,...V[b].items].map(it=>it.id)).size<=1)continue;
+        if(pointEast(V[a])!==pointEast(V[b])||dist>2.5||t>(mode.endsWith(":distance")?36:23))continue;
+        out.push([a,b,t<=12?3:t<=18?2:1,23,V[a].district===V[b].district?V[a].district+"就近连游":"相邻商圈","按候选交通耗时估算"]);
+      }
+      districtCache.set(mode,out);return out;}
+    function districtEdge(a,b,mode){return districtPairsFor(mode).find(([x,y])=>(a===x&&b===y)||(a===y&&b===x));}
     function routeDistricts(p){const steps=p.best.steps,groups=[];for(let i=1;i<steps.length;i++){const edge=districtEdge(steps[i-1].v.id,steps[i].v.id,p.mode);if(!edge)continue;let g=groups[groups.length-1];if(g&&g.end===i-1){g.end=i;g.names.add(edge[4]);g.minutes+=steps[i].tr;}else groups.push({start:i-1,end:i,names:new Set([edge[4]]),minutes:steps[i].tr});}return groups;}
-    function districtResult(p){const groups=routeDistricts(p);return '<section class="district-result" aria-label="片区连游结果"><div class="district-head"><strong>片区连游</strong><small>'+groups.length+' 组连续场馆</small></div>'+(groups.length?groups.map(g=>'<div class="district-summary"><b>'+esc([...g.names].join(" / "))+'</b><small>第 '+(g.start+1)+'–'+(g.end+1)+' 站 · 内部交通约 '+g.minutes+' 分钟</small><p>'+p.best.steps.slice(g.start,g.end+1).map(s=>esc(s.v.name)).join(' → ')+'</p></div>').join(""):'<p class="muted">当前路线未形成连续片区组合。预约、开放日期、目标或时间约束可能使独立访问更合适。</p>')+(p.districtBaseline?'<p class="muted">相对同首站的严格最短时间方案：'+(p.best.t-p.districtBaseline.t>=0?"+":"")+(p.best.t-p.districtBaseline.t)+' 分钟 · '+((routeMeters(p.best.steps,p.origin,p.mode)-p.districtBaseline.meters)/1000>=0?"+":"")+((routeMeters(p.best.steps,p.origin,p.mode)-p.districtBaseline.meters)/1000).toFixed(1)+' km。最多增加10分钟，优先保留预约与必集。</p>':'')+'</section>';}
-    function renderDistrictCandidates(){const el=$("districtCandidates");if(!el)return;const d=date(),mode=$("mode").value,region=$("region").value,use=$("useSlots").checked;const rows=DISTRICT_PAIRS.filter(([a,b,w,max])=>[a,b].every(i=>(!region||V[i].district===region)&&eligible(V[i],d,use).length)&&Math.max(transfer(V[a],V[b],mode),transfer(V[b],V[a],mode))<=max);
-      el.innerHTML=rows.length?rows.map(([a,b,w,max,label,reason])=>{const stamps=[...new Map([a,b].flatMap(i=>eligible(V[i],d,use)).map(it=>[it.id,it])).values()];return '<div class="district-summary"><div class="district-head"><b>'+esc(label)+'</b><small>'+stamps.length+'枚可安排</small></div><p>'+esc(V[a].name)+' ↔ '+esc(V[b].name)+'</p><small>'+esc(reason)+' · '+transfer(V[a],V[b],mode)+' / '+transfer(V[b],V[a],mode)+'分钟（双向估算）</small><button type="button" data-district-pair="'+a+','+b+'">将组合印章加入必集</button></div>';}).join(""):'<p class="muted">当前日期、范围及收录进度没有可用的完整组合。预约项目须先登记。</p>';}
+    function districtResult(p){const groups=routeDistricts(p);return '<section class="district-result" aria-label="片区连游结果"><div class="district-head"><strong>片区连游</strong><small>'+groups.length+' 组连续场馆</small></div>'+(groups.length?groups.map(g=>'<div class="district-summary"><b>'+esc([...g.names].join(" / "))+'</b><small>第 '+(g.start+1)+'–'+(g.end+1)+' 站 · 内部交通约 '+g.minutes+' 分钟</small><p>'+p.best.steps.slice(g.start,g.end+1).map(s=>esc(s.v.name)).join(' → ')+'</p></div>').join(""):'<p class="muted">当前路线未形成连续片区组合。预约、开放日期、目标或时间约束可能使独立访问更合适。</p>')+(p.districtBaseline?'<p class="muted">相对严格最短时间方案：'+(p.best.t-p.districtBaseline.t>=0?"+":"")+(p.best.t-p.districtBaseline.t)+' 分钟 · '+((routeMeters(p.best.steps,p.origin,p.mode)-p.districtBaseline.meters)/1000>=0?"+":"")+((routeMeters(p.best.steps,p.origin,p.mode)-p.districtBaseline.meters)/1000).toFixed(1)+' km。距离优先，时间必须符合出行窗口及预约；额外优先解锁成就选项可能增加路程。</p>':'')+'</section>';}
+    function districtAvailability(d,mode,region,use,st,limit,dwell,origin){
+      const bits={};[...IDS].forEach((id,i)=>bits[id]=1<<i);const available=V.map(v=>eligible(v,d,use));
+      const allowed=id=>!region||V[id].district===region;
+      const rows=[];for(const [a,b,w,max,label,reason] of districtPairsFor(mode)){if(!allowed(a)||!allowed(b))continue;
+        const open=[a,b].map(id=>V[id].items.filter(it=>inDate(it,d)&&!has(it)));if(open.some(x=>!x.length))continue;
+        const candidates=[];for(const [x,y] of [[a,b],[b,a]]){for(const first of visitOptions(V[x],st+transfer(origin,V[x],mode),0,available[x],d,limit,dwell,bits)){for(const next of visitOptions(V[y],first.end+transfer(V[x],V[y],mode),first.mask,available[y],d,limit,dwell,bits)){candidates.push({x,y,t:next.end,travel:transfer(origin,V[x],mode)+transfer(V[x],V[y],mode),items:[...first.items,...next.items]});}}}
+        candidates.sort((x,y)=>y.items.length-x.items.length||x.t-y.t||x.travel-y.travel);const best=candidates[0],pending=open.flat().some(it=>it.kind!=="walk"&&(!use||!slot(it,d)));rows.push({a,b,label,reason,best,pending});
+      }return rows;
+    }
+    function renderDistrictCandidates(){const el=$("districtCandidates");if(!el)return;const d=date(),mode=$("mode").value,region=$("region").value,use=$("useSlots").checked,st=Math.max(600,time($("start").value)),limit=Math.min(1320,time($("end").value))-Number($("buffer").value),dwell=Number($("dwell").value);let origin=routeOrigin();if(origin&&km(origin,{lat:31.23,lon:121.47})>80)origin=null;
+      const profile=$("routeStyle").value==="smooth"?mode+":distance":mode;const rows=districtAvailability(d,profile,region,use,st,limit,dwell,origin).sort((a,b)=>Number(!!b.best)-Number(!!a.best)||walkMeters(V[a.a],V[a.b])-walkMeters(V[b.a],V[b.b]));
+      const isXintiandi=(!region||region==="黄浦区"),openAlt=[13,14].filter(id=>V[id].items.some(it=>inDate(it,d)&&!has(it))),expo=V[4].items[0],expoOpen=inDate(expo,d)&&!has(expo);
+      let intro=isXintiandi&&(openAlt.length||expoOpen)?'<div class="district-summary"><b>新天地 · 淮海中路</b><p>拉法耶文化艺术中心 · 湖滨道 · 上海广场</p><small>'+(!expoOpen?'插画展当前日期无未收录印章。':slot(expo,d)&&use?'插画展已登记 '+esc(slot(expo,d).time)+'；优先按预约前后选店。':'插画展须预约并登记场次后纳入路线。')+' '+(openAlt.length?'上海广场、湖滨道同款西狮海壬，任选一处；两店之间步行约 '+transfer(V[13],V[14],mode)+' 分钟。':'西狮海壬当前日期未开放或已收录。')+'</small></div>':'';
+      el.innerHTML=intro+rows.map(({a,b,label,reason,best,pending})=>'<div class="district-summary"><div class="district-head"><b>'+esc(label)+'</b><small>'+(best?best.items.length+'枚可安排':pending?'待预约':'当前时段不适合')+'</small></div><p>'+esc(V[a].name)+' ↔ '+esc(V[b].name)+'</p><small>'+esc(reason)+' · 步行距离估算 '+(walkMeters(V[a],V[b])/1000).toFixed(1)+' km · '+transfer(V[a],V[b],profile)+' / '+transfer(V[b],V[a],profile)+'分钟（双向估算）</small>'+(best?'<p>单独安排该组合的可行顺序：'+esc(V[best.x].name)+' → '+esc(V[best.y].name)+'，预计 '+clock(best.t)+' 完成</p><button type="button" data-district-pair="'+a+','+b+'" data-district-items="'+esc(best.items.map(it=>it.id).join(","))+'">将组合印章加入必集</button>':'<p class="muted">'+(pending?'请先登记预约；未预约不计入可集数。':'请调整开始／结束时间或预约。')+'</p>')+'</div>').join("")+(!rows.length&&!intro?'<p class="muted">当前日期、范围及收录进度没有可用组合。</p>':'');}
+
         function eligible(v, d, use, excluded = new Set(state.done)) {
       return v.items.filter((s) => inDate(s, d) && !excluded.has(s.id) && (s.kind === "walk" && !s.dateUncertain || use && s.kind !== "walk" && slot(s, d)));
     }
-    function visitOptions(v, arrive, mask, available, d, limit, dwell, idBit) {
-      let normal = available.filter((s) => s.kind === "walk" && !(mask & idBit[s.id])), reserved = available.filter((s) => s.kind !== "walk" && !(mask & idBit[s.id]));
-      let result = [];
-      for (let k = 0; k < 1 << reserved.length; k++) {
-        let fixed = reserved.filter((_, i) => k & 1 << i).map((s) => ({ s, t: time(slot(s, d).time), duration: slot(s, d).duration })).sort((a, b) => a.t - b.t);
-        let now = Math.max(arrive, 600), picked = [], blocks = [];
-        let cost = normal.length ? dwell + 5 * (normal.length - 1) : 0, normalPending = normal.length > 0, valid = true;
-        for (let r of fixed) {
-          if (normalPending && now + cost <= r.t) {
-            blocks.push({ start: now, end: now + cost, items: normal });
-            picked.push(...normal);
-            now += cost;
-            normalPending = false;
-          }
-          if (now > r.t || r.t < 600 || r.t + r.duration > 1320) {
-            valid = false;
-            break;
-          }
-          blocks.push({ start: r.t, end: r.t + r.duration, items: [r.s] });
-          picked.push(r.s);
-          now = r.t + r.duration;
+    function eventSite(v,it){if(v.id<=2){const theme=it.id.endsWith("-3")||it.kind==="workshop";return theme?"主题空间":"卡牌道馆";}return "集章处";}
+    function insideMove(v,a,b){return a&&eventSite(v,a)!==eventSite(v,b)?5:0;}
+    function walkService(v,items,dwell){const groups=new Set(items.map(it=>eventSite(v,it)));return groups.size*dwell+Math.max(0,groups.size-1)*5+Math.max(0,items.length-groups.size)*5;}
+    function visitOptions(v,arrive,mask,available,d,limit,dwell,idBit){
+      const items=available.filter(it=>!(mask&idBit[it.id])),arrival=Math.max(arrive,600),out=new Map();
+      function extend(now,picked,blocks,bits,waiting,internal){
+        if(picked.length){const key=bits,old=out.get(key),candidate={end:now,mask:mask|bits,gain:picked.length,items:picked,blocks,arrival,waiting,internal};if(!old||now<old.end||now===old.end&&internal<old.internal)out.set(key,candidate);}
+        for(const it of items){const bit=idBit[it.id];if(bits&bit)continue;const last=picked[picked.length-1],move=insideMove(v,last,it),ready=now+move;let start=ready,end;
+          if(it.kind==="walk"){const same=last&&last.kind==="walk"&&eventSite(v,last)===eventSite(v,it);end=start+(same?5:dwell);}
+          else{const booking=slot(it,d);if(!booking)continue;start=time(booking.time);if(!Number.isFinite(start)||ready>start||start<600)continue;end=start+Number(booking.duration);}
+          if(end>Math.min(limit,1320)||!Number.isFinite(end)||end<=start)continue;
+          extend(end,[...picked,it],[...blocks,{start,end,items:[it],move,wait:start-ready}],bits|bit,waiting+start-ready,internal+move);
         }
-        if (!valid) continue;
-        if (normalPending) {
-          blocks.push({ start: now, end: now + cost, items: normal });
-          picked.push(...normal);
-          now += cost;
-        }
-        if (!picked.length || now > limit) continue;
-        let bits = picked.reduce((m, s) => m | idBit[s.id], 0);
-        result.push({ end: now, mask: mask | bits, gain: picked.length, items: picked, blocks, arrival: Math.max(arrive, 600) });
       }
-      return result;
+      extend(arrival,[],[],0,0,0);return [...out.values()].sort((a,b)=>b.gain-a.gain||a.end-b.end||a.internal-b.internal);
     }
     function plan(opts = {}) {
       var _a, _b, _c;
@@ -483,7 +524,7 @@
       if(firstPolicy==="fixed"&&fixed==="")return {error:"请选择指定的首个集章点。"};
       let states = [{ last: origin, mask: 0, visited: 0, t: st, count: 0, steps: [], travel: 0 }], best = states[0];
       const goal = (_a = opts.goal) != null ? _a : effectiveGoal(), needed = goal ? Math.max(0, goal - ((_c = (_b = opts.excluded) == null ? void 0 : _b.size) != null ? _c : state.done.length)) : Infinity;
-      const requestedStyle=opts.style || $("routeStyle").value || "fast", style=requestedStyle==="smooth"?"fast":requestedStyle, claim = targetMode==="total" && goal > 0 && goal <= 6 && $("claimLast").checked;
+      const requestedStyle=opts.style || $("routeStyle").value || "fast", style=requestedStyle, claim = targetMode==="total" && goal > 0 && goal <= 6 && $("claimLast").checked;
       const must = (state.must || []).filter((id) => !(opts.excluded || new Set(state.done)).has(id)), mustMask = must.reduce((m, id) => m | idBit[id], 0), bitCount = (m) => {
         let n = 0;
         while (m) {
@@ -492,20 +533,29 @@
         }
         return n;
       };
+      if(style==="smooth"&&!opts.fastLegs)mode+=":distance";
       const owned=opts.excluded||new Set(state.done),bookedMask=use?distinctStamps().filter(it=>!owned.has(it.id)&&inDate(it,d)&&slot(it,d)).reduce((m,it)=>m|idBit[it.id],0):0;
       // Connected districts, conditional on date, collected stamps and registered appointments.
       // [venueA, venueB, preference weight, max bidirectional connection minutes].
       // 0/12 share a mall-to-station pedestrian bridge; 0/5 and 5/12 are adjacent rail stops.
       // 4/13 and 4/14 only become eligible with an actual exhibition appointment.
-      const districtPairs=DISTRICT_PAIRS;
-      const activePairs=districtPairs.filter(([a,b,w,max])=>[a,b].every(id=>venues.some(v=>v.id===id))&&Math.max(transfer(V[a],V[b],mode),transfer(V[b],V[a],mode))<=max);
+      const districtPairs=districtPairsFor(mode);
+      const activePairs=districtPairs.filter(([a,b,w,max])=>[a,b].every(id=>venues.some(v=>v.id===id))&&bitCount(available[a].concat(available[b]).reduce((m,it)=>m|idBit[it.id],0))>=2);
       const pairedIds=opts.pairIds||[9,10],pairTrial=!!opts.pairTrial&&activePairs.some(([a,b])=>pairedIds.includes(a)&&pairedIds.includes(b)),pairBits=(1<<pairedIds[0])|(1<<pairedIds[1]);
       const hasPair=visited=>(visited&pairBits)===pairBits;
       const adjacentPair=(q,a,b)=>q.steps.some((s,i)=>i>0&&((s.v.id===a&&q.steps[i-1].v.id===b)||(s.v.id===b&&q.steps[i-1].v.id===a)));
       const pendingPair=visited=>pairTrial&&(visited&pairBits)!==0&&!hasPair(visited);
       const pairNext=(visited,id)=>!pendingPair(visited)||((pairBits&(1<<id))!==0&&(visited&(1<<id))===0);
       const districtScore=q=>activePairs.reduce((n,[a,b,w])=>n+(adjacentPair(q,a,b)?w:0),0);
-      const firstCost=q=>q.steps.length?q.steps[0].tr:0; const distance=q=>q.meters??0; const smooth=opts.smoothWeight||0; const smoothCost=q=>q.t+smooth*(distance(q)/1000+5*(q.crossings||0));
+      const firstCost=q=>q.steps.length?q.steps[0].tr:0; const distance=q=>q.meters??0;
+      const auto=style==="smooth"&&$("autoAchievement")?.checked&&!must.length&&Number.isFinite(needed)&&needed>0;
+      const availableMask=venues.reduce((m,v)=>m|available[v.id].reduce((n,it)=>n|idBit[it.id],0),0);
+      const achievementUnits=auto?SERIES.map(g=>(g.buckets||g.ids.map(id=>({ids:[id]}))).filter(u=>!u.ids.some(id=>owned.has(id))).map(u=>u.ids.reduce((m,id)=>m|(idBit[id]||0),0))).filter(u=>u.length&&u.length<=needed&&u.every(m=>(m&availableMask)!==0)):[];
+      const achievementCache=new Map();
+      const achievement=mask=>{if(achievementCache.has(mask))return achievementCache.get(mask);const value=Number(achievementUnits.some(u=>u.every(m=>(m&mask)!==0)));achievementCache.set(mask,value);return value;};
+      const achRank=(a,b)=>Number(b.count<=needed+1&&achievement(b.mask))-Number(a.count<=needed+1&&achievement(a.mask));
+      const smooth=0,smoothCost=q=>distance(q);
+      const distRank=(a,b)=>distance(a)-distance(b)||(a.crossings||0)-(b.crossings||0)||a.t-b.t||a.travel-b.travel;
       const rank = (a, b) => {
         let bd=bitCount(b.mask&bookedMask)-bitCount(a.mask&bookedMask);if(bd)return bd;
         let md = bitCount(b.mask & mustMask) - bitCount(a.mask & mustMask);
@@ -513,6 +563,7 @@
         let aa = a.count >= needed, bb = b.count >= needed;
         if (aa !== bb) return aa ? -1 : 1;
         if (aa && bb) {
+          if(style==="smooth")return achRank(a,b)||distRank(a,b)||b.count-a.count;
           let c = claim ? Number(canClaim(b)) - Number(canClaim(a)) : 0;
           // Claim eligibility is a tie-breaker, never a reason for a slower fast route.
           if (style === "few") return (a.t+a.travel+FEW_STOP_PENALTY*a.steps.length)-(b.t+b.travel+FEW_STOP_PENALTY*b.steps.length) || a.travel-b.travel || a.steps.length-b.steps.length || b.count-a.count || firstCost(a)-firstCost(b);
@@ -520,21 +571,22 @@
           return (smooth?smoothCost(a)-smoothCost(b):0)||a.t - b.t || a.travel - b.travel || distance(a)-distance(b) || c || b.count - a.count || firstCost(a)-firstCost(b);
         }
         let urgent = (q) => q.steps.flatMap((st2) => st2.items).filter((it) => it.kind !== "walk" && (Date.parse(it.end) - Date.parse(d)) / 864e5 <= 7).length;
-        return (opts.deadline ? urgent(b) - urgent(a) : 0) || b.count - a.count || (smooth?smoothCost(a)-smoothCost(b):0) || (style==="few"?(a.t+a.travel+FEW_STOP_PENALTY*a.steps.length)-(b.t+b.travel+FEW_STOP_PENALTY*b.steps.length):0) || a.t - b.t || a.travel - b.travel || firstCost(a)-firstCost(b);
+        return (opts.deadline ? urgent(b) - urgent(a) : 0) || b.count - a.count || (style==="smooth"?distRank(a,b):0) || (smooth?smoothCost(a)-smoothCost(b):0) || (style==="few"?(a.t+a.travel+FEW_STOP_PENALTY*a.steps.length)-(b.t+b.travel+FEW_STOP_PENALTY*b.steps.length):0) || a.t - b.t || a.travel - b.travel || firstCost(a)-firstCost(b);
       };
       if (needed === 0 && !must.length && !bookedMask) return { best, d, st, finish, buffer, limit, mode, origin, candidates: venues.length, target: goal };
       let firstId=null;
       const feasible=venues.filter(v=>visitOptions(v,st+transfer(origin,v,mode),0,available[v.id],d,limit,dwell,idBit).length);
-      if(origin)feasible.sort((a,b)=>leg(origin,a,mode).seconds-leg(origin,b,mode).seconds||km(origin,a)-km(origin,b)||a.id-b.id);
+      if(origin)feasible.sort((a,b)=>(style==="smooth"?leg(origin,a,mode).meters-leg(origin,b,mode).meters:leg(origin,a,mode).seconds-leg(origin,b,mode).seconds)||km(origin,a)-km(origin,b)||a.id-b.id);
       if(firstPolicy==="fixed"){firstId=Number(fixed);if(!feasible.some(v=>v.id===firstId))return {error:"指定首站在所选日期、范围及时间内没有可收录的印章，请更换首站或调整设置。"};}
-      else if(firstPolicy==="nearest"&&origin){if(!feasible.length)return opts.day?{best,d,st,finish,buffer,limit,mode,origin,candidates:venues.length,target:goal}:{error:"所选条件下没有可作为首站的未收录集章点。"};firstId=feasible[0].id;}
+      else if(firstPolicy==="nearest"&&origin){if(!feasible.length)return opts.day?{best,d,st,finish,buffer,limit,mode,origin,candidates:venues.length,target:goal}:{error:"所选条件下没有可作为首站的未收录集章点。"};const immediate=feasible.filter(v=>visitOptions(v,st+transfer(origin,v,mode),0,available[v.id],d,limit,dwell,idBit).some(op=>op.blocks[0].start<=op.arrival+20));firstId=(immediate[0]||feasible[0]).id;}
+      if(opts.overrideFirst!==undefined&&firstPolicy!=="fixed")firstId=opts.overrideFirst;
       const trMatrix=V.map(a=>V.map(b=>transfer(a,b,mode))),startTr=V.map(v=>transfer(origin,v,mode)),dmatrix=V.map(a=>V.map(b=>leg(a,b,mode).meters)),startDm=V.map(v=>leg(origin,v,mode).meters),cross=(a,b)=>a&&pointEast(a)!==pointEast(b)?1:0,cmatrix=V.map(a=>V.map(b=>cross(a,b))),startCross=V.map(v=>cross(origin,v));
       function search(seed,width){
         let frontier=[{last:origin,mask:0,visited:0,t:st,count:0,steps:[],travel:0}],winner=frontier[0];
         for(let depth=0;depth<bitCount(venues.reduce((m,v)=>m|available[v.id].reduce((x,it)=>x|idBit[it.id],0),0));depth++){
           const next=new Map();
           for(const p of frontier)for(const v of venues){
-            if(depth===0&&seed!==null&&v.id!==seed||!pairNext(p.visited,v.id)||!available[v.id].some(it=>!(p.mask&idBit[it.id])))continue;
+            if(depth===0&&seed!==null&&v.id!==seed||depth>0&&p.last.id===v.id||!pairNext(p.visited,v.id)||!available[v.id].some(it=>!(p.mask&idBit[it.id])))continue;
             const tr=depth===0?startTr[v.id]:trMatrix[p.last.id][v.id];
             for(const op of visitOptions(v,p.t+tr,p.mask,available[v.id],d,limit,dwell,idBit)){
               const n={last:v,mask:op.mask,visited:p.visited|1<<v.id,t:op.end,count:p.count+op.gain,steps:[...p.steps,{v,tr,...op}],travel:p.travel+tr,meters:(p.meters||0)+(depth===0?startDm[v.id]:dmatrix[p.last.id][v.id]),crossings:(p.crossings||0)+(depth===0?startCross[v.id]:cmatrix[p.last.id][v.id])};
@@ -552,31 +604,31 @@
       function exactWalk(){
         const n=venues.length,N=1<<n,full=N-1,masks=venues.map(v=>available[v.id].reduce((m,it)=>m|idBit[it.id],0));
         if(!n)return best;
-        const union=new Int32Array(N),counts=new Uint8Array(N),sizes=new Uint8Array(N),globalVisited=new Int32Array(N);
-        for(let m=1;m<N;m++){const b=m&-m,i=31-Math.clz32(b),rest=m^b;union[m]=union[rest]|masks[i];globalVisited[m]=globalVisited[rest]|(1<<venues[i].id);counts[m]=bitCount(union[m]);sizes[m]=sizes[rest]+1;}
+        const union=new Int32Array(N),counts=new Uint8Array(N),sizes=new Uint8Array(N),globalVisited=new Int32Array(N),services=new Int32Array(N);const venueService=venues.map(v=>walkService(v,available[v.id],dwell));
+        for(let m=1;m<N;m++){const b=m&-m,i=31-Math.clz32(b),rest=m^b;union[m]=union[rest]|masks[i];globalVisited[m]=globalVisited[rest]|(1<<venues[i].id);counts[m]=bitCount(union[m]);sizes[m]=sizes[rest]+1;services[m]=services[rest]+venueService[i];}
         const costs=new Int32Array(N*n),prev=new Int8Array(N*n),first=new Int8Array(N*n);costs.fill(-1);prev.fill(-1);first.fill(-1);const distances=new Int32Array(N*n),crossings=new Uint8Array(N*n);
         let win=null;
         const compare=(a,b)=>{
           if(!b)return -1;
           const md=bitCount(b.mask&mustMask)-bitCount(a.mask&mustMask);if(md)return md;
           const aa=a.count>=needed,bb=b.count>=needed;if(aa!==bb)return aa?-1:1;
-          if(aa&&bb){const c=claim?Number(b.claim)-Number(a.claim):0;
+          if(aa&&bb){if(style==="smooth")return achRank(a,b)||distRank(a,b)||b.count-a.count;const c=claim?Number(b.claim)-Number(a.claim):0;
             if(style==='few')return (a.t+a.travel+FEW_STOP_PENALTY*a.len)-(b.t+b.travel+FEW_STOP_PENALTY*b.len)||a.travel-b.travel||a.len-b.len||b.count-a.count||a.firstCost-b.firstCost;
             if(style==='max')return b.count-a.count||a.t-b.t||a.travel-b.travel||a.firstCost-b.firstCost;
             return (smooth?smoothCost(a)-smoothCost(b):0)||a.t-b.t||a.travel-b.travel||a.meters-b.meters||c||b.count-a.count||a.firstCost-b.firstCost;
           }
-          return b.count-a.count||(smooth?smoothCost(a)-smoothCost(b):0)||(style==='few'?(a.t+a.travel+FEW_STOP_PENALTY*a.len)-(b.t+b.travel+FEW_STOP_PENALTY*b.len):0)||a.t-b.t||a.travel-b.travel||a.meters-b.meters||a.firstCost-b.firstCost;
+          return b.count-a.count||(style==="smooth"?distRank(a,b):0)||(smooth?smoothCost(a)-smoothCost(b):0)||(style==='few'?(a.t+a.travel+FEW_STOP_PENALTY*a.len)-(b.t+b.travel+FEW_STOP_PENALTY*b.len):0)||a.t-b.t||a.travel-b.travel||a.meters-b.meters||a.firstCost-b.firstCost;
         };
-        for(let i=0;i<n;i++){const v=venues[i],m=1<<i,tr=startTr[v.id];if(firstId!==null&&v.id!==firstId||st+tr+dwell+5*(counts[m]-1)>limit)continue;const k=m*n+i;costs[k]=tr;distances[k]=startDm[v.id];crossings[k]=startCross[v.id];first[k]=i;}
+        for(let i=0;i<n;i++){const v=venues[i],m=1<<i,tr=startTr[v.id];if(firstId!==null&&v.id!==firstId||st+tr+services[m]>limit)continue;const k=m*n+i;costs[k]=tr;distances[k]=startDm[v.id];crossings[k]=startCross[v.id];first[k]=i;}
         for(let m=1;m<N;m++){
-          const count=counts[m],len=sizes[m],dwellTotal=len*dwell+5*(count-len);
+          const count=counts[m],len=sizes[m],dwellTotal=services[m];
           for(let bits=m;bits;bits&=bits-1){const i=31-Math.clz32(bits&-bits),k=m*n+i,tr=costs[k];if(tr<0)continue;
             const t=st+tr+dwellTotal;if(t>limit)continue;
             const v=venues[i],f=first[k],fc=startTr[venues[f].id];
             const a={m,i,mask:union[m],count,len,t,travel:tr,meters:distances[k],crossings:crossings[k],firstCost:fc,claim:v.id<=3||v.id>=5&&v.id<=10};
             if((!pairTrial||hasPair(globalVisited[m]))&&compare(a,win)<0)win=a;
             for(let rest=full^m;rest;rest&=rest-1){const b=rest&-rest,j=31-Math.clz32(b);if(!pairNext(globalVisited[m],venues[j].id)||!(masks[j]&~union[m]))continue;const nm=m|b,nt=tr+trMatrix[v.id][venues[j].id],nk=nm*n+j;
-              if(st+nt+sizes[nm]*dwell+5*(counts[nm]-sizes[nm])>limit)continue;
+              if(st+nt+services[nm]>limit)continue;
               const nd=distances[k]+dmatrix[v.id][venues[j].id],nc=crossings[k]+cmatrix[v.id][venues[j].id],score=nt+smooth*(nd/1000+5*nc),oldScore=costs[nk]+smooth*(distances[nk]/1000+5*crossings[nk]);if(costs[nk]<0||score<oldScore||score===oldScore&&(nt<costs[nk]||nt===costs[nk]&&nd<distances[nk])){costs[nk]=nt;distances[nk]=nd;crossings[nk]=nc;prev[nk]=i;first[nk]=f;}
             }
           }
@@ -584,10 +636,36 @@
         if(!win)return best;
         const order=[];let m=win.m,i=win.i;while(i>=0){order.unshift(venues[i]);const j=prev[m*n+i];m^=1<<i;i=j;}
         let p={last:origin,mask:0,visited:0,t:st,count:0,steps:[],travel:0};
-        for(const v of order){const tr=transfer(p.last,v,mode),op=visitOptions(v,p.t+tr,p.mask,available[v.id],d,limit,dwell,idBit)[0];if(!op)return best;p={last:v,mask:op.mask,visited:p.visited|1<<v.id,t:op.end,count:p.count+op.gain,steps:[...p.steps,{v,tr,...op}],travel:p.travel+tr,meters:(p.meters||0)+leg(p.last,v,mode).meters,crossings:(p.crossings||0)+cross(p.last,v)};}
+        for(const v of order){const tr=transfer(p.last,v,mode),op=visitOptions(v,p.t+tr,p.mask,available[v.id],d,limit,dwell,idBit).find(o=>o.gain===available[v.id].filter(it=>!(p.mask&idBit[it.id])).length);if(!op)return best;p={last:v,mask:op.mask,visited:p.visited|1<<v.id,t:op.end,count:p.count+op.gain,steps:[...p.steps,{v,tr,...op}],travel:p.travel+tr,meters:(p.meters||0)+leg(p.last,v,mode).meters,crossings:(p.crossings||0)+cross(p.last,v)};}
         return p;
       }
-      if(venues.every(v=>available[v.id].every(it=>it.kind==='walk')))best=exactWalk();
+      // Time-distance Pareto DP for non-reservation routes.
+      function exactDistance(){
+        const n=venues.length,N=1<<n,full=N-1,masks=venues.map(v=>available[v.id].reduce((m,it)=>m|idBit[it.id],0));
+        const unions=new Int32Array(N),globals=new Int32Array(N),service=new Int32Array(N),counts=new Uint8Array(N);
+        const costs=venues.map(v=>walkService(v,available[v.id],dwell)),labels=new Array(N*n);
+        for(let mask=1;mask<N;mask++){const b=mask&-mask,i=31-Math.clz32(b),r=mask^b;unions[mask]=unions[r]|masks[i];globals[mask]=globals[r]|(1<<venues[i].id);service[mask]=service[r]+costs[i];counts[mask]=bitCount(unions[mask]);}
+        function insert(k,q){let old=labels[k]||[];const dom=(a,b)=>a.travel<=b.travel&&a.meters<=b.meters&&a.crossings<=b.crossings;if(old.some(a=>dom(a,q)))return;labels[k]=[...old.filter(a=>!dom(q,a)),q];}
+        let winner=null;
+        const compare=(a,b)=>!b?-1:bitCount(b.mask&mustMask)-bitCount(a.mask&mustMask)||Number(b.count>=needed)-Number(a.count>=needed)||(a.count<needed&&b.count<needed?b.count-a.count:0)||achRank(a,b)||distRank(a,b)||b.count-a.count;
+        for(let i=0;i<n;i++){const v=venues[i],mask=1<<i,t=startTr[v.id];if((firstId!==null&&v.id!==firstId)||st+t+service[mask]>limit)continue;insert(mask*n+i,{i,travel:t,meters:startDm[v.id],crossings:startCross[v.id],prev:null});}
+        for(let mask=1;mask<N;mask++)for(let bits=mask;bits;bits&=bits-1){const i=31-Math.clz32(bits&-bits),list=labels[mask*n+i];if(!list)continue;const v=venues[i];
+          for(const q of list){const a={...q,t:st+q.travel+service[mask],mask:unions[mask],count:counts[mask]};
+            if((!pairTrial||hasPair(globals[mask]))&&compare(a,winner)<0)winner=a;
+            if(a.count>=needed&&(a.mask&mustMask)===mustMask&&(!pairTrial||hasPair(globals[mask]))&&(!auto||achievement(a.mask)||!achievementUnits.length||a.count>=needed+1))continue;
+            for(let rest=full^mask;rest;rest&=rest-1){const b=rest&-rest,j=31-Math.clz32(b),u=venues[j];if(!pairNext(globals[mask],u.id)||!(masks[j]&~unions[mask]))continue;
+              const nm=mask|b,nt=q.travel+trMatrix[v.id][u.id];if(st+nt+service[nm]>limit)continue;
+              insert(nm*n+j,{i:j,travel:nt,meters:q.meters+dmatrix[v.id][u.id],crossings:q.crossings+cmatrix[v.id][u.id],prev:q});
+            }
+          }
+        }
+        if(!winner)return best;const order=[];for(let q=winner;q;q=q.prev)order.unshift(venues[q.i]);
+        let p={last:origin,mask:0,visited:0,t:st,count:0,steps:[],travel:0,meters:0,crossings:0};
+        for(const v of order){const tr=transfer(p.last,v,mode),op=visitOptions(v,p.t+tr,p.mask,available[v.id],d,limit,dwell,idBit).find(o=>o.gain===available[v.id].filter(it=>!(p.mask&idBit[it.id])).length);if(!op)return best;p={last:v,mask:op.mask,visited:p.visited|1<<v.id,t:op.end,count:p.count+op.gain,steps:[...p.steps,{v,tr,...op}],travel:p.travel+tr,meters:p.meters+leg(p.last,v,mode).meters,crossings:p.crossings+cross(p.last,v)};}
+        return p;
+      }
+      const walkOnly=venues.every(v=>available[v.id].every(it=>it.kind==="walk"));const solveWalk=()=>style==="smooth"?exactDistance():exactWalk();
+      if(walkOnly&&limit-st>=90)best=solveWalk();
       else{
         const width=opts.day?350:Math.max(1000,opts.beam||1000);
         best=search(firstId,venues.length<=8?Infinity:width);
@@ -599,22 +677,19 @@
           }
         }
       }
-      let districtBaseline=null;
-      if(requestedStyle==="smooth"&&!opts.smoothWeight&&!opts.pairTrial){
-        districtBaseline={t:best.t,meters:distance(best)};
-        const baseline=best,valid=q=>q&&q.count>=Math.min(baseline.count,needed)&&(q.mask&baseline.mask&mustMask)===(baseline.mask&mustMask)&&(q.mask&baseline.mask&bookedMask)===(baseline.mask&bookedMask)&&q.t<=baseline.t+10;
-        for(const weight of [0.7,1.4,2.5]){const q=plan({...opts,style:"smooth",smoothWeight:weight}).best;if(valid(q)&&(q.crossings||0)*5000+distance(q)<(best.crossings||0)*5000+distance(best))best=q;}
-        // Strong geographic pair candidates are explicitly evaluated; the group is never a hard requirement.
-        // Strict baseline is preserved in its own route style; no duplicate Starbucks stamp or added river crossing.
-        for(const [a,b,w] of activePairs){
-          if(adjacentPair(best,a,b)||!((baseline.visited|best.visited)&((1<<a)|(1<<b))))continue;
-          const q=plan({...opts,style:"fast",pairTrial:true,pairIds:[a,b]}).best;
-          if(!valid(q)||!adjacentPair(q,a,b)||(q.crossings||0)>(baseline.crossings||0))continue;
-          const gain=districtScore(q)-districtScore(best);
-          if(gain>0&&distance(q)<=distance(baseline)+2500||gain===0&&distance(q)<distance(best)&&q.t<=best.t)best=q;
-        }
+      // A nearer first stop must not cause a registered appointment to be missed.
+      const nearestId=firstId;
+      if(firstPolicy==="nearest"&&firstId!==null&&opts.overrideFirst===undefined&&((best.mask&bookedMask)!==bookedMask||(best.mask&mustMask)!==mustMask||Number.isFinite(needed)&&best.count<needed)){
+        firstId=null;const alternative=walkOnly&&limit-st>=90?solveWalk():search(null,opts.day?350:Math.max(1500,opts.beam||1500));firstId=nearestId;
+        if(alternative.steps.length&&rank(alternative,best)<0){best=alternative;firstId=alternative.steps[0].v.id;}
       }
-      return { best, d, st, finish, buffer, limit, mode, origin, firstId, candidates: venues.length, target: goal, districtBaseline };
+      let districtBaseline=null;
+      if(style==="smooth"&&!opts.fastLegs&&!opts.pairTrial){
+        const q=plan({...opts,style:"smooth",fastLegs:true});
+        if(q&&!q.error&&rank(q.best,best)<0){best=q.best;mode=q.mode;firstId=q.firstId;}
+        if(!opts.day){const fast=plan({...opts,style:"fast"});if(!fast.error)districtBaseline={t:fast.best.t,meters:fast.best.meters||0,travel:fast.best.travel};}
+      }
+      return { best, d, st, finish, buffer, limit, mode, origin, firstId, firstAdjusted:nearestId!==firstId, candidates: venues.length, target: goal, districtBaseline };
     }
     function svgRoute(steps) {
       if (!steps.length) return "";
@@ -631,7 +706,7 @@
       if (m) m.textContent = "\u5DF2\u8BB0\u5F55\u3002\u9700\u8981\u8C03\u6574\u884C\u7A0B\u65F6\uFF0C\u53EF\u91CD\u65B0\u751F\u6210\u8DEF\u7EBF\u3002";
     });
     let lastPlan=null,routeChoices=[],compareGeneration=0,computeGeneration=0,targetMode="total";
-    const routeLabels={fast:'严格最短时间',smooth:'少绕路／就近连游',few:'少跑地点（兼顾时间）',max:'多集印章'};
+    const routeLabels={fast:'严格最短时间',smooth:'成就优先／最短移动距离',few:'少跑地点（兼顾时间）',max:'多集印章'};
     function clearRouteChoices(){compareGeneration++;routeChoices=[];$('routeChoices').innerHTML='';}
     function effectiveGoal(){const g=Number($("goal").value);return g&&targetMode==="new"?state.done.length+g:g;}
     function scrollResult(){try{$("route").scrollIntoView({block:"start"});}catch(e){$("route").scrollIntoView(true);}}
@@ -669,14 +744,15 @@
         $("route").innerHTML = goalResult(p)+'<div class="empty">\u6CA1\u6709\u53EF\u5B89\u6392\u7684\u672A\u96C6\u5370\u7AE0\uFF0C\u8BD5\u8BD5\u5176\u4ED6\u65E5\u671F\u6216\u5EF6\u957F\u884C\u7A0B\u3002</div>' + planWarnings(p);
         return;
       }
-      let html = goalResult(p) + districtResult(p) + '<div class="metrics"><div class="metric"><strong>' + b.count + '</strong>\u8DEF\u7EBF\u8BA1\u5212\u65B0\u589E</div><div class="metric"><strong>' + b.steps.length + '</strong>\u6253\u5361\u5730\u70B9</div><div class="metric"><strong>' + Math.round(b.travel) + '</strong>\u4EA4\u901A\u7EA6\u9700\uFF08\u5206\u949F\uFF09</div></div><p class="muted">' + p.d + " \xB7 " + clock(p.st) + " \u51FA\u53D1 \xB7 " + clock(b.t) + " \u9884\u8BA1\u7ED3\u675F \xB7 \u5269\u4F59 " + (p.finish - b.t) + " \u5206\u949F\uFF08\u542B\u9884\u7559 " + p.buffer + " \u5206\u949F\uFF09\u3002" + (p.origin ? " \u51FA\u53D1\u5730\u70B9\uFF1A" + esc(p.origin.name) + "\uFF08\u5DF2\u8BA1\u5165\u9996\u7AD9\u4EA4\u901A\uFF09\u3002" : " \u672A\u5305\u542B\u51FA\u53D1\u81F3\u9996\u7AD9\u65F6\u95F4\u3002") + "</p>" + (targetMode === "total" && p.target > 0 && p.target <= 6 && state.done.length + b.count >= p.target ? '<p class="claim-route">' + (canClaim(b) ? "\u6700\u540E\u4E00\u7AD9\u53EF\u524D\u5F80\u6307\u5B9A\u96C6\u7AE0\u5904\u6838\u9A8C\u9886\u5956\uFF08\u5E93\u5B58\u4EE5\u73B0\u573A\u4E3A\u51C6\uFF09\u3002" : "\u6700\u540E\u4E00\u7AD9\u4E0D\u662F\u6307\u5B9A\u9886\u5956\u70B9\uFF0C\u8BF7\u53E6\u5B89\u6392\u9886\u5956\u3002") + "</p>" : "") + '<div id="routeFeasibility">' + planWarnings(p) + '</div><button type="button" class="primary save-trip-button" id="saveTrip">\u4FDD\u5B58\u884C\u7A0B \xB7 \u5F00\u59CB\u96C6\u7AE0</button><details class="edit-route"><summary>\u8C03\u6574\u8DEF\u7EBF</summary><p class="muted">\u8C03\u6574\u7AD9\u70B9\u540E\u91CD\u65B0\u68C0\u67E5\u65F6\u95F4\u4E0E\u9884\u7EA6\uFF0C\u5931\u8D25\u65F6\u4FDD\u7559\u539F\u8DEF\u7EBF\u3002</p><div id="editStops">' + editControls(p) + '</div><label class="field">\u6DFB\u52A0\u96C6\u7AE0\u70B9<select id="addVenue"><option value="">\u8BF7\u9009\u62E9</option>' + V.filter((v) => !b.steps.some((st) => st.v.id === v.id) && eligible(v, p.d, $("useSlots").checked).length).map((v) => '<option value="' + v.id + '">' + esc(v.name) + "</option>").join("") + '</select></label><button type="button" data-add-venue>\u6DFB\u52A0\u5230\u672B\u7AD9</button><p id="editError" class="warn" aria-live="polite"></p></details>' + svgRoute(b.steps);
+      let html = goalResult(p) + (p.firstAdjusted?'<p class="district-leg">已为保留预约、必集或达成目标调整最近首站。</p>':"") + districtResult(p) + '<div class="metrics"><div class="metric"><strong>' + b.count + '</strong>\u8DEF\u7EBF\u8BA1\u5212\u65B0\u589E</div><div class="metric"><strong>' + b.steps.length + '</strong>\u6253\u5361\u5730\u70B9</div><div class="metric"><strong>' + Math.round(b.travel) + '</strong>\u4EA4\u901A\u7EA6\u9700\uFF08\u5206\u949F\uFF09</div></div><p class="muted">' + p.d + " \xB7 " + clock(p.st) + " \u51FA\u53D1 \xB7 " + clock(b.t) + " \u9884\u8BA1\u7ED3\u675F \xB7 \u5269\u4F59 " + (p.finish - b.t) + " \u5206\u949F\uFF08\u542B\u9884\u7559 " + p.buffer + " \u5206\u949F\uFF09\u3002" + (p.origin ? " \u51FA\u53D1\u5730\u70B9\uFF1A" + esc(p.origin.name) + "\uFF08\u5DF2\u8BA1\u5165\u9996\u7AD9\u4EA4\u901A\uFF09\u3002" : " \u672A\u5305\u542B\u51FA\u53D1\u81F3\u9996\u7AD9\u65F6\u95F4\u3002") + "</p>" + (targetMode === "total" && p.target > 0 && p.target <= 6 && state.done.length + b.count >= p.target ? '<p class="claim-route">' + (canClaim(b) ? "\u6700\u540E\u4E00\u7AD9\u53EF\u524D\u5F80\u6307\u5B9A\u96C6\u7AE0\u5904\u6838\u9A8C\u9886\u5956\uFF08\u5E93\u5B58\u4EE5\u73B0\u573A\u4E3A\u51C6\uFF09\u3002" : "\u6700\u540E\u4E00\u7AD9\u4E0D\u662F\u6307\u5B9A\u9886\u5956\u70B9\uFF0C\u8BF7\u53E6\u5B89\u6392\u9886\u5956\u3002") + "</p>" : "") + '<div id="routeFeasibility">' + planWarnings(p) + '</div><button type="button" class="primary save-trip-button" id="saveTrip">\u4FDD\u5B58\u884C\u7A0B \xB7 \u5F00\u59CB\u96C6\u7AE0</button><details class="edit-route"><summary>\u8C03\u6574\u8DEF\u7EBF</summary><p class="muted">\u8C03\u6574\u7AD9\u70B9\u540E\u91CD\u65B0\u68C0\u67E5\u65F6\u95F4\u4E0E\u9884\u7EA6\uFF0C\u5931\u8D25\u65F6\u4FDD\u7559\u539F\u8DEF\u7EBF\u3002</p><div id="editStops">' + editControls(p) + '</div><label class="field">\u6DFB\u52A0\u96C6\u7AE0\u70B9<select id="addVenue"><option value="">\u8BF7\u9009\u62E9</option>' + V.filter((v) => !b.steps.some((st) => st.v.id === v.id) && eligible(v, p.d, $("useSlots").checked).length).map((v) => '<option value="' + v.id + '">' + esc(v.name) + "</option>").join("") + '</select></label><button type="button" data-add-venue>\u6DFB\u52A0\u5230\u672B\u7AD9</button><p id="editError" class="warn" aria-live="polite"></p></details>' + svgRoute(b.steps);
+      const owned=new Set(state.done),after=new Set([...owned,...b.steps.flatMap(s=>s.items.map(it=>it.id))]),newAchievements=SERIES.filter(g=>!seriesStat(g,owned).complete&&seriesStat(g,after).complete);if(newAchievements.length)html+='<p class="district-leg">预计解锁成就：'+newAchievements.map(g=>esc(g.name)).join("、")+'</p>';const totalWait=b.steps.reduce((n,s)=>n+(s.waiting||0),0);if(totalWait)html+='<p class="muted">预约前预计空档 '+totalWait+' 分钟（包含在全程耗时中）。</p>';
       html+='<p class="muted">全程约 '+(b.t-p.st)+' 分钟 · 交通约 '+b.travel+' 分钟 · 总路程约 '+(routeMeters(b.steps,p.origin,p.mode)/1000).toFixed(1)+' km（含首段；不限起点时除外）</p>';
       let total = 0;
       for (let [i, s] of b.steps.entries()) {
         total += s.gain;
         const connected=i>0?districtEdge(b.steps[i-1].v.id,s.v.id,p.mode):null,groupNote=connected?'<p class="district-leg">片区连游 · '+esc(connected[4])+' · '+esc(connected[5])+'</p>':"";
         const from=i?b.steps[i-1].v:p.origin,legInfo=leg(from,s.v,p.mode),legCheck=from&&from.id!==s.v.id?'<p class="muted">步行约 '+legInfo.walk+' 米 · <a class="action" rel="noopener" href="'+esc(mapLegLink(from,s.v,p.mode))+'">查看本段交通详情</a></p>':"";
-        html += '<div class="route-stop" id="stop-' + (i + 1) + '" tabindex="-1" data-n="' + (i + 1) + '"><div class="flex"><span class="time">' + clock(s.arrival) + "\u2013" + clock(s.end) + '</span><span class="pill">+' + s.gain + " \xB7 \u7D2F\u8BA1" + total + "</span></div><h3>" + esc(s.v.name) + "</h3><small>" + esc(s.v.district + " " + s.v.address) + " · " + (i===0&&!p.origin?"未计首站交通":transferLabel(i?b.steps[i-1].v:p.origin,s.v,p.mode)+"约"+s.tr+"分钟 · 约"+(leg(i?b.steps[i-1].v:p.origin,s.v,p.mode).meters/1000).toFixed(1)+"km") + '</small>'+groupNote+legCheck+'<div class="chips">' + s.items.map((it) => '<label style="display:flex;gap:3px;align-items:center;background:#edf3f9;padding:3px 5px;border-radius:5px;font-size:11px"><input style="width:17px;height:17px;margin:0" type="checkbox" data-route-stamp="' + it.id + '" ' + (has(it) ? "checked" : "") + ">" + esc(it.stamp) + (it.kind !== "walk" ? "\uFF08\u9884\u7EA6\uFF09" : "") + "</label>").join("") + "</div>" + s.blocks.filter((x) => x.items[0].kind !== "walk").map((x) => '<p class="muted">\u9884\u7EA6 ' + clock(x.start) + "\u2013" + clock(x.end) + " " + esc(x.items[0].activity) + "</p>").join("") + '<a class="action" href="' + mapLink(s.v) + '">\u67E5\u770B\u5730\u5740</a></div>';
+        html += '<div class="route-stop" id="stop-' + (i + 1) + '" tabindex="-1" data-n="' + (i + 1) + '"><div class="flex"><span class="time">' + clock(s.arrival) + "\u2013" + clock(s.end) + '</span><span class="pill">+' + s.gain + " \xB7 \u7D2F\u8BA1" + total + "</span></div><h3>" + esc(s.v.name) + "</h3><small>" + esc(s.v.district + " " + s.v.address) + " · " + (i===0&&!p.origin?"未计首站交通":transferLabel(i?b.steps[i-1].v:p.origin,s.v,p.mode)+"约"+s.tr+"分钟 · 约"+(leg(i?b.steps[i-1].v:p.origin,s.v,p.mode).meters/1000).toFixed(1)+"km") + '</small>'+groupNote+legCheck+'<div class="chips">' + s.items.map((it) => '<label style="display:flex;gap:3px;align-items:center;background:#edf3f9;padding:3px 5px;border-radius:5px;font-size:11px"><input style="width:17px;height:17px;margin:0" type="checkbox" data-route-stamp="' + it.id + '" ' + (has(it) ? "checked" : "") + ">" + esc(it.stamp) + (it.kind !== "walk" ? "\uFF08\u9884\u7EA6\uFF09" : "") + "</label>").join("") + "</div>" + s.blocks.map(x=>'<p class="muted">'+(x.move?'馆内移动约 '+x.move+' 分钟 · ':"")+(x.wait?'等待 '+x.wait+' 分钟 · ':"")+(x.items[0].kind==="walk"?"集章 ":"预约 ")+clock(x.start)+"–"+clock(x.end)+" "+esc(x.items.map(it=>it.stamp+" · "+it.activity).join("、"))+"</p>").join("") + '<a class="action" href="' + mapLink(s.v) + '">\u67E5\u770B\u5730\u5740</a></div>';
       }
       html += '<p class="status" id="routeUpdated" aria-live="polite"></p><button id="copyRoute" style="width:100%;margin-top:12px">\u67E5\u770B\u8DEF\u7EBF\u6587\u5B57</button><p class="muted">地铁采用2026-09上海线路、区间及换乘数据；公交覆盖9条已核对双向站序的重点线路，支持公交与地铁换乘；公交站位为路口参考坐标，车程、步行、候车及缺失轨道里程为估算，不含实时班次及道路导航；每段可查看乘车说明，请在地图 App 手动核对当时方案。请预留排队时间。\u6D3B\u52A8\u53D8\u52A8\u53CA\u7B7E\u5230\u8981\u6C42\u4EE5\u73B0\u573A\u4E3A\u51C6\u3002</p>';
       $("route").innerHTML = html;
@@ -691,11 +767,11 @@
     function copy(t) {
       showText("\u67E5\u770B\u6587\u5B57", t, false, "\u53EF\u5728\u9875\u9762\u9009\u4E2D\u6587\u5B57\uFF1B\u5BB9\u5668\u4E0D\u652F\u6301\u4E00\u952E\u590D\u5236\u3002");
     }
-    $("districtCandidates").addEventListener("click",e=>{const b=e.target.closest("[data-district-pair]");if(!b)return;const ids=b.dataset.districtPair.split(",").map(Number),items=ids.flatMap(i=>eligible(V[i],date(),$("useSlots").checked));state.must=[...new Set([...(state.must||[]),...items.map(it=>it.id)])];save();renderMust();renderPocket();renderSeries();$("routeStyle").value="smooth";invalidate();clearMulti();requestPlan();});
+    $("districtCandidates").addEventListener("click",e=>{const b=e.target.closest("[data-district-pair]");if(!b)return;const ids=b.dataset.districtItems.split(",").filter(id=>IDS.has(id));state.must=[...new Set([...(state.must||[]),...ids])];save();renderMust();renderPocket();renderSeries();$("routeStyle").value="smooth";invalidate();clearMulti();requestPlan();});
     $("compute").onclick = requestPlan;
     document.addEventListener("change",refreshSettingsSummary);
     $("plan").addEventListener("click",()=>setTimeout(refreshSettingsSummary,0));
-    for (let id of ["date", "region", "start", "end", "origin", "firstPolicy", "firstVenue", "mode", "dwell", "buffer", "useSlots", "routeStyle", "claimLast"]) $(id).addEventListener("change", () => {
+    for (let id of ["date", "region", "start", "end", "origin", "firstPolicy", "firstVenue", "mode", "dwell", "buffer", "useSlots", "routeStyle", "claimLast", "autoAchievement"]) $(id).addEventListener("change", () => {
       invalidate();
       renderList();
       renderDates();
@@ -788,7 +864,8 @@
           let mustScore = (q) => q.best.steps.flatMap((st) => st.items).filter((it) => (state.must || []).includes(it.id) && !excluded.has(it.id)).length;
           let m = best ? mustScore(p) - mustScore(best) : 0;
           let u = m || (best && g === 30 ? urgency(p) - urgency(best) : 0);
-          if (!best || u > 0 || u === 0 && (reaches && !prev || reaches === prev && (reaches ? p.best.t < best.best.t || p.best.t === best.best.t && day < best.d : p.best.count > best.best.count || p.best.count === best.best.count && (p.best.t < best.best.t || p.best.t === best.best.t && day < best.d)))) best = p;
+          const byDistance=$("routeStyle").value==="smooth";const cheaper=best&&(byDistance?(p.best.meters||0)<(best.best.meters||0)||(p.best.meters||0)===(best.best.meters||0)&&(p.best.t<best.best.t||p.best.t===best.best.t&&day<best.d):p.best.t<best.best.t||p.best.t===best.best.t&&day<best.d);
+          if (!best || u > 0 || u === 0 && (reaches && !prev || reaches === prev && (reaches ? cheaper : p.best.count > best.best.count || p.best.count === best.best.count && cheaper))) best = p;
         }
         if (!best) break;
         used.add(best.d);
@@ -1302,7 +1379,7 @@
       const b=mapControl(e.target,"data-map-plan",$("map"));if(!b)return;
       const id=b.getAttribute("data-map-plan"),anchor=ROUTE_ANCHORS.find(v=>v.id===id),venue=anchor||V[Number(id)];if(!venue&&id!=="any")return;
       e.preventDefault();$("date").value=$("mapDate").value;$("originSource").value="manual";$("origin").value=id;$("region").value=$("mapRegion").value;
-      $("firstPolicy").value=venue&&!anchor&&eligible(venue,date(),$("useSlots").checked).length?"fixed":"nearest";$("firstVenue").value=!venue||anchor?"":id;
+      $("firstPolicy").value=venue&&!anchor&&eligible(venue,date(),$("useSlots").checked).length?"fixed":"overall";$("firstVenue").value=!venue||anchor?"":id;
       invalidate();renderQuickDates();renderReminders();clearMulti();updateFirstControls();switchTab("plan");
       const status=document.createElement("p");status.className="map-origin-status";status.textContent="出发地点："+(venue?venue.name:"不限起点")+" · "+date()+" · 已按当前行程设置规划";$("route").insertBefore(status,$("route").firstChild);
       document.documentElement.scrollTop=0;document.body.scrollTop=0;window.scrollTo(0,0);
@@ -1457,7 +1534,7 @@
       const owned=new Set(state.done),out=[],d=$('date').value;
       const remaining=g.buckets.filter(u=>!u.ids.some(id=>owned.has(id)));
       while(remaining.length){const candidates=[...new Set(remaining.flatMap(u=>u.ids))];candidates.sort((a,b)=>{
-        const score=id=>{let it=EVENT_STAMPS.find(i=>i.id===id);return remaining.filter(u=>u.ids.includes(id)).length*100+(it.start<=d&&d<=it.end?10:0)+(it.kind==='walk'?5:0)};
+        const score=id=>{let it=EVENT_STAMPS.find(i=>i.id===id);return remaining.filter(u=>u.ids.includes(id)).length*100+(inDate(it,d)?10:0)+(it.kind==='walk'?5:0)};
         return score(b)-score(a)||DEX[a]-DEX[b];
       });const id=candidates[0];out.push(id);for(let i=remaining.length-1;i>=0;i--)if(remaining[i].ids.includes(id))remaining.splice(i,1);}
       return out;
@@ -1510,7 +1587,7 @@
     function addSeries(i) {
       let g = SERIES[i];
       if (!g) return;
-      state.must = [.../* @__PURE__ */ new Set([...state.must || [], ...seriesTargets(g)])];
+      state.must = [.../* @__PURE__ */ new Set([...state.must || [], ...seriesTargets(g)])];$("routeStyle").value="smooth";
       save();
       renderMust();
       renderPocket();
@@ -1532,7 +1609,7 @@
       $("region").value = type === "changning" ? "\u957F\u5B81\u533A" : type === "center" ? "\u9EC4\u6D66\u533A" : "";
       $("start").value = type === "center" ? "13:00" : "10:00";
       $("end").value = type === "changning" ? "14:00" : type === "center" ? "18:00" : "22:00";
-      $("firstPolicy").value="nearest";updateFirstControls();
+      $("firstPolicy").value="overall";updateFirstControls();
       $("routeStyle").value = type === "3" || type === "6" ? "smooth" : "max";
       $("useSlots").checked = type !== "walk";
       if (type === "birds") addSeries(1);

@@ -1,4 +1,4 @@
-name: Build Xiaohongshu native V5.6.19
+name: Build Xiaohongshu native V5.6.22
 on:
   push:
     branches: [xiaohongshu]
@@ -25,7 +25,7 @@ jobs:
           from pathlib import Path
           import zipfile
           folder=Path('dist-native')
-          out=Path('shanghai-dex-xhs-v5.6.19.zip')
+          out=Path('shanghai-dex-xhs-v5.6.22.zip')
           with zipfile.ZipFile(out,'w',zipfile.ZIP_DEFLATED) as z:
               for p in sorted(folder.rglob('*')):
                   if p.is_file(): z.write(p,p.relative_to(folder))
@@ -67,7 +67,7 @@ jobs:
             assert.match(await page.locator('#districtCandidates').innerText(),/外滩连游/);
             assert.match(await page.locator('#route .district-result').innerText(),/片区连游/);
             const names=await page.locator('#route .route-stop h3').allTextContents();
-            assert.equal(names[0],'宏伊国际广场');assert.equal(names[1],'BFC外滩金融中心');
+            assert.ok(names.length>0);assert.equal(await page.locator('#firstPolicy').inputValue(),'overall');assert.match(await page.locator('#route').innerText(),/总路程约/);
             await page.locator('#route a[href^="#leg-"]').first().click();
             assert.match(await page.locator('#nativeTitle').innerText(),/本段交通/);
             await page.locator('#nativeClose').click();
@@ -75,6 +75,7 @@ jobs:
             await page.waitForFunction(()=>window.__saved&&window.__saved.must.includes('s10-1')&&window.__saved.must.includes('s11-1'));
             assert.equal(await page.evaluate(()=>window.__key),'sh-pokemon-stamps-v1');
             await page.waitForFunction(()=>!document.querySelector('#compute').disabled);
+            const afterPair=await page.locator('#route .route-stop h3').allTextContents();assert.ok(afterPair.includes('宏伊国际广场')&&afterPair.includes('BFC外滩金融中心'));
             await page.locator('#routeDetails').evaluate(e=>e.open=true);
             await page.locator('#locateOnce').click();
             await page.waitForFunction(()=>document.querySelectorAll('#gpsDistances .distance-row').length>0);
@@ -92,6 +93,6 @@ jobs:
           JS
       - uses: actions/upload-artifact@v4
         with:
-          name: shanghai-dex-xhs-v5.6.19
-          path: shanghai-dex-xhs-v5.6.19.zip
+          name: shanghai-dex-xhs-v5.6.22
+          path: shanghai-dex-xhs-v5.6.22.zip
           retention-days: 30

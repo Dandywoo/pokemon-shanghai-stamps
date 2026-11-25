@@ -26,7 +26,7 @@ def image(m):
     return './'+path
 h,n=re.subn(r'data:image/(webp|jpeg|png);base64,([A-Za-z0-9+/=]+)',image,h)
 assert n==1,n
-assert 'V5.6.19' in h and 'districtCandidates' in h and 'BUS_PATTERNS' in j
+assert 'V5.6.22' in h and 'districtCandidates' in h and 'BUS_PATTERNS' in j
 assert len(re.findall(r'<script\b',h))==1 and '<script defer src="./app.js"></script>' in h
 for forbidden in ['localStorage','navigator.geolocation','navigator.share','navigator.clipboard','window.open','document.execCommand','URL.createObjectURL','raw.githubusercontent.com']:
     assert forbidden not in j,forbidden
