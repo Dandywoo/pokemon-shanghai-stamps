@@ -32,13 +32,19 @@ jobs:
             await page.locator('#list [data-open-series]').click();
             await page.waitForFunction(()=>document.querySelector('#seriesPanel').open);
             assert.equal(await page.locator('#seriesGrid .series-row').count(),6);
-            assert.equal(await page.locator('#seriesTabs button').count(),4);
-            assert.equal(await page.locator('#dexSeriesCount').innerText(),'0/31');
+            assert.equal(await page.locator('#seriesTabs button').count(),3);
+            assert.equal(await page.locator('#dexSeriesCount').innerText(),'0/21');
+            assert.equal(await page.locator('#pocketGrid').evaluate(e=>!!(e.compareDocumentPosition(document.querySelector('#seriesPanel'))&Node.DOCUMENT_POSITION_FOLLOWING)),true);
+            assert.equal(await page.locator('#seriesTabs').innerText().then(t=>t.includes('属性研究')),false);
             await page.locator('[data-pocket="s1-2"]').click();
             await page.locator('[data-pocket="s2-2"]').click();
             await page.locator('[data-pocket="s3-2"]').click();
             assert.equal(await page.locator('#seriesGrid .series-earned').count(),1);
             assert.match(await page.locator('#seriesGrid .series-earned').innerText(),/三圣鸟/);
+            assert.match(await page.locator('#collectToast .achievement-unlocked').innerText(),/三圣鸟/);
+            await page.locator('[data-pocket="s3-2"]').click();
+            await page.locator('[data-pocket="s3-2"]').click();
+            assert.equal(await page.locator('#collectToast .achievement-unlocked').count(),0);
             await page.locator('#list [data-open-poster]').click();
             await page.locator('#posterImage').waitFor({state:'visible',timeout:15000});
             await page.waitForFunction(()=>document.querySelector('#posterImage').naturalWidth===1080);
@@ -53,7 +59,7 @@ jobs:
             await page.locator('#list [data-open-series]').click();
             assert.match(await page.locator('#seriesGrid .series-earned').innerText(),/三圣鸟/);
             assert.deepEqual(errors,[]);
-            console.log('PASS: four achievement categories, legendary birds unlock, 1080x1440 PNG, download, reload persistence');
+            console.log('PASS: card-first layout, 21 challenges in 3 categories, first-unlock toast without repeat, PNG download, reload persistence');
             await browser.close();
           })().catch(e=>{console.error(e);process.exit(1)});
           JS
