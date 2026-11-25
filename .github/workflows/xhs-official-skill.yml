@@ -1,0 +1,23 @@
+name: Retrieve official minitool skill
+on:
+  push:
+    branches: [xiaohongshu]
+    paths: ['.github/workflows/xhs-official-skill.yml']
+permissions:
+  contents: read
+jobs:
+  retrieve:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download specified skill archive
+        run: |
+          mkdir -p .skill
+          curl --fail --location --retry 2 --connect-timeout 12 --max-time 60 'https://fe-static.xhscdn.com/minitool/20261117152455/minitool-zip-builder-1.11.1.skill' -o minitool-zip-builder-1.11.1.skill
+          file minitool-zip-builder-1.11.1.skill
+          sha256sum minitool-zip-builder-1.11.1.skill
+          unzip -l minitool-zip-builder-1.11.1.skill
+      - uses: actions/upload-artifact@v4
+        with:
+          name: minitool-official-skill
+          path: minitool-zip-builder-1.11.1.skill
+          retention-days: 1
