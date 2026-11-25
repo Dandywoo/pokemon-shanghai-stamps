@@ -609,6 +609,17 @@ header.pixel-header .hero-facts span{color:#5a5263;font:650 clamp(9px,2.85vw,12p
     }
     function transfer(a,b,mode){return leg(a,b,mode).minutes;}
     function transferLabel(a,b,mode){const q=leg(a,b,mode);return q.rides?.length?q.rides.map(v=>(v.type==="rail"?"地铁"+v.line+"号线":(/^\d+$/.test(v.line)?"公交"+v.line+"路":"公交"+v.line))+"（"+v.board+"→"+v.alight+(v.direction?"，开往"+v.direction:"")+"）").join("；换乘")+"＋步行":q.label;}
+    // Amap's documented URI opens a fresh external journey query on explicit user action.
+    // WGS84 -> GCJ-02, for Amap navigation coordinates.
+    function amapPosition(p){const x=p.lon-105,y=p.lat-35,pi=Math.PI,a=6378245,e=.006693421622965943;
+      let dl=-100+2*x+3*y+.2*y*y+.1*x*y+.2*Math.sqrt(Math.abs(x))+(20*Math.sin(6*x*pi)+20*Math.sin(2*x*pi))*2/3+(20*Math.sin(y*pi)+40*Math.sin(y/3*pi))*2/3+(160*Math.sin(y/12*pi)+320*Math.sin(y*pi/30))*2/3;
+      let dn=300+x+2*y+.1*x*x+.1*x*y+.1*Math.sqrt(Math.abs(x))+(20*Math.sin(6*x*pi)+20*Math.sin(2*x*pi))*2/3+(20*Math.sin(x*pi)+40*Math.sin(x/3*pi))*2/3+(150*Math.sin(x/12*pi)+300*Math.sin(x/30*pi))*2/3;
+      const rad=p.lat*pi/180,m=1-e*Math.sin(rad)**2,s=Math.sqrt(m);
+      return (p.lon+dn*180/(a/s*Math.cos(rad)*pi)).toFixed(6)+","+(p.lat+dl*180/((a*(1-e))/(m*s)*pi)).toFixed(6)+","+p.name;
+    }
+    function mapLegLink(a,b,mode){const q=leg(a,b,mode),travel=mode==="taxi"?"car":q.rides?.length?"bus":"walk";
+      return "https://uri.amap.com/navigation?from="+encodeURIComponent(amapPosition(a))+"&to="+encodeURIComponent(amapPosition(b))+"&mode="+travel+"&policy=0&src=sh-pokemon-stamps&callnative=1";
+    }
     function routeMeters(steps,origin,mode){let a=origin,total=0;for(const s of steps){total+=leg(a,s.v,mode).meters;a=s.v;}return total;}
     // One fewer visit is worth at most 15 minutes of elapsed time, not an unlimited detour.
     const FEW_STOP_PENALTY=12; // Weight actual transfer time twice in elapsed+travel; a saved stop cannot justify a large detour.
@@ -828,9 +839,10 @@ header.pixel-header .hero-facts span{color:#5a5263;font:650 clamp(9px,2.85vw,12p
       let total = 0;
       for (let [i, s] of b.steps.entries()) {
         total += s.gain;
-        html += '<div class="route-stop" id="stop-' + (i + 1) + '" tabindex="-1" data-n="' + (i + 1) + '"><div class="flex"><span class="time">' + clock(s.arrival) + "\u2013" + clock(s.end) + '</span><span class="pill">+' + s.gain + " \xB7 \u7D2F\u8BA1" + total + "</span></div><h3>" + esc(s.v.name) + "</h3><small>" + esc(s.v.district + " " + s.v.address) + " · " + (i===0&&!p.origin?"未计首站交通":transferLabel(i?b.steps[i-1].v:p.origin,s.v,p.mode)+"约"+s.tr+"分钟 · 约"+(leg(i?b.steps[i-1].v:p.origin,s.v,p.mode).meters/1000).toFixed(1)+"km") + '</small><div class="chips">' + s.items.map((it) => '<label style="display:flex;gap:3px;align-items:center;background:#edf3f9;padding:3px 5px;border-radius:5px;font-size:11px"><input style="width:17px;height:17px;margin:0" type="checkbox" data-route-stamp="' + it.id + '" ' + (has(it) ? "checked" : "") + ">" + esc(it.stamp) + (it.kind !== "walk" ? "\uFF08\u9884\u7EA6\uFF09" : "") + "</label>").join("") + "</div>" + s.blocks.filter((x) => x.items[0].kind !== "walk").map((x) => '<p class="muted">\u9884\u7EA6 ' + clock(x.start) + "\u2013" + clock(x.end) + " " + esc(x.items[0].activity) + "</p>").join("") + '<a class="action" href="' + mapLink(s.v) + '">\u67E5\u770B\u5730\u5740</a></div>';
+        const from=i?b.steps[i-1].v:p.origin,legInfo=leg(from,s.v,p.mode),legCheck=from&&from.id!==s.v.id?'<p class="muted">步行约 '+legInfo.walk+' 米 · <a class="action" rel="noopener" href="'+esc(mapLegLink(from,s.v,p.mode))+'">高德核对本段交通 ↗</a></p>':"";
+        html += '<div class="route-stop" id="stop-' + (i + 1) + '" tabindex="-1" data-n="' + (i + 1) + '"><div class="flex"><span class="time">' + clock(s.arrival) + "\u2013" + clock(s.end) + '</span><span class="pill">+' + s.gain + " \xB7 \u7D2F\u8BA1" + total + "</span></div><h3>" + esc(s.v.name) + "</h3><small>" + esc(s.v.district + " " + s.v.address) + " · " + (i===0&&!p.origin?"未计首站交通":transferLabel(i?b.steps[i-1].v:p.origin,s.v,p.mode)+"约"+s.tr+"分钟 · 约"+(leg(i?b.steps[i-1].v:p.origin,s.v,p.mode).meters/1000).toFixed(1)+"km") + '</small>'+legCheck+'<div class="chips">' + s.items.map((it) => '<label style="display:flex;gap:3px;align-items:center;background:#edf3f9;padding:3px 5px;border-radius:5px;font-size:11px"><input style="width:17px;height:17px;margin:0" type="checkbox" data-route-stamp="' + it.id + '" ' + (has(it) ? "checked" : "") + ">" + esc(it.stamp) + (it.kind !== "walk" ? "\uFF08\u9884\u7EA6\uFF09" : "") + "</label>").join("") + "</div>" + s.blocks.filter((x) => x.items[0].kind !== "walk").map((x) => '<p class="muted">\u9884\u7EA6 ' + clock(x.start) + "\u2013" + clock(x.end) + " " + esc(x.items[0].activity) + "</p>").join("") + '<a class="action" href="' + mapLink(s.v) + '">\u67E5\u770B\u5730\u5740</a></div>';
       }
-      html += '<p class="status" id="routeUpdated" aria-live="polite"></p><button id="copyRoute" style="width:100%;margin-top:12px">\u67E5\u770B\u8DEF\u7EBF\u6587\u5B57</button><p class="muted">地铁采用2026-09上海线路、区间及换乘数据；公交覆盖8条已核对双向站序的重点线路，支持公交与地铁换乘；公交站位为路口参考坐标，车程、步行、候车及缺失轨道里程为估算，不含实时班次及道路导航。请预留排队时间。\u6D3B\u52A8\u53D8\u52A8\u53CA\u7B7E\u5230\u8981\u6C42\u4EE5\u73B0\u573A\u4E3A\u51C6\u3002</p>';
+      html += '<p class="status" id="routeUpdated" aria-live="polite"></p><button id="copyRoute" style="width:100%;margin-top:12px">\u67E5\u770B\u8DEF\u7EBF\u6587\u5B57</button><p class="muted">地铁采用2026-09上海线路、区间及换乘数据；公交覆盖9条已核对双向站序的重点线路，支持公交与地铁换乘；公交站位为路口参考坐标，车程、步行、候车及缺失轨道里程为估算，不含实时班次及道路导航；每段可打开高德核对当时可用方案。请预留排队时间。\u6D3B\u52A8\u53D8\u52A8\u53CA\u7B7E\u5230\u8981\u6C42\u4EE5\u73B0\u573A\u4E3A\u51C6\u3002</p>';
       $("route").innerHTML = html;
       $("copyRoute").onclick = () => copy(routeText(p));
       $("saveTrip").onclick = () => {
