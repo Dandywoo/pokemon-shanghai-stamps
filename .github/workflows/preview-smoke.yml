@@ -94,6 +94,7 @@ jobs:
             await page.reload();
             await page.waitForFunction(()=>document.querySelector('#startupGate')?.hidden);
             await page.locator('#tabList').click();
+            await page.evaluate(()=>{document.documentElement.style.setProperty('--content-top','54px');document.documentElement.style.setProperty('--native-bottom','20px');window.dispatchEvent(new Event('resize'));});
             await page.locator('#seriesPanel').evaluate(e=>e.open=true);
             await page.evaluate(()=>{window.__testCardFonts=[];const old=CanvasRenderingContext2D.prototype.fillText;CanvasRenderingContext2D.prototype.fillText=function(...args){if(this.canvas.width===1080)window.__testCardFonts.push([args[0],this.font]);return old.apply(this,args)}});
             let cardCount=0;
