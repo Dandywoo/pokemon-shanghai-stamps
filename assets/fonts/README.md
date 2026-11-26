@@ -1,0 +1,1 @@
+Fusion Pixel 12px proportional SC, OFL 1.1. Original project: https://github.com/TakWolf/fusion-pixel-font . Unmodified WOFF2 copied from https://github.com/ADAning/dsh-pixel-skin/tree/main/assets/fonts ; complete accompanying license retained. Self-hosted for predictable mobile loading.
