@@ -3,9 +3,12 @@ on:
   push:
     branches: [main]
     paths:
-      - 'silhouette/index.html'
+      - 'index.html'
+      - 'game-theme.css'
+      - 'assets/fonts/**'
       - '.github/workflows/xhs-package.yml'
       - 'scripts/build-xhs-package.py'
+      - 'scripts/test-xhs-package.cjs'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,28 +20,34 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install build-only compiler
-        run: npm install --no-save --ignore-scripts esbuild@0.25.12 acorn@8.15.0
+      - name: Install build-only tools
+        run: |
+          npm install --no-save --ignore-scripts esbuild@0.25.12 acorn@8.15.0 playwright@1.56.1
+          python3 -m pip install Pillow
       - name: Build and statically validate offline packages
         run: |
           python3 scripts/build-xhs-package.py
-          for d in dist/xhs-pixel dist/xhs-number; do
+          for d in dist/xhs-pixel dist/xhs-silhouette; do
             node_modules/.bin/esbuild "$d/app.raw.js" --target=es2017,chrome61 --minify --legal-comments=none --outfile="$d/app.js"
             rm "$d/app.raw.js"
             node -e 'const fs=require("fs");require("acorn").parse(fs.readFileSync(process.argv[1],"utf8"),{ecmaVersion:2017});console.log("ES2017 syntax OK:",process.argv[1])' "$d/app.js"
-            python3 -c 'import pathlib,re,sys; d=pathlib.Path(sys.argv[1]); h=(d/"index.html").read_text(); j=(d/"app.js").read_text(); assert not re.search(r"<script(?![^>]*src=)",h,re.I); assert not re.search(r"\b(?:on[a-z]+)\s*=\s*[\x22\x27]",h,re.I); assert not re.search(r"\b(?:localStorage|sessionStorage|indexedDB|XMLHttpRequest|WebSocket)\b|\bwindow\.open\(|\bfetch\(|\bnew Function\(|\beval\(",j); assert "7.1.8" in h; print("Offline structure OK:",d)' "$d"
+            python3 -c 'import pathlib,re,sys; d=pathlib.Path(sys.argv[1]); h=(d/"index.html").read_text(); j=(d/"app.js").read_text(); assert not re.search(r"<script(?![^>]*src=)",h,re.I); assert not re.search(r"\b(?:on[a-z]+)\s*=\s*[\x22\x27]",h,re.I); assert not re.search(r"\b(?:localStorage|sessionStorage|indexedDB|XMLHttpRequest|WebSocket)\b|\bwindow\.open\(|\bfetch\(|\bnew Function\(|\beval\(",j); assert "7.2.2" in h; print("Offline structure OK:",d)' "$d"
           done
-      - name: Upload pixel package
+      - name: Test both packages with native SDK mock
+        run: |
+          python3 -m http.server 8765 >/tmp/xhs-http.log 2>&1 &
+          node scripts/test-xhs-package.cjs
+      - name: Upload web-style pixel package
         uses: actions/upload-artifact@v4
         with:
-          name: shanghai-dex-xhs-v7.1.8-pixel
+          name: shanghai-dex-xhs-v7.2.2-rpg-pixel
           path: dist/xhs-pixel/
           if-no-files-found: error
           retention-days: 30
-      - name: Upload number-only package
+      - name: Upload silhouette package
         uses: actions/upload-artifact@v4
         with:
-          name: shanghai-dex-xhs-v7.1.8-number
-          path: dist/xhs-number/
+          name: shanghai-dex-xhs-v7.2.2-rpg-silhouette
+          path: dist/xhs-silhouette/
           if-no-files-found: error
           retention-days: 30

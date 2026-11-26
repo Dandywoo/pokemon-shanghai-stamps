@@ -1,80 +1,83 @@
 from pathlib import Path
-import re, json, base64, shutil
+from io import BytesIO
+import base64, json, re, shutil
+from PIL import Image
 
-source=Path("silhouette/index.html").read_text(encoding="utf-8")
-assert 'window.__dexVersion="7.1.7"' in source, "Wrong version"
-source=source.replace("7.1.7","7.1.8")
-# No colored tile backgrounds when collection state changes; the check button is retained.
-source=source.replace("</style>", ".dex-tile.pixel-dex-tile.is-done{background:#e8eef0;border-color:#ccdadd;box-shadow:none}.dex-tile.pixel-dex-tile.is-done.is-target{border-color:#cbac65}.dex-tile.pixel-dex-tile.is-done .dex-id{font-weight:inherit}</style>",1)
+source=Path("index.html").read_text(encoding="utf-8")
+assert "window.__dexVersion='7.2.2'" in source
+assert 'href="game-theme.css?v=3"' in source
 scripts=re.findall(r'<script\b[^>]*>([\s\S]*?)</script>',source,re.I)
 assert len(scripts)==1
 js=scripts[0]
 html=re.sub(r'<script\b[^>]*>[\s\S]*?</script>', '<script src="./app.js"></script>',source,count=1,flags=re.I)
-def replace(a,b):
+html=html.replace('href="game-theme.css?v=3"','href="./game-theme.css"')
+def replace(a,b,count=1):
     global js
-    assert js.count(a)==1, (a[:100],js.count(a))
-    js=js.replace(a,b,1)
-def region(a,b,new):
-    global js
-    i=js.index(a); j=js.index(b,i+len(a))
-    js=js[:i]+new+js[j:]
-# Keep native storage key and original data; extend the validated schema.
+    assert js.count(a)==count, (a[:120],js.count(a),count)
+    js=js.replace(a,b)
+# Keep the existing native storage key and schema, including extra route preferences.
 replace('draft: a.draft && typeof a.draft === "object" ? a.draft : {},', '''draft: a.draft && typeof a.draft === "object" ? a.draft : {}, manualRoute: a.manualRoute && typeof a.manualRoute === "object" ? a.manualRoute : {}, achievementGoals: Array.isArray(a.achievementGoals) ? a.achievementGoals.filter(Number.isInteger).slice(0,100) : [],''')
-# SDK absence or unknown version never falls back to browser cache.
-a=js.index('if(!x||!x.miniTool){try{const raw=localStorage')
+a=js.index('if(!x){try{const raw=localStorage')
 b=js.index('mini = x && x.miniTool;',a)
-js=js[:a]+'''if(!x||!x.miniTool){storageStatus('本次无法保存进度，请使用文本备份。');return;}\n        '''+js[b:]
+js=js[:a]+"""if(!x||!x.miniTool){storageStatus('本次无法保存进度，请使用文本备份。');return;}
+        """+js[b:]
 replace("JSON.parse(localStorage.getItem('sh-pokemon-stamps-v7-ach')||'[]')","(state.achievementGoals||[])")
 replace("localStorage.setItem('sh-pokemon-stamps-v7-ach',JSON.stringify([...window.__v7Goals]))","state.achievementGoals=[...window.__v7Goals];save()")
-a="JSON.parse(localStorage.getItem('sh-pokemon-stamps-manual-route-v1')||'null')"
-assert js.count(a)==2
-js=js.replace(a,"(state.manualRoute||null)")
+replace("JSON.parse(localStorage.getItem('sh-pokemon-stamps-manual-route-v1')||'null')","(state.manualRoute||null)",2)
 replace("localStorage.setItem('sh-pokemon-stamps-manual-route-v1',JSON.stringify({active:window.manualMode,ids:[...window.manualVenues],goal:window.manualGoal,goalMode:window.manualGoalMode}))","const draft={active:window.manualMode,ids:[...window.manualVenues],goal:window.manualGoal,goalMode:window.manualGoalMode};if(JSON.stringify(state.manualRoute)!==JSON.stringify(draft)){state.manualRoute=draft;save()}")
-# Remove browser-only actions from the container package.
+# Replace browser location only at the input boundary, preserving the candidate/route algorithm.
+replace("""if(!navigator.geolocation)throw Error('浏览器不支持定位，请手动选择。');
+  const p=await new Promise((ok,no)=>navigator.geolocation.getCurrentPosition(ok,no,{enableHighAccuracy:true,timeout:12000,maximumAge:0}));""","""const api=window.xhs&&window.xhs.miniTool;
+  if(!api||typeof api.getLocation!=='function'||clientVersion===null||clientVersion<9490)throw Error('请升级小红书至9.49或手动选择起点。');
+  const native=await timed(api.getLocation({type:'wgs84'}),20000);
+  if(!native||native.errMsg!=='getLocation:ok'||!Number.isFinite(native.latitude)||!Number.isFinite(native.longitude)||Math.abs(native.latitude)>90||Math.abs(native.longitude)>180)throw Error('定位失败，请手动选择。');
+  const p={coords:{latitude:native.latitude,longitude:native.longitude,accuracy:Number(native.accuracy)||0}};""")
 for pattern in [r"if\(!window\.xhs&&navigator\.geolocation\)\{.*?return;\}",r"if\(!window\.xhs\)\{const a=document\.createElement\('a'\);a\.href=data;.*?return;\}",r"if\(v&&!window\.xhs\)\{window\.open\(.*?return;\}",r"if\(!window\.xhs\)\{e\.preventDefault\(\);window\.open\(.*?return;\}"]:
     js,n=re.subn(pattern,"",js,count=1)
     assert n==1,pattern
-# API polyfills for the Android minimum baseline (compiler handles syntax only).
 poly="""if(!Array.prototype.at)Object.defineProperty(Array.prototype,'at',{configurable:true,writable:true,value:function(i){i=Math.trunc(Number(i)||0);return this[i<0?this.length+i:i];}});if(!Object.fromEntries)Object.fromEntries=function(entries){var out={};for(var entry of entries)out[entry[0]]=entry[1];return out;};\n"""
 js=poly+js
-# Extract all 60 existing sprites to local assets without redrawing or changing them.
 m=re.search(r'const v604Assets=(\{[^\n]+\});',js)
 assert m
 assets=json.loads(m.group(1))
 assert len(assets)==60 and sum('/bw-' in k for k in assets)==30
 js=js[:m.start()]+js[m.end():]
-replace('function v604Sprite(id){let u=LOCAL_ART[DEX[id]];return v604Assets[has({id})?u:u.replace("/images/","/images/bw-")]||"";}','function v604Sprite(id){let u=LOCAL_ART[DEX[id]];return u?u.replace("/images/","/images/bw-"):"";}')
-# Static package contains no outbound resource URLs. Official URLs remain plain text for users.
+replace('function v604Sprite(id){let u=LOCAL_ART[DEX[id]];return v604Assets[has({id})?u:u.replace("/images/","/images/bw-")]||"";}','function v604Sprite(id){let u=LOCAL_ART[DEX[id]];return u?(has({id})?u:u.replace("/images/","/images/bw-")):"";}')
 assert not re.search(r'localStorage|sessionStorage|indexedDB|window\.open\(|navigator\.geolocation|\.download\s*=',js)
 assert not re.search(r'<(?:script|img|link)\b[^>]*(?:src|href)=["\x27]https?://',html,re.I)
 root=Path("dist")
 if root.exists(): shutil.rmtree(root)
-pixel=root/"xhs-pixel"; number=root/"xhs-number"
-for d in [pixel,number]: d.mkdir(parents=True)
-for path,data in assets.items():
-    if "/bw-" not in path: continue
-    assert path.startswith("./images/") and data.startswith("data:image/png;base64,")
-    target=pixel/path[2:];target.parent.mkdir(exist_ok=True)
-    raw=base64.b64decode(data.split(",",1)[1],validate=True)
-    assert raw.startswith(b"\x89PNG\r\n\x1a\n")
-    target.write_bytes(raw)
-# Keep theme banner local instead of embedding a large image.
 m=re.search(r'src="data:image/webp;base64,([^"]+)"',html)
-if m:
-    (pixel/"banner.webp").write_bytes(base64.b64decode(m.group(1),validate=True))
-    pixel_html=html[:m.start()]+'src="./banner.webp"'+html[m.end():]
-else: pixel_html=html
-(pixel/"index.html").write_text(pixel_html,encoding="utf-8")
-(pixel/"app.raw.js").write_text(js,encoding="utf-8")
-# Number-only variant: no monster images, including in progress/achievement cards.
-num=js
-a=num.index('function v604Sprite(id)');b=num.index('const LOCAL_ART',a)
-num=num[:a]+'''function v604Sprite(id){const c=document.createElement('canvas');c.width=c.height=96;const ctx=c.getContext('2d');ctx.fillStyle='#42505a';ctx.font='bold 20px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(dexNo(id),48,48);return c.toDataURL('image/png');}\n      '''+num[b:]
-num=re.sub(r'const LOCAL_ART\s*=\s*\{[^\n]*\};','const LOCAL_ART = {};',num,count=1)
-# The skyline banner has no monster character but number-only variant omits imagery entirely.
-nh=re.sub(r'<img\b[^>]*class="pixel-banner"[^>]*>', '', html,count=1)
-(number/"index.html").write_text(nh,encoding="utf-8")
-(number/"app.raw.js").write_text(num,encoding="utf-8")
-assert len(list((pixel/"images").glob("*.png")))==30
-assert all(p.name.startswith("bw-") for p in (pixel/"images").glob("*.png"))
-print("Pixel:",len(list(pixel.rglob("*"))),"entries, 30 monochrome sprites only; number-only: no monster assets")
+assert m
+banner=base64.b64decode(m.group(1),validate=True)
+html=html[:m.start()]+'src="./banner.webp"'+html[m.end():]
+for name in ("xhs-pixel","xhs-silhouette"):
+    d=root/name
+    d.mkdir(parents=True)
+    (d/"images").mkdir()
+    (d/"banner.webp").write_bytes(banner)
+    (d/"index.html").write_text(html,encoding="utf-8")
+    (d/"app.raw.js").write_text(js,encoding="utf-8")
+    shutil.copyfile("game-theme.css",d/"game-theme.css")
+    shutil.copytree("assets/fonts",d/"assets/fonts")
+    if name=="xhs-pixel":
+        for path,data in assets.items():
+            assert path.startswith("./images/") and data.startswith("data:image/png;base64,")
+            raw=base64.b64decode(data.split(",",1)[1],validate=True)
+            assert raw.startswith(b"\x89PNG\r\n\x1a\n")
+            (d/path[2:]).write_bytes(raw)
+    else:
+        # No original coloured/detailed sprites in this variant. Actual flat silhouettes,
+        # including poster/achievement art; preserve pixel alpha and state indication.
+        for path,data in assets.items():
+            if "/bw-" not in path: continue
+            raw=base64.b64decode(data.split(",",1)[1],validate=True)
+            im=Image.open(BytesIO(raw)).convert("RGBA")
+            alpha=im.getchannel("A")
+            assert alpha.getextrema()[0]==0 and alpha.getextrema()[1]>0, path
+            for filename,colour in [(path[2:],(76,70,80)),(path[2:].replace("/bw-","/"),(40,99,71))]:
+                flat=Image.new("RGBA",im.size,colour+(255,))
+                flat.putalpha(alpha)
+                flat.save(d/filename,optimize=True)
+    assert len(list((d/"images").glob("*.png")))==60
+    print(name, "60 local state images, local font/theme/banner, native storage/location")
