@@ -1,0 +1,45 @@
+name: Preview browser smoke test
+on:
+  push:
+    branches: [main]
+    paths: ['ui-preview.html','.github/workflows/preview-smoke.yml']
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate preview in Chrome
+        run: |
+          npm install --no-save --ignore-scripts playwright@1.56.1
+          python3 -m http.server 8765 >/tmp/preview-http.log 2>&1 &
+          node <<'JS'
+          const {chromium}=require('playwright');
+          const assert=require('node:assert/strict');
+          const fs=require('node:fs');
+          (async()=>{
+            const browser=await chromium.launch({channel:'chrome',headless:true,args:['--no-sandbox']});
+            const page=await browser.newPage({viewport:{width:390,height:844},isMobile:true});
+            page.on('pageerror',e=>console.log('PAGEERROR',e.stack));
+            page.on('console',m=>console.log('BROWSER',m.type(),m.text()));
+            let html=fs.readFileSync('ui-preview.html','utf8');
+            await page.route('**/ui-preview.html*',r=>r.fulfill({contentType:'text/html; charset=utf-8',body:html.replace('document.open();document.write(html);','html=html.replace("})().catch(function() {","})().catch(function(error) {console.error(error.stack||error);");document.open();document.write(html);').replace('catch(e){document.getElementById("loading")','catch(e){console.error(e.stack||e);document.getElementById("loading")')}));
+            await page.addInitScript(()=>Object.defineProperty(navigator,'geolocation',{configurable:true,value:{getCurrentPosition:ok=>ok({coords:{latitude:31.220,longitude:121.420,accuracy:20}})}}));
+            await page.goto('http://127.0.0.1:8765/ui-preview.html');
+            await page.waitForFunction(()=>window.__dexVersion==='7.2.0-preview'&&document.querySelector('#startupGate')?.hidden,{timeout:15000}).catch(async e=>{console.log('BODY',await page.locator('body').innerText().then(t=>t.slice(0,1000)));throw e});
+            await page.locator('#tabMap').click();
+            await page.locator('#v6MapOrigin').evaluate(e=>e.closest('details').open=true);
+            await page.locator('#v6MapGPS').click();
+            await page.waitForFunction(()=>document.querySelector('#originSource').value==='gps',{timeout:15000});
+            console.log('GPS',await page.locator('#v6MapGPS').evaluate(e=>e.nextElementSibling.innerText));
+            await page.locator('#v6MapCompute').click();
+            await page.waitForFunction(()=>!document.querySelector('#v6MapCompute').disabled);
+            console.log('RESULT',await page.locator('#v6MapResult').innerText());
+            assert.match(await page.locator('#v6MapResult').innerText(),/预计新增/);
+            await browser.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
