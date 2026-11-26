@@ -1,6 +1,6 @@
 from pathlib import Path
 from io import BytesIO
-import base64, json, re, shutil
+import base64, json, re, shutil, html as html_escape
 from PIL import Image
 
 source=Path("index.html").read_text(encoding="utf-8")
@@ -59,7 +59,17 @@ for name in ("xhs-pixel","xhs-silhouette"):
     (d/"index.html").write_text(html,encoding="utf-8")
     (d/"app.raw.js").write_text(js,encoding="utf-8")
     shutil.copyfile("game-theme.css",d/"game-theme.css")
-    shutil.copytree("assets/fonts",d/"assets/fonts")
+    fonts=d/"assets/fonts"
+    fonts.mkdir(parents=True)
+    for font_file in Path("assets/fonts").iterdir():
+        if font_file.suffix.lower() in (".woff", ".woff2"):
+            shutil.copyfile(font_file,fonts/font_file.name)
+        elif font_file.suffix.lower() in (".txt", ".md"):
+            content=font_file.read_bytes().decode("utf-8")
+            title=html_escape.escape(font_file.name)
+            (fonts/(font_file.stem+".html")).write_text('<!doctype html><html lang="en"><meta charset="utf-8"><title>'+title+'</title><body><pre style="white-space:pre-wrap">'+html_escape.escape(content)+'</pre></body></html>',encoding="utf-8")
+        else:
+            raise ValueError("Unsupported font resource: "+font_file.name)
     if name=="xhs-pixel":
         for path,data in assets.items():
             assert path.startswith("./images/") and data.startswith("data:image/png;base64,")
@@ -81,3 +91,9 @@ for name in ("xhs-pixel","xhs-silhouette"):
                 flat.save(d/filename,optimize=True)
     assert len(list((d/"images").glob("*.png")))==60
     print(name, "60 local state images, local font/theme/banner, native storage/location")
+
+# Xiaohongshu deployment allowlist (app.raw.js is replaced by app.js in CI).
+allowed=set("jpg css gif svg png js jpeg json html woff2 webp woff".split())
+for file in root.rglob("*"):
+    if file.is_file():
+        assert file.suffix.lower().lstrip(".") in allowed, str(file)
