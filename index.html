@@ -313,6 +313,12 @@ body.compact-head{--page-controls-top:var(--compact-title-height,44px)}
 .prize-dialog::backdrop{background:#302c4099}
 .prize-dialog img{display:block;width:100%;max-width:300px;height:180px;object-fit:contain;margin:10px auto}
 .prize-dialog button{width:100%}
+</style><style id="reward-bottom-sheet-v1">
+.prize-dialog[open],.prize-dialog.prize-fallback[open]{position:fixed;inset:auto 0 0;transform:none;margin:0 auto;width:min(100%,480px);max-width:100%;box-sizing:border-box;max-height:80dvh;overflow:auto;padding:16px 20px calc(18px + env(safe-area-inset-bottom));border:3px solid #762529;border-bottom:0;animation:reward-slide-up .26s ease-out}
+.prize-dialog[open]::before{content:"";display:block;width:40px;height:4px;background:#b9aca2;margin:0 auto 12px}
+@keyframes reward-slide-up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.prize-dialog[open]{animation:none}}
+#shareOverlay button{border-radius:0}
 </style></head><body class="booting"><main><header class="pixel-header"><img alt="30周年主题上海像素风景：外滩、东方明珠、陆家嘴和黄浦江" class="pixel-banner" height="204" src="data:image/webp;base64,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" width="320"/><div class="hero-content"><h1>上海盛典图鉴</h1><p class="hero-facts"><span>2026.11.28–2027.01.03</span><span>15处地点</span><span>30款印章</span></p></div></header><p class="startup-status" id="startupGate" role="status">正在准备图鉴并读取集章记录。如长时间未就绪，请刷新页面。</p>
 <div id="home"><section class="panel home-remind" id="homeNotices"><div class="flex"><h2>活动公告与预约</h2><a class="action" data-official="https://www.pokemon.cn/tcg/campaign/24854.html" href="#">官方公告 ›</a></div><div id="homeReminder"></div><button class="reward-more" data-boot-disabled="1" data-tab="bookings" disabled="" type="button">我的预约 · 登记已确认场次 <span aria-hidden="true">›</span></button></section><section class="panel" id="homeDashboard"></section><section class="panel" hidden="" id="homeTodayBookings"></section><section class="panel" hidden="" id="homeSaved"></section><section class="panel home-task"><h2>准备怎么集章？</h2><button class="task-card" data-boot-disabled="1" data-task="reward" disabled="" type="button"><span class="task-symbol">★</span><span><strong>拿到奖励就好</strong><small>按目标安排省时路线</small></span><span aria-hidden="true">›</span></button><button class="task-card" data-boot-disabled="1" data-task="max" disabled="" type="button"><span class="task-symbol">⌖</span><span><strong>一天尽量多集</strong><small>选择出行日期和时间</small></span><span aria-hidden="true">›</span></button><button class="task-card" data-boot-disabled="1" data-task="all" disabled="" type="button"><span class="task-symbol">▦</span><span><strong>集齐全部30枚</strong><small>按空闲日期安排多日行程</small></span><span aria-hidden="true">›</span></button></section><section class="panel home-shortcuts"><h2>快捷路线</h2><p class="muted">按所选日期、已捕捉记录和现有必集目标计算。</p><div class="shortcut-grid" id="shortcuts"><button data-boot-disabled="1" data-preset="3" disabled="">最快拿挂件<small>3枚目标</small></button><button data-boot-disabled="1" data-preset="6" disabled="">最快拿徽章<small>6枚目标</small></button><button data-boot-disabled="1" data-preset="changning" disabled="">长宁半日<small>10:00–14:00</small></button><button data-boot-disabled="1" data-preset="center" disabled="">黄浦半日<small>13:00–18:00</small></button><button data-boot-disabled="1" data-preset="walk" disabled="">不预约集章<small>普通打卡</small></button><button data-boot-disabled="1" data-preset="birds" disabled="">三圣鸟<small>需要赛事预约</small></button></div></section><section aria-label="集章进度与奖励" class="panel reward-panel"><div class="reward-head"><div><small>已集印章</small><div class="count" id="count">0<span> / 30</span></div></div><div class="reward-percent"><strong id="rewardPercent">0%</strong><small>完成率</small></div></div><div class="reward-track"><div aria-label="已集章数量" aria-valuemax="30" aria-valuemin="0" aria-valuenow="0" class="progress" id="rewardTrack" role="progressbar"><i id="progress" style="width:0%"></i></div><div aria-hidden="true" class="milestones" id="milestones"></div></div><div aria-live="polite" class="reward-next"><span id="nextReward">距离彩影挂件还差3枚</span><small id="saveStatus">正在读取记录</small></div><button class="reward-more" data-boot-disabled="1" data-tab="rewards" disabled="" type="button">查看奖励及领取方式 <span aria-hidden="true">→</span></button></section><section class="panel home-handbook"><details><summary>首次集章？先领取实体手册</summary><p>现场拍照打卡并发布带 #宝可梦30周年上海盛典 的小红书笔记。手册共20万本，每人限领一本，领完即止。</p><a data-official="https://www.pokemon.cn/tcg/campaign/24854.html" href="#">查看领取规则 ›</a></details></section></div>
 <nav aria-label="页面切换" class="tabs bottom-nav"><button aria-current="page" class="primary" data-boot-disabled="1" data-tab="home" disabled="" id="tabHome" type="button"><span aria-hidden="true" class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" shape-rendering="crispEdges"><path d="M2 11H5V8H8V5H11V2H13V5H16V8H19V11H22M5 11V21H10V15H14V21H19V11"/></svg></span>首页</button><button data-boot-disabled="1" data-tab="map" disabled="" id="tabMap" type="button"><span aria-hidden="true" class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" shape-rendering="crispEdges"><path d="M3 5H9V2H15V5H21V19H15V22H9V19H3ZM9 5V19M15 5V19"/></svg></span>地图</button><button data-boot-disabled="1" data-tab="list" disabled="" id="tabList" type="button"><span aria-hidden="true" class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" shape-rendering="crispEdges"><path d="M3 3H21V21H3ZM12 3V21M6 7H9M15 7H18M6 11H9M15 11H18M6 15H9M15 15H18"/></svg></span>图鉴</button><button data-boot-disabled="1" data-tab="dates" disabled="" id="tabDates" type="button"><span aria-hidden="true" class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" shape-rendering="crispEdges"><path d="M3 5H21V21H3ZM7 2V8M17 2V8M3 10H21M7 14H9M12 14H14M17 14H19M7 18H9M12 18H14"/></svg></span>日历</button><button data-boot-disabled="1" data-tab="plan" disabled="" id="tabPlan" type="button"><span aria-hidden="true" class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" shape-rendering="crispEdges"><path d="M3 17H7V21H3ZM17 3H21V7H17ZM7 19H13V11H9V5H17"/></svg></span>行程</button></nav>
@@ -2973,29 +2979,16 @@ function v602Progress(p){if(!p.areaProgress||!p.futureBalanced)return '';const r
       }
       async function reportCanvas() {
         const stamps = dexStamps(), acquired = new Set(state.done), n = acquired.size, earned = SERIES.filter((g) => seriesStat(g, acquired).complete), arts = await Promise.all(stamps.map((it) => loadPosterArt(it.id)));
+        if(document.fonts)await document.fonts.ready;
+        const gameFont=getComputedStyle(document.body).fontFamily;
         const canvas = document.createElement("canvas");
         canvas.width = 1080;
         canvas.height = 1440;
         const c = canvas.getContext("2d");
         if (!c) throw Error("\u65E0\u6CD5\u751F\u6210\u6D77\u62A5");
-        const rr = (x, y, w, h, r2, fill, stroke) => {
-          c.beginPath();
-          c.moveTo(x + r2, y);
-          c.arcTo(x + w, y, x + w, y + h, r2);
-          c.arcTo(x + w, y + h, x, y + h, r2);
-          c.arcTo(x, y + h, x, y, r2);
-          c.arcTo(x, y, x + w, y, r2);
-          c.closePath();
-          c.fillStyle = fill;
-          c.fill();
-          if (stroke) {
-            c.strokeStyle = stroke;
-            c.lineWidth = 2;
-            c.stroke();
-          }
-        };
-        const ink = "#263e50", muted = "#526c79", red = "#c9403b", green = "#2f7154";
-        c.fillStyle = "#f7f3e5";
+        const rr=(x,y,w,h,r2,fill,stroke)=>{if(stroke){c.fillStyle="#c5b9ae";c.fillRect(x+5,y+5,w,h);}c.fillStyle=fill;c.fillRect(x,y,w,h);if(stroke){c.strokeStyle=stroke;c.lineWidth=4;c.strokeRect(x,y,w,h);c.fillStyle="#ffffff88";c.fillRect(x+4,y+4,w-8,3);}};
+        const ink = "#263e50", muted = "#526c79", red = "#a83232", green = "#2f7154";
+        c.fillStyle = "#f6f1e7";
         c.fillRect(0, 0, 1080, 1440);
         c.fillStyle = red;
         c.fillRect(0, 0, 1080, 146);
@@ -3004,50 +2997,50 @@ function v602Progress(p){if(!p.areaProgress||!p.futureBalanced)return '';const r
         c.fillStyle = "#f7d66b";
         c.fillRect(54, 30, 12, 12);
         c.fillStyle = "#fff7e6";
-        c.font = "bold 22px sans-serif";
+        c.font = "bold 22px "+gameFont;
         c.fillText("SHANGHAI 2026 / STAMP DEX", 80, 43);
-        c.font = "bold 46px sans-serif";
+        c.font = "bold 46px "+gameFont;
         c.fillText("\u6211\u7684\u4E0A\u6D77\u76DB\u5178\u56FE\u9274", 54, 110);
-        rr(54, 175, 972, 151, 14, "#e4eceb", "#b6c9ce");
+        rr(54, 175, 972, 151, 14, "#fffdf8", "#776b70");
         c.fillStyle = muted;
-        c.font = "bold 22px sans-serif";
+        c.font = "bold 22px "+gameFont;
         c.fillText("\u8BAD\u7EC3\u5BB6\u6536\u85CF\u8BB0\u5F55", 74, 210);
         c.fillStyle = green;
-        c.font = "bold 80px sans-serif";
+        c.font = "bold 80px "+gameFont;
         c.fillText(n + " / 30", 74, 291);
         let r = REWARDS.find((x) => x[0] > n);
         c.textAlign = "right";
         c.fillStyle = ink;
-        c.font = "bold 25px sans-serif";
+        c.font = "bold 25px "+gameFont;
         c.fillText(Math.round(n / 30 * 100) + "% \u5B8C\u6210", 1006, 220);
-        c.font = "22px sans-serif";
+        c.font = "22px "+gameFont;
         c.fillText(r ? "\u8DDD\u79BB" + r[1] + "\u8FD8\u5DEE " + (r[0] - n) + " \u679A" : "30\u679A\u5168\u90E8\u6536\u5F55", 1006, 261, 540);
         c.textAlign = "left";
         rr(74, 302, 932, 8, 4, "#c3d2d1");
         if (n) rr(74, 302, 932 * n / 30, 8, 4, "#498f70");
         const tint = document.createElement("canvas");
-        tint.width = 128;
-        tint.height = 76;
+        tint.width = 160;
+        tint.height = 105;
         const t = tint.getContext("2d");
         stamps.forEach((it, i) => {
           let x = 54 + i % 5 * 196, y = 350 + Math.floor(i / 5) * 148, done = acquired.has(it.id), im = arts[i];
-          rr(x, y, 184, 138, 10, done ? "#d5edda" : "#e9eeef", done ? "#8fbea5" : "#bfcdd1");
+          rr(x, y, 184, 138, 10, done ? "#dcebe0" : "#eee9df", done ? "#28634c" : "#b9aca2");
           c.fillStyle = done ? green : muted;
-          c.font = "bold 17px sans-serif";
+          c.font = "bold 17px "+gameFont;
           c.textAlign = "left";
           c.fillText(dexNo(it.id), x + 11, y + 23);
           if (im && t) {
-            let k = Math.min(120 / im.naturalWidth, 72 / im.naturalHeight), w = im.naturalWidth * k, h = im.naturalHeight * k;
-            t.clearRect(0, 0, 128, 76);
+            let k = Math.min(155 / im.naturalWidth, 102 / im.naturalHeight), w = im.naturalWidth * k, h = im.naturalHeight * k;
+            t.clearRect(0, 0, 160, 105);
             t.globalCompositeOperation = "source-over";
             t.imageSmoothingEnabled = false;
             c.imageSmoothingEnabled = false;
-            t.drawImage(im, (128 - w) / 2, (76 - h) / 2, w, h);
-            c.drawImage(tint, x + 28, y + 27);
+            t.drawImage(im, (160 - w) / 2, (105 - h) / 2, w, h);
+            if(!done){c.filter="grayscale(1)";}c.drawImage(tint, x + 12, y + 28);c.filter="none";
           }
           c.textAlign = "center";
           c.fillStyle = done ? "#285d49" : ink;
-          c.font = "bold 21px sans-serif";
+          c.font = "bold 21px "+gameFont;
           if (done) {
             c.textAlign = "right";
             c.fillStyle = green;
@@ -3055,15 +3048,15 @@ function v602Progress(p){if(!p.areaProgress||!p.futureBalanced)return '';const r
           }
           c.textAlign = "left";
         });
-        rr(54, 1247, 972, 101, 12, "#fae8ae", "#d9bd6c");
+        rr(54, 1247, 972, 101, 12, "#f4e6bb", "#d9bd6c");
         c.fillStyle = "#74531b";
-        c.font = "bold 25px sans-serif";
+        c.font = "bold 25px "+gameFont;
         c.fillText("\u6536\u85CF\u6311\u6218 " + earned.length + "/" + SERIES.length + "\u7EC4", 74, 1284);
         c.fillStyle = ink;
-        c.font = "22px sans-serif";
+        c.font = "22px "+gameFont;
         c.fillText(earned.length ? earned.slice(0, 4).map((g) => g.name).join(" \xB7 ") + (earned.length > 4 ? " \u7B49" + earned.length + "\u7EC4" : "") : "\u7EE7\u7EED\u6536\u5F55\uFF0C\u89E3\u9501\u4F60\u7684\u6536\u85CF\u6311\u6218", 74, 1322, 932);
         c.fillStyle = muted;
-        c.font = "20px sans-serif";
+        c.font = "20px "+gameFont;
         c.fillText("\u975E\u5B98\u65B9 \xB7 \u4E2A\u4EBA\u6536\u5F55\u8BB0\u5F55", 54, 1392);
         c.textAlign = "right";
         c.fillText((/* @__PURE__ */ new Date()).toLocaleDateString("zh-CN"), 1026, 1392);
@@ -3905,11 +3898,13 @@ const prizeHD={"3":"https://image.pokemon.com.cn/wp-content/uploads/2026/11/2026
 const prizeSeen=new Set();try{for(const n of JSON.parse(localStorage.getItem('shanghai-prize-seen-v2')||'[]'))prizeSeen.add(n)}catch(e){}
 const prizeDialog=document.createElement('dialog');prizeDialog.className='prize-dialog';prizeDialog.setAttribute('aria-label','实物奖励');document.body.append(prizeDialog);
 let prizeQueue=[];
-function showPrize(n,auto=false){const p=prizeInfo[n];if(!p)return;if(prizeDialog.open){if(auto&&!prizeQueue.includes(n))prizeQueue.push(n);return;}const reached=state.done.length>=n;prizeDialog.innerHTML='<h2>'+(reached?'奖励已解锁':'集章奖励')+'</h2><img src="'+p.image+'" alt="'+p.name+'"><h3>'+n+'枚 · '+p.name+'</h3><p>'+(reached?'已达到兑换数量，请携带实体集章手册前往兑换。':'还差 '+(n-state.done.length)+' 枚')+'</p><p>兑换地点：上海官方卡牌道馆、官方慢闪店或卡牌艺术插画展（须预约入场）的集章处。</p><p class="muted">每人限领一份，共'+p.stock+'，领完即止。以现场工作人员核验为准。</p><button type="button">知道了</button>';const photo=prizeDialog.querySelector('img');photo.onerror=()=>{photo.onerror=null;photo.src=p.image};photo.src=prizeHD[n];prizeDialog.querySelector('button').onclick=()=>{if(prizeDialog.dataset.auto){prizeSeen.add(n);try{localStorage.setItem('shanghai-prize-seen-v2',JSON.stringify([...prizeSeen]))}catch(e){}}if(prizeDialog.classList.contains('prize-fallback')){prizeDialog.removeAttribute('open');prizeDialog.classList.remove('prize-fallback');prizeDialog.dispatchEvent(new Event('close'));}else prizeDialog.close();};prizeDialog.dataset.auto=auto?String(n):'';try{prizeDialog.showModal()}catch(e){prizeDialog.setAttribute('open','');prizeDialog.classList.add('prize-fallback');}}
-prizeDialog.addEventListener('close',()=>{if(prizeQueue.length)showPrize(prizeQueue.shift(),true)});
+function showPrize(n,auto=false){const p=prizeInfo[n];if(!p)return;if(prizeDialog.open||!achievementOverlay.hidden){if(auto&&!prizeQueue.includes(n))prizeQueue.push(n);return;}const reached=state.done.length>=n;prizeDialog.innerHTML='<h2>'+(reached?'奖励已解锁':'集章奖励')+'</h2><img src="'+p.image+'" alt="'+p.name+'"><h3>'+n+'枚 · '+p.name+'</h3><p>'+(reached?'已达到兑换数量，请携带实体集章手册前往兑换。':'还差 '+(n-state.done.length)+' 枚')+'</p><p>兑换地点：上海官方卡牌道馆、官方慢闪店或卡牌艺术插画展（须预约入场）的集章处。</p><p class="muted">每人限领一份，共'+p.stock+'，领完即止。以现场工作人员核验为准。</p><button type="button">知道了</button>';const photo=prizeDialog.querySelector('img');photo.onerror=()=>{photo.onerror=null;photo.src=p.image};photo.src=prizeHD[n];prizeDialog.querySelector('button').onclick=()=>{if(prizeDialog.dataset.auto){prizeSeen.add(n);try{localStorage.setItem('shanghai-prize-seen-v2',JSON.stringify([...prizeSeen]))}catch(e){}}if(prizeDialog.classList.contains('prize-fallback')){prizeDialog.removeAttribute('open');prizeDialog.classList.remove('prize-fallback');prizeDialog.dispatchEvent(new Event('close'));}else prizeDialog.close();};prizeDialog.dataset.auto=auto?String(n):'';try{prizeDialog.showModal()}catch(e){prizeDialog.setAttribute('open','');prizeDialog.classList.add('prize-fallback');}}
+function drainPrizes(){if(!prizeDialog.open&&achievementOverlay.hidden&&prizeQueue.length)showPrize(prizeQueue.shift(),true);}
+prizeDialog.addEventListener('close',()=>{prizeDialog.dataset.auto='';drainPrizes()});
+new MutationObserver(drainPrizes).observe(achievementOverlay,{attributes:true,attributeFilter:['hidden']});
 function decoratePrizes(){const root=$('milestones');root.removeAttribute('aria-hidden');for(const node of root.children){const n=Number(node.textContent.trim()),p=prizeInfo[n];if(!p||node.classList.contains('prize-marker'))continue;node.classList.add('prize-marker');node.tabIndex=0;node.setAttribute('role','button');node.setAttribute('aria-label',n+'枚 '+p.name);const img=document.createElement('img');img.src=p.image;img.alt=p.name;node.append(img);node.onclick=()=>showPrize(n);node.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();showPrize(n)}}}}
 function checkPrizes(){for(const n of [3,6])if(state.done.length>=n&&!prizeSeen.has(n)&&prizeDialog.dataset.auto!==String(n)&&!prizeQueue.includes(n))showPrize(n,true);}
-const prizeRefreshBase=refreshProgress;refreshProgress=function(){const result=prizeRefreshBase();decoratePrizes();checkPrizes();return result;};
+const prizeRefreshBase=refreshProgress;refreshProgress=function(){const result=prizeRefreshBase();decoratePrizes();queueMicrotask(checkPrizes);return result;};
 
 decoratePrizes();checkPrizes();
 
