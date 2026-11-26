@@ -3749,7 +3749,7 @@ renderDashboard=function(){
  const root=$('homeDashboard'),was=root.querySelector('.home-day-details')?.open;
  homeDashBase();const stats=root.querySelector('.home-stats');if(!stats)return;
  const copy=root.querySelector(':scope > p.muted'),newItems=root.querySelector('.home-new'),actions=root.querySelector('.home-daily-actions');
- if(copy||newItems){const details=document.createElement('details'),summary=document.createElement('summary');details.className='home-day-details';details.open=!!was;summary.textContent='开放明细';details.append(summary);if(copy)details.append(copy);if(newItems)details.append(newItems);if(actions)actions.after(details);else root.append(details);}
+ if(copy||newItems){const details=document.createElement('details'),summary=document.createElement('summary');details.className='home-day-details';details.open=!!was;summary.textContent='开放明细';details.append(summary);if(copy)details.append(copy);if(newItems){const title=document.createElement('strong');title.textContent=newItems.querySelector('summary')?.textContent||'新增开放';details.append(title);for(const p of newItems.querySelectorAll('p'))details.append(p);newItems.remove();}if(actions)actions.after(details);else root.append(details);}
  const buttons=actions?.querySelectorAll('button');if(buttons?.length===2){buttons[0].textContent='查看印章';buttons[1].textContent='规划路线 ›';}
 };
 const homeRenderBase=renderHome;
