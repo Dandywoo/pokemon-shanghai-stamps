@@ -238,7 +238,7 @@ header.pixel-header .hero-facts span{color:#5a5263;font:650 clamp(9px,2.85vw,12p
 #achievementOverlay #achievementTitle:before{display:none}
 #achievementOverlay #achievementClose{width:44px;height:44px;border:2px solid #762529;border-radius:0;background:#fffdf8;color:#a83232;font-weight:400;box-shadow:2px 2px 0 #762529;font-family:var(--game-font)}
 #achievementOverlay .achievement-body{padding:8px;background:#f4f0e9}
-#achievementOverlay #achievementImage{border-radius:0;max-width:none;box-shadow:none;image-rendering:auto}
+#achievementOverlay #achievementImage{border-radius:0;max-width:none;box-shadow:none;image-rendering:auto;-webkit-touch-callout:default!important;-webkit-user-select:auto;user-select:auto;pointer-events:auto}
 #achievementOverlay .achievement-footer{padding:9px 12px 12px;background:#fffdf8;border-top:2px solid #c9bcb7}
 #achievementOverlay #achievementSave{min-height:44px;font-size:17px;font-weight:400;border:2px solid #762529;border-radius:0;background:#a83232;box-shadow:inset 2px 2px 0 #d68078,2px 2px 0 #762529}
 #achievementOverlay #achievementNav button{border-radius:0;min-height:38px;font-family:var(--game-font);font-size:14px}
@@ -2986,6 +2986,7 @@ function v602Progress(p){if(!p.areaProgress||!p.futureBalanced)return '';const r
           download.hidden = false;
           status.textContent = "\u6536\u85CF\u6D77\u62A5";
           $("posterHint").textContent = "\u4FDD\u5B58\u56FE\u7247\u5230\u76F8\u518C";
+          if(!window.xhs)$("posterHint").textContent=imageSaveHint();
         } catch (e) {
           if (ticket !== posterSequence) return;
           status.textContent = "\u751F\u6210\u5931\u8D25";
@@ -3011,9 +3012,48 @@ function v602Progress(p){if(!p.areaProgress||!p.futureBalanced)return '';const r
         $("seriesPanel").open = true;
         $("seriesPanel").scrollIntoView({ block: "start" });
       }
+      // WEB_IMAGE_SAVE_BEGIN: excluded from the Xiaohongshu native package.
+      function imageSaveHint(){
+        return navigator.maxTouchPoints>0 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent||"") ? "点击保存，或长按上方图片存入相册" : "点击保存或下载原图";
+      }
+      async function saveWebImage(data,button,hint){
+        const mobile=navigator.maxTouchPoints>0 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent||"");
+        const name=button.id==="achievementSave"?"上海盛典图鉴-成就卡.png":"上海盛典图鉴-收藏海报.png";
+        let blob,file;
+        try{
+          const bytes=atob(data.slice(data.indexOf(",")+1)),arr=new Uint8Array(bytes.length);
+          for(let i=0;i<bytes.length;i++)arr[i]=bytes.charCodeAt(i);
+          blob=new Blob([arr],{type:"image/png"});
+          if(typeof File==="function")file=new File([blob],name,{type:"image/png"});
+        }catch(e){hint.textContent="请长按上方图片，选择保存图像。";return;}
+        if(file&&typeof navigator.share==="function"&&typeof navigator.canShare==="function"){
+          let available=false;
+          try{available=navigator.canShare({files:[file]})}catch(e){}
+          if(available){
+            button.disabled=true;
+            try{
+              await navigator.share({files:[file]});
+              hint.textContent="如需存入相册，请在系统菜单中选择“存储图像”。";
+              return;
+            }catch(e){
+              if(e&&e.name==="AbortError"){hint.textContent="已取消分享，仍可长按图片保存。";return;}
+              if(mobile){hint.textContent="请长按上方图片，选择“存储图像”或“添加到照片”。";return;}
+            }finally{button.disabled=false;}
+          }
+        }
+        if(mobile){
+          hint.textContent="请长按上方图片，选择“存储图像”或“添加到照片”。";
+          return;
+        }
+        const url=URL.createObjectURL(blob),a=document.createElement("a");
+        a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+        setTimeout(()=>URL.revokeObjectURL(url),60000);
+        hint.textContent="已请求下载 PNG，请查看浏览器下载记录。";
+      }
+      // WEB_IMAGE_SAVE_END
       async function saveNativeImage(data, button, hint) {
         if (!data || button.disabled) return;
-        if(!window.xhs){const a=document.createElement('a');a.href=data;a.download='pokemon-shanghai-stamps.png';a.click();hint.textContent='已发起图片下载';return;}
+        if(!window.xhs){return saveWebImage(data,button,hint);}
         if (!mini || typeof mini.saveImageToPhotosAlbum !== "function" || clientVersion === null || clientVersion < 9420) {
           hint.textContent = "\u5F53\u524D\u5BA2\u6237\u7AEF\u6682\u4E0D\u652F\u6301\u4FDD\u5B58\u76F8\u518C\uFF0C\u8BF7\u5347\u7EA7\u6216\u622A\u56FE\u4FDD\u5B58\u3002";
           return;
@@ -3146,7 +3186,7 @@ function v602Progress(p){if(!p.areaProgress||!p.futureBalanced)return '';const r
         }
         const cols=ids.length<=3?ids.length:ids.length===4?2:ids.length<=9?3:ids.length<=12?4:5;
         const rows=Math.ceil(ids.length/cols),step=Math.min(312,Math.floor(960/cols)),tileW=step-16,tileH=cols<=3?292:cols===4?252:224;
-        const top=g.buckets?332:292,h=top+rows*(tileH+14)+124;
+        const top=g.buckets?426:376,h=top+rows*(tileH+14)+148;
         const canvas=document.createElement("canvas");canvas.width=1080;canvas.height=h;
         const c=canvas.getContext("2d");if(!c)throw Error("无法生成图片");
         const ink="#302c40",paper="#fffdf8",bg="#f4f0e9",edge="#65565a",shadow="#c6b8ae",red="#a83232",dark="#762529",gold="#795512",goldSoft="#f9edcf",green="#286347",greenSoft="#e3efe4";
@@ -3163,9 +3203,9 @@ function v602Progress(p){if(!p.areaProgress||!p.futureBalanced)return '';const r
         rect(392,144,296,52,gold);rect(398,150,284,40,goldSoft);
         rect(414,166,7,10,green);rect(421,173,7,10,green);rect(428,166,7,10,green);rect(435,159,7,10,green);
         text("成就解锁！",557,171,32,gold,226);
-        text(g.name,540,233,60,ink,930);
-        text(CAT_NAMES[g.cat]+"  ·  "+stat.n+"/"+stat.total+" 已捕捉",540,275,34,green,920);
-        if(g.buckets)text("每个登场世代展示一位已捕捉伙伴",540,313,26,ink,930);
+        text(g.name,540,252,60,ink,930);
+        text(CAT_NAMES[g.cat]+"  ·  "+stat.n+"/"+stat.total+" 已捕捉",540,326,34,green,920);
+        if(g.buckets)text("每个登场世代展示一位已捕捉伙伴",540,374,26,ink,930);
         const crop=document.createElement("canvas"),ctx=crop.getContext("2d");
         ids.forEach((id,i)=>{
           const row=Math.floor(i/cols),n=Math.min(cols,ids.length-row*cols),x=Math.round((1080-n*step)/2)+(i%cols)*step+8,y=top+row*(tileH+14);
@@ -3186,8 +3226,8 @@ function v602Progress(p){if(!p.areaProgress||!p.futureBalanced)return '';const r
         });
         const footer=top+rows*(tileH+14)+8;
         rect(70,footer,940,3,shadow);
-        text("30周年上海盛典 · 我的收藏成就",540,footer+29,30,gold,940);
-        text("非官方个人记录 · 不代表官方奖励或凭证",540,footer+66,26,ink,940);
+        text("30周年上海盛典 · 我的收藏成就",540,footer+34,30,gold,940);
+        text("非官方个人记录 · 不代表官方奖励或凭证",540,footer+84,26,ink,940);
         return canvas.toDataURL("image/png");
       }
       function closeAchievement() {
@@ -3225,6 +3265,7 @@ function v602Progress(p){if(!p.areaProgress||!p.futureBalanced)return '';const r
           $("achievementImage").hidden = false;
           $("achievementMessage").hidden = true;
           $("achievementSave").disabled = false;
+          if(!window.xhs)$("achievementHint").textContent=imageSaveHint();
         } catch (e) {
           if (ticket === achievementTicket) $("achievementMessage").textContent = "\u50CF\u7D20\u56FE\u7247\u6682\u65F6\u65E0\u6CD5\u751F\u6210\uFF0C\u8BF7\u5173\u95ED\u540E\u4ECE\u5DF2\u89E3\u9501\u6210\u5C31\u91CD\u65B0\u6253\u5F00\u3002";
         }

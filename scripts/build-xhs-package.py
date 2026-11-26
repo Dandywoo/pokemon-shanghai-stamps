@@ -32,7 +32,12 @@ replace("""if(!navigator.geolocation)throw Error('浏览器不支持定位，请
   const native=await timed(api.getLocation({type:'wgs84'}),20000);
   if(!native||native.errMsg!=='getLocation:ok'||!Number.isFinite(native.latitude)||!Number.isFinite(native.longitude)||Math.abs(native.latitude)>90||Math.abs(native.longitude)>180)throw Error('定位失败，请手动选择。');
   const p={coords:{latitude:native.latitude,longitude:native.longitude,accuracy:Number(native.accuracy)||0}};""")
-for pattern in [r"if\(!window\.xhs&&navigator\.geolocation\)\{.*?return;\}",r"if\(!window\.xhs\)\{const a=document\.createElement\('a'\);a\.href=data;.*?return;\}",r"if\(v&&!window\.xhs\)\{window\.open\(.*?return;\}",r"if\(!window\.xhs\)\{e\.preventDefault\(\);window\.open\(.*?return;\}"]:
+# Native package uses only the original platform album API.
+js,n=re.subn(r"// WEB_IMAGE_SAVE_BEGIN[^\n]*\n[\s\S]*?// WEB_IMAGE_SAVE_END\n","",js,count=1)
+assert n==1
+replace('if(!window.xhs)$("achievementHint").textContent=imageSaveHint();','')
+replace('if(!window.xhs)$("posterHint").textContent=imageSaveHint();','')
+for pattern in [r"if\(!window\.xhs&&navigator\.geolocation\)\{.*?return;\}",r"if\(!window\.xhs\)\{return saveWebImage\(data,button,hint\);\}",r"if\(v&&!window\.xhs\)\{window\.open\(.*?return;\}",r"if\(!window\.xhs\)\{e\.preventDefault\(\);window\.open\(.*?return;\}"]:
     js,n=re.subn(pattern,"",js,count=1)
     assert n==1,pattern
 poly="""if(!Array.prototype.at)Object.defineProperty(Array.prototype,'at',{configurable:true,writable:true,value:function(i){i=Math.trunc(Number(i)||0);return this[i<0?this.length+i:i];}});if(!Object.fromEntries)Object.fromEntries=function(entries){var out={};for(var entry of entries)out[entry[0]]=entry[1];return out;};\n"""

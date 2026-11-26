@@ -91,6 +91,24 @@ jobs:
                 assert.equal(await page.locator('.achievement-dialog').evaluate(e=>getComputedStyle(e).borderRadius),'0px');
                 assert.equal(await page.locator('#achievementSave').innerText(),'保存成就卡');
                 assert.ok(await page.evaluate(()=>window.__testCardFonts.some(([t,f])=>t==='成就解锁！'&&f.includes('Fusion Pixel UI'))));
+                if(cardCount===0){
+                  await page.evaluate(()=>{window.__shareCalls=[];Object.defineProperty(navigator,'canShare',{configurable:true,value:p=>p.files[0].type==='image/png'});Object.defineProperty(navigator,'share',{configurable:true,value:async p=>{const f=p.files[0];window.__shareCalls.push({name:f.name,size:f.size,type:f.type})}})});
+                  await page.locator('#achievementSave').click();
+                  await page.waitForFunction(()=>window.__shareCalls.length===1);
+                  assert.ok(await page.evaluate(()=>window.__shareCalls[0].size>1000&&window.__shareCalls[0].type==='image/png'));
+                  assert.match(await page.locator('#achievementHint').innerText(),/存储图像/);
+                  await page.evaluate(()=>{Object.defineProperty(navigator,'canShare',{configurable:true,value:()=>false});Object.defineProperty(navigator,'maxTouchPoints',{configurable:true,value:5})});
+                  await page.locator('#achievementSave').click();
+                  assert.match(await page.locator('#achievementHint').innerText(),/长按上方图片/);
+                  await page.evaluate(()=>{Object.defineProperty(navigator,'maxTouchPoints',{configurable:true,value:0})});
+                  const pending=page.waitForEvent('download');
+                  await page.locator('#achievementSave').click();
+                  const dl=await pending;
+                  assert.match(dl.suggestedFilename(),/成就卡\.png$/);
+                  assert.match(await page.locator('#achievementHint').innerText(),/浏览器下载记录/);
+                  console.log('IMAGE SAVE: file share, touch fallback and PNG download passed');
+                  assert.equal(await page.locator('#achievementImage').evaluate(e=>e.naturalHeight),830);
+                }
                 if(cardCount===2){fs.mkdirSync('achievement-test',{recursive:true});const png=await page.locator('#achievementImage').getAttribute('src');fs.writeFileSync('achievement-test/锻匠一家.png',Buffer.from(png.split(',')[1],'base64'));await page.screenshot({path:'achievement-test/mobile.png'});}
                 await page.locator('#achievementClose').click();
                 cardCount++;
