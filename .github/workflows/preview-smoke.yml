@@ -2,7 +2,7 @@ name: Preview browser smoke test
 on:
   push:
     branches: [main]
-    paths: ['ui-preview.html','.github/workflows/preview-smoke.yml']
+    paths: ['index.html','ui-preview.html','.github/workflows/preview-smoke.yml']
 permissions:
   contents: read
 jobs:
@@ -26,11 +26,12 @@ jobs:
             const page=await browser.newPage({viewport:{width:390,height:844},isMobile:true});
             page.on('pageerror',e=>console.log('PAGEERROR',e.stack));
             page.on('console',m=>console.log('BROWSER',m.type(),m.text()));
-            let html=fs.readFileSync('ui-preview.html','utf8');
-            await page.route('**/ui-preview.html*',r=>r.fulfill({contentType:'text/html; charset=utf-8',body:html.replace('document.open();document.write(html);','html=html.replace("})().catch(function() {","})().catch(function(error) {console.error(error.stack||error);");document.open();document.write(html);').replace('catch(e){document.getElementById("loading")','catch(e){console.error(e.stack||e);document.getElementById("loading")')}));
+            let html=fs.readFileSync('index.html','utf8');
+            await page.route('**/index.html*',r=>r.fulfill({contentType:'text/html; charset=utf-8',body:html.replace('document.open();document.write(html);','html=html.replace("})().catch(function() {","})().catch(function(error) {console.error(error.stack||error);");document.open();document.write(html);').replace('catch(e){document.getElementById("loading")','catch(e){console.error(e.stack||e);document.getElementById("loading")')}));
             await page.addInitScript(()=>Object.defineProperty(navigator,'geolocation',{configurable:true,value:{getCurrentPosition:ok=>ok({coords:{latitude:31.220,longitude:121.420,accuracy:20}})}}));
-            await page.goto('http://127.0.0.1:8765/ui-preview.html');
-            await page.waitForFunction(()=>window.__dexVersion==='7.2.0-preview'&&document.querySelector('#startupGate')?.hidden,{timeout:15000}).catch(async e=>{console.log('BODY',await page.locator('body').innerText().then(t=>t.slice(0,1000)));throw e});
+            await page.goto('http://127.0.0.1:8765/index.html');
+            await page.waitForFunction(()=>window.__dexVersion==='7.2.0'&&document.querySelector('#startupGate')?.hidden,{timeout:15000}).catch(async e=>{console.log('BODY',await page.locator('body').innerText().then(t=>t.slice(0,1000)));throw e});
+            assert.equal(await page.locator('#home').isVisible(),true);
             await page.locator('#tabMap').click();
             await page.locator('#v6MapOrigin').evaluate(e=>e.closest('details').open=true);
             await page.locator('#v6MapGPS').click();
@@ -40,6 +41,12 @@ jobs:
             await page.waitForFunction(()=>!document.querySelector('#v6MapCompute').disabled);
             console.log('RESULT',await page.locator('#v6MapResult').innerText());
             assert.match(await page.locator('#v6MapResult').innerText(),/预计新增/);
+            await page.locator('#tabList').click();
+            await page.locator('[data-pocket]').first().click();
+            assert.ok(await page.evaluate(()=>JSON.parse(localStorage.getItem('sh-pokemon-stamps-v1')).done.length>0));
+            await page.reload();
+            await page.waitForFunction(()=>window.__dexVersion==='7.2.0'&&document.querySelector('#startupGate')?.hidden);
+            assert.ok(await page.evaluate(()=>JSON.parse(localStorage.getItem('sh-pokemon-stamps-v1')).done.length>0));
             await browser.close();
           })().catch(e=>{console.error(e);process.exit(1)});
           JS
