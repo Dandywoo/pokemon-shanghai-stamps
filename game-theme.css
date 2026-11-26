@@ -110,3 +110,39 @@ input[type=checkbox]{accent-color:var(--game-red)}
 .collect-toast{border-radius:0;box-shadow:var(--game-lift)}
 @media(prefers-reduced-motion:reduce){button,.progress i,.reward-mini-track i,.dex-tile,.collect-toast{transition:none!important;animation:none!important}}
 @media print{.panel,.dex-tile,.reward-item,.venue{box-shadow:none}}
+
+/* v2: True CJK pixel font + stepped 8-bit borders; no third-party runtime request.
+   Fusion Pixel (OFL 1.1), source and license in assets/fonts. */
+@font-face{font-family:"Fusion Pixel UI";src:url("assets/fonts/fusion-pixel-sc.woff2") format("woff2");font-style:normal;font-weight:400;font-display:swap}
+:root{
+ --game-font:"Fusion Pixel UI","PingFang SC","Microsoft YaHei",sans-serif;
+ --display:var(--game-font);--game-radius:0px;
+ --game-pixel-frame:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' shape-rendering='crispEdges'%3E%3Cpath d='M3 0H9V1H11V3H12V9H11V11H9V12H3V11H1V9H0V3H1V1H3Z M3 2V3H2V9H3V10H9V9H10V3H9V2Z' fill='%23776b72' fill-rule='evenodd'/%3E%3C/svg%3E");
+ --game-pixel-shadow:2px 0 0 var(--game-shadow),0 2px 0 var(--game-shadow),2px 4px 0 var(--game-shadow),4px 2px 0 var(--game-shadow)
+}
+/* Pixel font for interface labels and numbers; system font for dense information. */
+h1,h2,h3,button,summary,.count,.reward-percent strong,.metric strong,.reward-number,.home-stats strong,.v6-summary-grid b,.dex-id,.notice-state,.route-stop:before,.preview-num,.milestone,.section-en{
+ font-family:var(--game-font);font-weight:400;font-synthesis:none;letter-spacing:0
+}
+header.pixel-header h1{font-size:24px;font-family:var(--game-font);font-weight:400;font-synthesis:none}
+.compact-head header.pixel-header h1{font-size:18px}
+.bottom-nav button{font-size:12px;font-weight:400}
+p,small,.muted,label,input,select,textarea,.route-stop .chips span,.v6-route-leg,.guide-copy{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+#home .home-progress-compact .count,#home .home-progress-compact .reward-percent strong{font-family:var(--game-font);font-weight:400}
+#home .panel,.panel,.dex-terminal,.guide-footer,.v6-card,.venue,.reward-item,.saved-trip,.distance-panel,.dex-overlay>div{
+ border:3px solid var(--game-edge);border-image:var(--game-pixel-frame) 4 stretch;border-radius:0;box-shadow:var(--game-pixel-shadow)
+}
+#home .home-progress-compact{border:3px solid var(--game-edge);border-image:var(--game-pixel-frame) 4 stretch;box-shadow:var(--game-pixel-shadow)}
+#home .home-multi-entry,#home .home-handbook{border-width:1px;border-image:none;box-shadow:none}
+.dex-tile,.dex-tile.pixel-dex-tile{border:2px solid var(--game-line);border-radius:0;box-shadow:2px 0 0 var(--game-shadow),0 2px 0 var(--game-shadow)}
+.dex-tile.is-done,.dex-tile.pixel-dex-tile.is-done{border-color:var(--game-green)}
+.dex-tile.is-target,.dex-tile.pixel-dex-tile.is-target{border-color:var(--game-gold)}
+button.primary,#compute,#v6MapCompute{border-radius:0;box-shadow:2px 0 0 var(--game-red-dark),0 2px 0 var(--game-red-dark),2px 2px 0 var(--game-red-dark)}
+.bottom-nav button.primary{box-shadow:inset 0 -3px 0 var(--game-red)}
+button:focus-visible,summary:focus-visible{outline-offset:3px}
+#home .home-multi-entry .task-card small{display:none}
+#home .home-progress-compact .reward-more,#home #homeNotices .reward-more{min-height:44px}
+#home #homeDashboard .home-daily-actions button{min-height:44px}
+#home .home-day-details summary,#home .home-notice-more summary{min-height:36px}
+@media(max-width:360px){header.pixel-header h1{font-size:24px}.compact-head header.pixel-header h1{font-size:18px}.bottom-nav button{font-size:11px}}
+@media print{#home .panel,.panel,.dex-terminal,.v6-card,.venue,.reward-item{border-image:none;box-shadow:none}}
