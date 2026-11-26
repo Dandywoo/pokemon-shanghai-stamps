@@ -3,6 +3,9 @@ import re, json, base64, shutil
 
 source=Path("silhouette/index.html").read_text(encoding="utf-8")
 assert 'window.__dexVersion="7.1.7"' in source, "Wrong version"
+source=source.replace("7.1.7","7.1.8")
+# No colored tile backgrounds when collection state changes; the check button is retained.
+source=source.replace("</style>", ".dex-tile.pixel-dex-tile.is-done{background:#e8eef0;border-color:#ccdadd;box-shadow:none}.dex-tile.pixel-dex-tile.is-done.is-target{border-color:#cbac65}.dex-tile.pixel-dex-tile.is-done .dex-id{font-weight:inherit}</style>",1)
 scripts=re.findall(r'<script\b[^>]*>([\s\S]*?)</script>',source,re.I)
 assert len(scripts)==1
 js=scripts[0]
@@ -40,7 +43,7 @@ assert m
 assets=json.loads(m.group(1))
 assert len(assets)==60 and sum('/bw-' in k for k in assets)==30
 js=js[:m.start()]+js[m.end():]
-replace('function v604Sprite(id){let u=LOCAL_ART[DEX[id]];return v604Assets[has({id})?u:u.replace("/images/","/images/bw-")]||"";}','function v604Sprite(id){let u=LOCAL_ART[DEX[id]];return u?(has({id})?u:u.replace("/images/","/images/bw-")):"";}')
+replace('function v604Sprite(id){let u=LOCAL_ART[DEX[id]];return v604Assets[has({id})?u:u.replace("/images/","/images/bw-")]||"";}','function v604Sprite(id){let u=LOCAL_ART[DEX[id]];return u?u.replace("/images/","/images/bw-"):"";}')
 # Static package contains no outbound resource URLs. Official URLs remain plain text for users.
 assert not re.search(r'localStorage|sessionStorage|indexedDB|window\.open\(|navigator\.geolocation|\.download\s*=',js)
 assert not re.search(r'<(?:script|img|link)\b[^>]*(?:src|href)=["\x27]https?://',html,re.I)
@@ -49,6 +52,7 @@ if root.exists(): shutil.rmtree(root)
 pixel=root/"xhs-pixel"; number=root/"xhs-number"
 for d in [pixel,number]: d.mkdir(parents=True)
 for path,data in assets.items():
+    if "/bw-" not in path: continue
     assert path.startswith("./images/") and data.startswith("data:image/png;base64,")
     target=pixel/path[2:];target.parent.mkdir(exist_ok=True)
     raw=base64.b64decode(data.split(",",1)[1],validate=True)
@@ -65,10 +69,12 @@ else: pixel_html=html
 # Number-only variant: no monster images, including in progress/achievement cards.
 num=js
 a=num.index('function v604Sprite(id)');b=num.index('const LOCAL_ART',a)
-num=num[:a]+'''function v604Sprite(id){const c=document.createElement('canvas');c.width=c.height=96;const ctx=c.getContext('2d');ctx.fillStyle=has({id})?'#26766f':'#42505a';ctx.font='bold 20px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(dexNo(id),48,48);return c.toDataURL('image/png');}\n      '''+num[b:]
+num=num[:a]+'''function v604Sprite(id){const c=document.createElement('canvas');c.width=c.height=96;const ctx=c.getContext('2d');ctx.fillStyle='#42505a';ctx.font='bold 20px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(dexNo(id),48,48);return c.toDataURL('image/png');}\n      '''+num[b:]
 num=re.sub(r'const LOCAL_ART\s*=\s*\{[^\n]*\};','const LOCAL_ART = {};',num,count=1)
 # The skyline banner has no monster character but number-only variant omits imagery entirely.
 nh=re.sub(r'<img\b[^>]*class="pixel-banner"[^>]*>', '', html,count=1)
 (number/"index.html").write_text(nh,encoding="utf-8")
 (number/"app.raw.js").write_text(num,encoding="utf-8")
-print("Pixel:",len(list(pixel.rglob("*"))),"entries, 60 local sprites; number-only: no monster assets")
+assert len(list((pixel/"images").glob("*.png")))==30
+assert all(p.name.startswith("bw-") for p in (pixel/"images").glob("*.png"))
+print("Pixel:",len(list(pixel.rglob("*"))),"entries, 30 monochrome sprites only; number-only: no monster assets")
