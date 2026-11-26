@@ -1,0 +1,21 @@
+name: Retrieve official XHS packaging skill
+on:
+  push:
+    branches: ['audit/xhs-official-skill-1-11-1']
+permissions:
+  contents: read
+jobs:
+  retrieve:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download official skill without executing
+        run: |
+          mkdir -p result
+          curl --fail --location --retry 2 --max-time 60 'https://fe-static.xhscdn.com/minitool/20261117152455/minitool-zip-builder-1.11.1.skill' -o result/minitool-zip-builder-1.11.1.skill
+          python3 -m zipfile -l result/minitool-zip-builder-1.11.1.skill
+      - uses: actions/upload-artifact@v4
+        with:
+          name: official-xhs-skill-1.11.1
+          path: result/
+          if-no-files-found: error
+          retention-days: 1
