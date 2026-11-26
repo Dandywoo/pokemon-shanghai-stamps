@@ -1,6 +1,6 @@
 from pathlib import Path
 from io import BytesIO
-import base64, json, re, shutil, html as html_escape
+import base64, json, re, shutil
 from PIL import Image
 
 source=Path("index.html").read_text(encoding="utf-8")
@@ -66,8 +66,9 @@ for name in ("xhs-pixel","xhs-silhouette"):
             shutil.copyfile(font_file,fonts/font_file.name)
         elif font_file.suffix.lower() in (".txt", ".md"):
             content=font_file.read_bytes().decode("utf-8")
-            title=html_escape.escape(font_file.name)
-            (fonts/(font_file.stem+".html")).write_text('<!doctype html><html lang="en"><meta charset="utf-8"><title>'+title+'</title><body><pre style="white-space:pre-wrap">'+html_escape.escape(content)+'</pre></body></html>',encoding="utf-8")
+            assert "*/" not in content, font_file.name
+            with (d/"game-theme.css").open("a",encoding="utf-8") as css:
+                css.write("\n/* "+font_file.name+"\n"+content+"\n*/\n")
         else:
             raise ValueError("Unsupported font resource: "+font_file.name)
     if name=="xhs-pixel":
@@ -97,3 +98,6 @@ allowed=set("jpg css gif svg png js jpeg json html woff2 webp woff".split())
 for file in root.rglob("*"):
     if file.is_file():
         assert file.suffix.lower().lstrip(".") in allowed, str(file)
+
+for package in root.iterdir():
+    assert sorted(str(p.relative_to(package)) for p in package.rglob("*.html"))==["index.html"], package
