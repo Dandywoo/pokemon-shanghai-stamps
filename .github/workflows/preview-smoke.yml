@@ -30,8 +30,17 @@ jobs:
             await page.route('**/index.html*',r=>r.fulfill({contentType:'text/html; charset=utf-8',body:html.replace('})().catch(function() {','})().catch(function(error) {console.error(error.stack||error);')}));
             await page.addInitScript(()=>Object.defineProperty(navigator,'geolocation',{configurable:true,value:{getCurrentPosition:ok=>ok({coords:{latitude:31.220,longitude:121.420,accuracy:20}})}}));
             await page.goto('http://127.0.0.1:8765/index.html');
-            await page.waitForFunction(()=>window.__dexVersion==='7.2.1'&&document.querySelector('#startupGate')?.hidden,{timeout:15000}).catch(async e=>{console.log('BODY',await page.locator('body').innerText().then(t=>t.slice(0,1000)));throw e});
+            await page.waitForFunction(()=>window.__dexVersion==='7.2.2'&&document.querySelector('#startupGate')?.hidden,{timeout:15000}).catch(async e=>{console.log('BODY',await page.locator('body').innerText().then(t=>t.slice(0,1000)));throw e});
             assert.equal(await page.locator('#home').isVisible(),true);
+            assert.equal(await page.locator('#home > section').first().getAttribute('aria-label'),'集章进度与奖励');
+            assert.equal(await page.locator('#home .home-shortcuts').isVisible(),false);
+            assert.equal(await page.locator('#home [data-task="all"]').isVisible(),true);
+            assert.ok(await page.locator('#homeReminder > .home-notice-row:visible').count()<=2);
+            const more=page.locator('#homeReminder .home-notice-more');if(await more.count()){await more.locator('summary').click();assert.equal(await more.evaluate(e=>e.open),true);await more.locator('summary').click();}
+            await page.locator('#homeDashboard .home-day-details summary').click();assert.equal(await page.locator('#homeDashboard .home-day-details').evaluate(e=>e.open),true);
+            await page.locator('#homeDashboard .home-day-details summary').click();
+            assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+            console.log('HOME',await page.locator('#home').innerText());
             await page.locator('#tabMap').click();
             await page.locator('#v6MapOrigin').evaluate(e=>e.closest('details').open=true);
             await page.locator('#v6MapGPS').click();
@@ -51,7 +60,7 @@ jobs:
             await page.locator('[data-pocket]').first().click();
             assert.ok(await page.evaluate(()=>JSON.parse(localStorage.getItem('sh-pokemon-stamps-v1')).done.length>0));
             await page.reload();
-            await page.waitForFunction(()=>window.__dexVersion==='7.2.1'&&document.querySelector('#startupGate')?.hidden);
+            await page.waitForFunction(()=>window.__dexVersion==='7.2.2'&&document.querySelector('#startupGate')?.hidden);
             assert.ok(await page.evaluate(()=>JSON.parse(localStorage.getItem('sh-pokemon-stamps-v1')).done.length>0));
             await browser.close();
           })().catch(e=>{console.error(e);process.exit(1)});
