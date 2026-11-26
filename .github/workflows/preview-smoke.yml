@@ -32,6 +32,9 @@ jobs:
             await page.goto('http://127.0.0.1:8765/index.html');
             await page.waitForFunction(()=>window.__dexVersion==='7.2.2'&&document.querySelector('#startupGate')?.hidden,{timeout:15000}).catch(async e=>{console.log('BODY',await page.locator('body').innerText().then(t=>t.slice(0,1000)));throw e});
             assert.equal(await page.locator('#home').isVisible(),true);
+            assert.equal(await page.locator('header h1').innerText(),'上海盛典图鉴');
+            await page.evaluate(()=>document.fonts.ready);
+            assert.ok(await page.evaluate(()=>document.fonts.check('16px "Fusion Pixel UI"','捕捉')));
             assert.equal(await page.locator('#home > section').first().getAttribute('aria-label'),'集章进度与奖励');
             assert.equal(await page.locator('#home .home-shortcuts').isVisible(),false);
             assert.equal(await page.locator('#home [data-task="all"]').isVisible(),true);
@@ -42,6 +45,7 @@ jobs:
             assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
             console.log('HOME',await page.locator('#home').innerText());
             await page.locator('#tabMap').click();
+            assert.ok(await page.locator('#exploreMap g[data-v6-pin] .game-map-pin').count()>0);
             await page.locator('#v6MapOrigin').evaluate(e=>e.closest('details').open=true);
             await page.locator('#v6MapGPS').click();
             await page.waitForFunction(()=>document.querySelector('#originSource').value==='gps',{timeout:15000});
@@ -57,7 +61,13 @@ jobs:
             console.log('RESULT',await page.locator('#v6MapResult').innerText());
             assert.match(await page.locator('#v6MapResult').innerText(),/预计新增/);
             await page.locator('#tabList').click();
-            await page.locator('[data-pocket]').first().click();
+            const first=page.locator('[data-pocket]').first();
+            assert.equal(await first.innerText(),'+');
+            await first.click();
+            assert.match(await first.getAttribute('title'),/已捕捉.*放生/);
+            await first.click();
+            assert.equal(await first.innerText(),'+');
+            await first.click();
             assert.ok(await page.evaluate(()=>JSON.parse(localStorage.getItem('sh-pokemon-stamps-v1')).done.length>0));
             await page.reload();
             await page.waitForFunction(()=>window.__dexVersion==='7.2.2'&&document.querySelector('#startupGate')?.hidden);
