@@ -44,6 +44,22 @@ jobs:
             await page.locator('#homeDashboard .home-day-details summary').click();
             assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
             console.log('HOME',await page.locator('#home').innerText());
+            // Emulate a device safe area, verify clipping instead of document scrolling.
+            await page.evaluate(()=>{document.documentElement.style.setProperty('--content-top','54px');document.documentElement.style.setProperty('--native-bottom','20px');window.dispatchEvent(new Event('resize'));});
+            await page.waitForFunction(()=>document.documentElement.classList.contains('safe-scroll-shell'));
+            const checkShell=()=>page.evaluate(()=>{const m=document.querySelector('main'),n=document.querySelector('.bottom-nav'),a=m.getBoundingClientRect(),b=n.getBoundingClientRect();return {top:a.top,bottom:a.bottom,nav:b.top,doc:window.scrollY,overflow:getComputedStyle(m).overflowY,navOutside:n.parentElement===document.body};});
+            const bounds=await checkShell();assert.ok(bounds.top>=54&&Math.abs(bounds.bottom-bounds.nav)<=2&&bounds.doc===0&&bounds.overflow==='auto'&&bounds.navOutside);
+            await page.evaluate(()=>{document.querySelector('main').scrollTop=300;window.scrollTo(0,500)});
+            assert.ok(await page.evaluate(()=>document.querySelector('main').scrollTop>0&&window.scrollY===0));
+            assert.deepEqual(await checkShell(),bounds);
+            await page.locator('#tabList').click();
+            await page.evaluate(()=>document.querySelector('main').scrollTop=350);
+            const dexScroll=await page.evaluate(()=>document.querySelector('main').scrollTop);
+            assert.ok(dexScroll>100);
+            await page.locator('#tabHome').click();
+            await page.locator('#tabList').click();
+            assert.equal(await page.evaluate(()=>document.querySelector('main').scrollTop),dexScroll);
+            console.log('SAFE SCROLL SHELL',JSON.stringify(bounds));
             await page.locator('#tabMap').click();
             assert.ok(await page.locator('#exploreMap g[data-v6-pin] .game-map-pin').count()>0);
             await page.locator('#v6MapOrigin').evaluate(e=>e.closest('details').open=true);
@@ -89,6 +105,7 @@ jobs:
                 await buttons.nth(i).click();
                 await page.waitForFunction(()=>{const im=document.querySelector('#achievementImage');return im&&!im.hidden&&im.complete&&im.naturalWidth===1080&&!document.querySelector('#achievementSave').disabled});
                 assert.equal(await page.locator('.achievement-dialog').evaluate(e=>getComputedStyle(e).borderRadius),'0px');
+                const modalBounds=await page.locator('#achievementOverlay').boundingBox();assert.ok(modalBounds.y>=54&&modalBounds.y+modalBounds.height<=844-20+2);
                 assert.equal(await page.locator('#achievementSave').innerText(),'保存成就卡');
                 assert.ok(await page.evaluate(()=>window.__testCardFonts.some(([t,f])=>t==='成就解锁！'&&f.includes('Fusion Pixel UI'))));
                 if(cardCount===0){
