@@ -1,0 +1,112 @@
+/* Shanghai stamps — Pixel Art / 8-bit, adapted from Claude Artisan (MIT).
+   https://github.com/ara-mkr/claude-artisan/blob/main/design-language/references/00-flagship-implementation-specs/pixel-art.md
+   A restrained red/white RPG skin. Visual only; no changes to routes or data. */
+:root{
+  --game-bg:#f4f0e9; --game-paper:#fffdf8; --game-soft:#f2ebe3;
+  --game-ink:#302c40; --game-muted:#625b68; --game-line:#c9bcb7;
+  --game-edge:#776b72; --game-shadow:#d7c9c0;
+  --game-red:#a83232; --game-red-dark:#762529; --game-red-soft:#f7e4e0;
+  --game-green:#286347; --game-green-soft:#e3efe4;
+  --game-gold:#795512; --game-gold-soft:#f9edcf; --game-white:#fffdf8;
+  --game-radius:2px; --game-step:steps(3,end);
+  --game-lift:2px 2px 0 var(--game-shadow);
+  --game-hard:2px 2px 0 var(--game-red-dark);
+  --game-focus:#a83232;
+  --game-grid:linear-gradient(90deg,transparent 0 6px,var(--game-paper) 6px 8px);
+  --ink:var(--game-ink); --muted:var(--game-muted); --bg:var(--game-bg);
+  --line:var(--game-line); --red:var(--game-red);
+}
+body{background:var(--game-bg);color:var(--game-ink)}
+main{color:var(--game-ink)}
+/* Keep the original event illustration; no ornamental sprites added. */
+header.pixel-header .pixel-banner{image-rendering:pixelated}
+header.pixel-header h1{color:var(--game-red);letter-spacing:.035em}
+.compact-head header.pixel-header{background:var(--game-red);border-radius:0;border-bottom:3px solid var(--game-red-dark)}
+.compact-head header.pixel-header h1{color:var(--game-white)}
+h1,h2,h3{color:var(--game-ink)}
+h2:before{border-radius:0;background:var(--game-red);box-shadow:2px 2px 0 var(--game-red-soft)}
+small,.muted,.status{color:var(--game-muted)}
+a,summary,.action{color:var(--game-red)}
+/* Main surfaces: same square frame, quiet offset shadow, no gloss. */
+.panel,#home .panel,.dex-terminal,.guide-footer,.v6-card,.venue,.reward-item,.district-result,.district-options,.saved-trip,.distance-panel,.map-hubs{
+  background:var(--game-paper);border:1px solid var(--game-line);border-radius:var(--game-radius);box-shadow:var(--game-lift)
+}
+#home .panel{border-radius:var(--game-radius)}
+.dex-terminal{border-top:3px solid var(--game-red)}
+#home .home-progress-compact{background:var(--game-paper);border:2px solid var(--game-edge);box-shadow:var(--game-lift)}
+#home #homeDashboard .home-stats,.metric,.v6-summary-grid>div,.pocket-summary{
+ background:var(--game-soft);border-color:var(--game-line);border-radius:0;box-shadow:none
+}
+#home #homeDashboard .home-stats strong,.metric strong,.v6-summary-grid b{color:var(--game-red);font-variant-numeric:tabular-nums}
+#home #homeDashboard .home-stats>div:first-child strong{color:var(--game-green)}
+#home .home-multi-entry .task-card{color:var(--game-red)}
+/* Segmented XP track: real width is still controlled by existing app. */
+.progress,.reward-mini-track,#home .home-progress-compact .progress{border-radius:0;background:var(--game-soft);box-shadow:none;border:1px solid var(--game-line)}
+.progress i,.reward-mini-track i,#home .home-progress-compact .progress i{
+  border-radius:0;background-color:var(--game-red);background-image:var(--game-grid);background-size:8px 100%;transition:width .18s var(--game-step)
+}
+#home .home-progress-compact .count,#home .home-progress-compact .reward-percent strong,.count,.reward-percent strong{color:var(--game-red);font-variant-numeric:tabular-nums}
+.milestone b,#home .home-progress-compact .milestone b{border-radius:0;border-color:var(--game-edge);background:var(--game-paper);box-shadow:none}
+.milestone.reached b,#home .home-progress-compact .milestone.reached b{background:var(--game-gold-soft);border:2px solid var(--game-gold)}
+#home .home-progress-compact .reward-next{color:var(--game-gold)}
+/* Buttons/fields: mechanical press effect; do not apply motion to tile hit targets. */
+button:not(.tile-check):not(.tile-favorite):not(.tile-info):not(.explore-row),.guide-actions>a,.guide-actions>.footer-link{
+  border-radius:var(--game-radius);transition:background-color .12s var(--game-step),box-shadow .12s var(--game-step)
+}
+button:not(.primary):not(.tile-check):not(.tile-favorite):not(.tile-info):not(.explore-row):not([aria-pressed=true]):not(.selected):not(.active){border-color:var(--game-line)}
+button.primary,#compute,#v6MapCompute,.tabs button.primary{
+  color:var(--game-white);background:var(--game-red);border:1px solid var(--game-red-dark);border-radius:var(--game-radius);box-shadow:var(--game-hard)
+}
+button.primary:active:not(:disabled),#compute:active:not(:disabled),#v6MapCompute:active:not(:disabled){transform:translate(1px,1px);box-shadow:none}
+button:disabled{cursor:not-allowed}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--game-focus)!important;outline-offset:2px}
+input:not([type=checkbox]):not([type=hidden]),select,textarea,#map input,#map select,#plan input,#plan select{
+  border-radius:var(--game-radius);border-color:var(--game-line);background-color:var(--game-paper);color:var(--game-ink);box-shadow:none
+}
+input[type=checkbox]{accent-color:var(--game-red)}
+/* Nav remains fixed and hit targets stay intact. */
+.bottom-nav{background:var(--game-paper);border-top:3px solid var(--game-edge);border-radius:0;box-shadow:0 -2px 0 var(--game-shadow);backdrop-filter:none;-webkit-backdrop-filter:none}
+.bottom-nav button{border-radius:0;color:var(--game-muted);box-shadow:none}
+.bottom-nav button.primary{background:var(--game-red-soft);color:var(--game-red-dark);border:1px solid var(--game-red);box-shadow:inset 0 -3px 0 var(--game-red)}
+.bottom-nav button.primary .tab-icon{color:var(--game-red-dark)}
+.bottom-nav .tab-icon svg{stroke-linecap:square;stroke-linejoin:miter}
+/* Dex: preserve original monochrome/color image logic, favorite and info actions. */
+.dex-terminal .pocket-heading{background:var(--game-soft);border-color:var(--game-line);border-radius:0}
+.dex-tile,.dex-tile.pixel-dex-tile{background:var(--game-soft);border:1px solid var(--game-line);border-radius:0;box-shadow:var(--game-lift)}
+.dex-tile.is-done{background:var(--game-green-soft);border-color:var(--game-green);box-shadow:2px 2px 0 var(--game-shadow)}
+.dex-tile.is-target,.dex-tile.is-done.is-target{border-color:var(--game-gold);box-shadow:inset 0 0 0 1px var(--game-gold)}
+.dex-tile .tile-check,.dex-tile .tile-favorite,.dex-tile.pixel-dex-tile .tile-info{border-radius:0;box-shadow:none}
+.dex-tile .tile-check{background:transparent}
+.dex-tile .dex-id,.dex-tile .tile-check strong{color:var(--game-ink)}
+.dex-tile .dex-state,.dex-kind{color:var(--game-muted)}
+.dex-tile .tile-info{background:var(--game-paper);border-color:var(--game-line);color:var(--game-ink)}
+.dex-tile.is-done .tile-info{background:var(--game-green);border-color:var(--game-green);color:var(--game-white)}
+.dex-tile .tile-favorite[aria-pressed=true]{border-radius:0;background:var(--game-gold-soft);color:var(--game-gold)}
+.dex-art img,.v6-art{image-rendering:pixelated}
+.series-tabs button.active,.quick-dates button.selected,.datestrip button.selected,.schedule-table th button.selected,.v6-calendar-head button[aria-pressed=true]{
+ background:var(--game-red-soft);border:1px solid var(--game-red);color:var(--game-red-dark);box-shadow:inset 0 -2px 0 var(--game-red)
+}
+.series-tabs button.active small{color:var(--game-red-dark)}
+/* Distinct task states; semantic green/gold remain distinct from red actions. */
+.pill,.notice-state,.dex-state,.guide-num,.reward-status,.ach,.goal-progress,.map-origin-status{border-radius:0}
+.pill.complete,.ach.done,.reward-item.reached{background:var(--game-green-soft);color:var(--game-green);border-color:var(--game-green)}
+.pill.reserve,.notice-state.reserve{background:var(--game-gold-soft);color:var(--game-gold);border-color:var(--game-gold)}
+#map .gps-origin-actions button[aria-pressed=true],#plan .gps-origin-actions button[aria-pressed=true]{
+ background:var(--game-red-soft);border-color:var(--game-red);color:var(--game-red-dark);box-shadow:inset 0 -2px 0 var(--game-red)
+}
+#mustGrid button[aria-pressed=true],#mustGrid button.selected,#mustGrid button.primary{background:var(--game-green-soft);color:var(--game-green);border-color:var(--game-green);box-shadow:inset 0 -2px 0 var(--game-green)}
+.goal-progress,.note,.route-working{background:var(--game-soft);border-color:var(--game-line);color:var(--game-ink);border-radius:0}
+#map .v6-map-wrap,.map,.v6-schedule,#plan .preview-settings,#map .preview-collapse,.advanced-settings,.must-details,#v6CandidatePanel,#v6Transport,#v6MapMore{border-radius:0;border-color:var(--game-line)}
+#map .explore-row .preview-num,.route-stop:before{border-radius:0;box-shadow:none;font-variant-numeric:tabular-nums}
+.route-stop{border-color:var(--game-line)}
+.route-stop:before{background:var(--game-red);color:var(--game-white)}
+.route-stop .time{color:var(--game-red)}
+.route-stop .chips span{border-radius:0}
+.v6-schedule th,.v6-schedule td{border-color:var(--game-line)}
+.v6-schedule td button{border-radius:0}
+.v6-schedule td button.booked{background:var(--game-red);color:var(--game-white)}
+.dex-overlay{background:rgba(48,44,64,.68);backdrop-filter:none}
+.dex-overlay>div,.dex-overlay .share-sheet{border-radius:0;border:2px solid var(--game-edge);background:var(--game-paper);box-shadow:4px 4px 0 var(--game-shadow)}
+.collect-toast{border-radius:0;box-shadow:var(--game-lift)}
+@media(prefers-reduced-motion:reduce){button,.progress i,.reward-mini-track i,.dex-tile,.collect-toast{transition:none!important;animation:none!important}}
+@media print{.panel,.dex-tile,.reward-item,.venue{box-shadow:none}}
