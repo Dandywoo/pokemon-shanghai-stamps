@@ -72,6 +72,41 @@ jobs:
             await page.reload();
             await page.waitForFunction(()=>window.__dexVersion==='7.2.2'&&document.querySelector('#startupGate')?.hidden);
             assert.ok(await page.evaluate(()=>JSON.parse(localStorage.getItem('sh-pokemon-stamps-v1')).done.length>0));
+
+            // Seed a separate browser-only test profile; validate all 21 exported achievement cards.
+            await page.evaluate(()=>{const key='sh-pokemon-stamps-v1',old=JSON.parse(localStorage.getItem(key));old.done=['s1-1','s1-2','s1-3','s1-4','s1-5','s1-6','s2-1','s2-2','s2-3','s2-4','s2-5','s2-6','s3-1','s3-2','s3-3','s3-4','s3-5','s3-6','s4-1','s4-2','s4-3','s5-1','s6-1','s7-1','s8-1','s9-1','s10-1','s11-1','s12-1','starbucks'];localStorage.setItem(key,JSON.stringify(old));});
+            await page.reload();
+            await page.waitForFunction(()=>document.querySelector('#startupGate')?.hidden);
+            await page.locator('#tabList').click();
+            await page.locator('#seriesPanel').evaluate(e=>e.open=true);
+            await page.evaluate(()=>{window.__testCardFonts=[];const old=CanvasRenderingContext2D.prototype.fillText;CanvasRenderingContext2D.prototype.fillText=function(...args){if(this.canvas.width===1080)window.__testCardFonts.push([args[0],this.font]);return old.apply(this,args)}});
+            let cardCount=0;
+            for(let cat=0;cat<3;cat++){
+              await page.locator('[data-series-cat="'+cat+'"]').click();
+              const buttons=page.locator('[data-achievement-view]');
+              const count=await buttons.count();
+              for(let i=0;i<count;i++){
+                await buttons.nth(i).click();
+                await page.waitForFunction(()=>{const im=document.querySelector('#achievementImage');return im&&!im.hidden&&im.complete&&im.naturalWidth===1080&&!document.querySelector('#achievementSave').disabled});
+                assert.equal(await page.locator('.achievement-dialog').evaluate(e=>getComputedStyle(e).borderRadius),'0px');
+                assert.equal(await page.locator('#achievementSave').innerText(),'保存成就卡');
+                assert.ok(await page.evaluate(()=>window.__testCardFonts.some(([t,f])=>t==='成就解锁！'&&f.includes('Fusion Pixel UI'))));
+                if(cardCount===2){fs.mkdirSync('achievement-test',{recursive:true});const png=await page.locator('#achievementImage').getAttribute('src');fs.writeFileSync('achievement-test/锻匠一家.png',Buffer.from(png.split(',')[1],'base64'));await page.screenshot({path:'achievement-test/mobile.png'});}
+                await page.locator('#achievementClose').click();
+                cardCount++;
+              }
+            }
+            assert.equal(cardCount,21);
+            console.log('ACHIEVEMENT PNG:',cardCount,'cards generated with RPG font and dialog');
             await browser.close();
           })().catch(e=>{console.error(e);process.exit(1)});
           JS
+
+      - name: Save achievement card preview
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: achievement-card-rpg-preview
+          path: achievement-test/
+          if-no-files-found: error
+          retention-days: 7
