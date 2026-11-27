@@ -230,3 +230,28 @@ input[type=checkbox]:checked::after{content:"";position:absolute;left:4px;top:1p
 @media(prefers-reduced-motion:reduce){.route-working::after,.dex-tile.just-collected,.collect-toast{animation:none!important}}
 @media(max-width:360px){main h3{font-size:16px}#plan .route-stop h3{font-size:18px}.bottom-nav button{font-size:12px}}
 @media print{#plan .route-stop,.series-achievement,.dex-tile{box-shadow:none}}
+
+
+/* v7.2.6 — saved itinerary: compact horizontal stamp checklist */
+#plan #savedTrip .saved-stops,#plan #savedTrip .saved-stop{min-width:0;max-width:100%;box-sizing:border-box}
+#plan #savedTrip .saved-stop{padding:10px;margin:8px 0;height:auto;min-height:0;border-radius:0!important;border:1px solid var(--game-line,#c4b8ac);background:var(--game-paper,#fffcf5)}
+#plan #savedTrip .saved-stop.next-stop{border:2px solid var(--game-red,#ae3431)}
+#plan #savedTrip .saved-stop.finished{background:#e7f0e1;border-color:#47775f}
+#plan #savedTrip .saved-stop>.flex{min-width:0;align-items:center;flex-wrap:wrap}
+#plan #savedTrip .saved-stop>.flex>strong{flex:1 1 140px;min-width:0;white-space:normal;overflow-wrap:break-word;word-break:normal;line-height:1.4}
+#plan #savedTrip .saved-stop>.flex>small{flex:0 0 auto;white-space:nowrap;font-size:12px}
+#plan #savedTrip .saved-stop.next-stop>.flex>small{color:var(--game-red,#ae3431)}
+#plan #savedTrip .saved-stop>p{margin:6px 0 9px;white-space:normal;overflow-wrap:break-word;word-break:normal;line-height:1.5}
+#plan #savedTrip .saved-stop .live-check{display:grid;grid-template-columns:24px minmax(0,1fr);align-items:center;column-gap:9px;min-height:60px;height:auto;width:100%;box-sizing:border-box;padding:7px 6px;margin:4px 0;border:1px solid var(--game-line,#c4b8ac);background:var(--game-soft,#f5f0e5);text-align:left;white-space:normal;cursor:pointer}
+#plan #savedTrip .saved-stop .live-check>input[type=checkbox]{display:block;box-sizing:border-box;width:24px!important;min-width:24px!important;max-width:24px!important;height:24px!important;min-height:24px!important;max-height:24px!important;padding:0!important;margin:0!important;align-self:center;justify-self:start;flex:none;border:2px solid var(--game-edge,#8a7d72);border-radius:0;appearance:none;-webkit-appearance:none;position:relative;background:var(--game-paper,#fffcf5)}
+#plan #savedTrip .saved-stop .live-check>input[type=checkbox]:checked{background:#47775f;border-color:#365c49}
+#plan #savedTrip .saved-stop .live-check>input[type=checkbox]:checked::after{content:"";position:absolute;left:6px;top:2px;width:6px;height:12px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg)}
+#plan #savedTrip .saved-stop .live-check>input:focus-visible{outline:2px solid #ad3431;outline-offset:2px}
+#plan #savedTrip .saved-stop .live-check>span{display:grid;grid-template-columns:48px minmax(0,1fr);grid-template-rows:auto auto;column-gap:8px;row-gap:2px;align-items:center;align-content:center;min-width:0;width:100%;box-sizing:border-box;margin:0!important;padding:0;line-height:1.35;white-space:normal;word-break:normal;overflow-wrap:break-word;writing-mode:horizontal-tb;font-size:15px}
+#plan #savedTrip .saved-stop .live-check>span>.v6-art{grid-column:1;grid-row:1 / span 2;width:48px!important;height:48px!important;max-width:48px;max-height:48px;object-fit:contain;image-rendering:pixelated;margin:0!important;align-self:center;justify-self:center}
+#plan #savedTrip .saved-stop .live-check>span>small{grid-column:2;grid-row:2;display:block;min-width:0;margin:0!important;white-space:normal;word-break:normal;overflow-wrap:break-word;writing-mode:horizontal-tb;font-size:12px;line-height:1.4}
+#plan #savedTrip .saved-stop .live-check>input:checked+span{color:#365c49;background:#e1eddd}
+#plan #savedTrip .saved-stop .live-check:has(>input:checked){background:#e1eddd;border-color:#89a58b}
+#plan #savedTrip .saved-stop>.flex:last-child{margin-top:6px}
+#plan #savedTrip .saved-stop .live-nav,#plan #savedTrip .saved-stop button[data-skip]{min-height:40px;white-space:normal;max-width:100%}
+@media(max-width:350px){#plan #savedTrip .saved-stop{padding:8px}#plan #savedTrip .saved-stop .live-check{column-gap:6px;padding:6px 4px}#plan #savedTrip .saved-stop .live-check>span{grid-template-columns:40px minmax(0,1fr);column-gap:6px}#plan #savedTrip .saved-stop .live-check>span>.v6-art{width:40px!important;height:40px!important}}
