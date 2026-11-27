@@ -230,7 +230,7 @@ header.pixel-header .hero-facts span{color:#5a5263;font:650 clamp(9px,2.85vw,12p
 #home .home-multi-entry .task-card small{font-size:11px}
 #home .home-handbook{padding:8px 14px}
 @media(min-width:900px){#home .home-multi-entry,#home .home-handbook{grid-column:1/-1}}
-</style><link rel="stylesheet" href="game-theme.css?v=3" id="artisan-game-theme"/><style id="achievement-rpg-v4">
+</style><link rel="stylesheet" href="game-theme.css?v=7.2.7" id="artisan-game-theme"/><style id="achievement-rpg-v4">
 #achievementOverlay{background:rgba(48,44,64,.68);padding:12px}
 #achievementOverlay .achievement-dialog{max-width:460px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);border:3px solid #65565a;border-radius:0;box-shadow:inset 2px 2px 0 #fffdf8,5px 5px 0 #302c40;background:#fffdf8;font-family:var(--game-font)}
 #achievementOverlay .achievement-head{padding:9px 12px;border-bottom:3px solid #762529;background:#a83232;min-height:58px;box-shadow:inset 2px 2px 0 #d68078}
@@ -302,6 +302,9 @@ body.compact-head{--page-controls-top:var(--compact-title-height,44px)}
 #list .dex-pinned .dex-filters{margin-bottom:4px!important}
 #map .map-pinned .route-mode-switch{margin-bottom:4px!important}
 @media(min-width:900px){html:not(.safe-scroll-shell) body.compact-head{--page-controls-top:calc(var(--compact-title-height,44px) + var(--desktop-nav-height,68px))}}
+body.compact-head #map .v6-list,body.compact-head #v6MapResult{scroll-margin-top:calc(52px + var(--map-pin-height,0px))}
+html.safe-scroll-shell body.compact-head #map .v6-list,html.safe-scroll-shell body.compact-head #v6MapResult{scroll-margin-top:calc(8px + var(--map-pin-height,0px))}
+#map .v6-map-wrap svg{display:block;width:100%;height:auto;aspect-ratio:370/255;min-height:150px}
 @media print{#list .dex-pinned,#map .map-pinned{position:static}}
 </style><style id="physical-rewards-v1">
 #home .home-progress-compact .milestones{height:70px}
@@ -1559,6 +1562,7 @@ body.compact-head{--page-controls-top:var(--compact-title-height,44px)}
         return g && targetMode === "new" ? state.done.length + g : g;
       }
       function scrollResult() {
+        if(!lastPlan||lastPlan.error||!lastPlan.best||!lastPlan.best.steps.length){const settings=document.querySelector('#plan .preview-settings');if(settings)settings.open=true;pageScroller().scrollTop=0;return;}
         try {
           $("route").scrollIntoView({ block: "start" });
         } catch (e) {
@@ -2830,7 +2834,7 @@ function v602Progress(p){if(!p.areaProgress||!p.futureBalanced)return '';const r
       function v6Install(){
         for(const [a,b] of [['v6MapOrigin','origin'],['v6MapStyle','routeStyle'],['v6MapStart','start'],['v6MapEnd','end'],['v6MapBudget','v6Budget'],['v6MapWalk','v6Walk']])$(a).onchange=()=>{$(b).value=$(a).value;if(b==='origin'){$('originSource').value='manual';$('firstPolicy').value='overall';}v6Changed();};
         $('mapDate').onchange=()=>{$('date').value=$('mapDate').value;v6Changed();};for(const id of ['mapRegion','mapKind','mapRemaining'])$(id).onchange=()=>{exploreSelected=null;v6Map();};
-        $('v6MapGPS').onclick=async()=>{await locateOnce();if(currentPosition){$('originSource').value='gps';v6Changed();}else $('v6MapResult').innerHTML='<p class="warn">'+esc($('locationStatus').textContent)+'</p>';};$('v6MapCompute').onclick=v6MapPlan;$('v6FullRoute').onclick=()=>{switchTab('plan');if(lastPlan)scrollResult();};
+        $('v6MapGPS').onclick=async()=>{await locateOnce();if(currentPosition){$('originSource').value='gps';v6Changed();}else $('v6MapResult').innerHTML='<p class="warn">'+esc($('locationStatus').textContent)+'</p>';};$('v6MapCompute').onclick=v6MapPlan;$('v6FullRoute').onclick=()=>{switchTab('plan');pageScroller().scrollTop=0;};
         for(const id of ['v6Budget','v6Walk','v6Ticket','v6WalkCap','v6EndPoint','v602Strategy'])$(id).onchange=v6Changed;$('v602MapStrategy').onchange=()=>{$('v602Strategy').value=$('v602MapStrategy').value;v6Changed();};$('v6MapTicket').onchange=()=>{$('v6Ticket').value=$('v6MapTicket').value;v6Changed();};$('v6MapGoal').onchange=()=>{const n=Number($('v6MapGoal').value);if(n>=1&&n<=30&&Number.isInteger(n)){$('goal').value=String(n);v6Changed();}};$('v6Goal').onchange=()=>{let n=Number($('v6Goal').value);if(n>=1&&n<=30&&Number.isInteger(n)){$('goal').value=String(n);v6Changed();}};
         $('v6Today').onclick=()=>{v6History=false;v6Mine=false;v6CalDay=shToday()<'2026-11-28'?'2026-11-28':shToday()>'2027-01-03'?'2027-01-03':shToday();v6Calendar();const sc=$('scheduleView').querySelector('.v6-schedule');if(sc)sc.scrollLeft=0;};$('v6History').onclick=()=>{v6History=!v6History;v6Mine=false;v6Calendar();};$('v6Mine').onclick=()=>{v6Mine=!v6Mine;v6Calendar();};for(const id of ['calendarKind','calendarDays'])$(id).onchange=v6Calendar;
         document.addEventListener('click',e=>{const b=e.target.closest('[data-v6-pin],[data-v6-closemap],[data-v6-origin],[data-v6-required],[data-v6-exclude],[data-v6-zoom],[data-v6-day],[data-v6-cell],[data-v6-dex],[data-v6-plan-day],[data-v6-savebook],[data-v6-removebook],[data-v6-saveplan],[data-v6-replan]');if(!b)return;const z=b.dataset;if(z.v6Pin!==undefined){exploreSelected=Number(z.v6Pin);v6Map();}else if(z.v6Closemap!==undefined){exploreSelected=null;v6Map();}else if(z.v6Origin!==undefined){$('origin').value=z.v6Origin;$('originSource').value='manual';$('firstPolicy').value='overall';v6Changed();}else if(z.v6Required!==undefined){const id=Number(z.v6Required);v6Required.has(id)?v6Required.delete(id):v6Required.add(id);v6Excluded.delete(id);v6Changed();}else if(z.v6Exclude!==undefined){const id=Number(z.v6Exclude);v6Excluded.has(id)?v6Excluded.delete(id):v6Excluded.add(id);v6Required.delete(id);v6Changed();}else if(z.v6Zoom!==undefined){v6Zoom=z.v6Zoom==='reset'?1:Math.min(3,Math.max(1,v6Zoom*Number(z.v6Zoom)));v6Map();}else if(z.v6Day!==undefined){v6CalDay=z.v6Day;v6Calendar();}else if(z.v6Cell!==undefined){v6CalDay=z.day;v6Calendar();$('dexDate').value=z.day;renderPocketDetail(z.v6Cell);}else if(z.v6Dex!==undefined){$('dexDate').value=z.day||date();renderPocketDetail(z.v6Dex);}else if(z.v6PlanDay!==undefined){$('date').value=z.v6PlanDay;v6Changed();switchTab('plan');}else if(z.v6Savebook!==undefined||z.v6Removebook!==undefined)v6BookChange(b,z.v6Removebook!==undefined);else if(z.v6Saveplan!==undefined&&lastPlan){saveOneTrip(lastPlan);switchTab('plan');}else if(z.v6Replan!==undefined&&state.saved){const trip=state.saved; if(trip.terminal){const id=String(trip.terminal.id),el=$('v6EndPoint');if(Array.from(el.options).some(o=>o.value===id))el.value=id;else if(routeOrigin()?.matchedId===id)el.value='return';else{alert('已保存的终点是附近地铁站。请先重新定位匹配该站，或在行程设置中选择新终点后重新规划。');switchTab('plan');return;}}const done=trip.stops.filter(st=>st.ids.every(id=>state.done.includes(id))),left=trip.stops.filter(st=>!st.skip).flatMap(st=>st.ids).filter(id=>!state.done.includes(id));$('date').value=trip.day;$('goal').value=String(new Set(left).size);targetMode='new';if(done.length){$('origin').value=String(done[done.length-1].venue);$('originSource').value='manual';}if(trip.day===shToday())$('start').value=new Date(Date.now()+288e5).toISOString().slice(11,16);for(const st of trip.stops.filter(st=>st.skip))v6Excluded.add(st.venue);v6Changed();requestPlan();}});
@@ -3749,8 +3753,17 @@ const requiredMap=v6Map;v6Map=function(){requiredMap();const selected=window.man
 const oldResult=v6Result;v6Result=function(p){const t=node('div');t.innerHTML=oldResult(p);for(const e of t.querySelectorAll('p.muted,p.warn')){const txt=e.textContent.trim();if(/^(建议|活动及馆内移动|标准条件|自定义条件|预计跨江|终点：)/.test(txt))e.remove();else if(txt.startsWith('最长连续步行约')&&p.best&&p.best.maxwalk<=900)e.remove();}return t.innerHTML;};
 function manualSuggestionCard(p,container){if(!p?.manualSuggestion||!container)return;const s=p.manualSuggestion,card=node('div','v6-card');card.style.marginTop='8px';card.append(node('h3','','可行备选路线'),node('p','','需调整：'+s.label),node('p','',s.route+' · 预计 '+s.count+' 枚 · '+s.end+' 结束'));const b=node('button','','采用此设置并重新规划');b.type='button';b.onclick=()=>{for(const [id,value] of Object.entries(s.changes))$(id).value=value;v6Changed();if(!$('map').classList.contains('hidden'))v6MapPlan();else requestPlan();};card.append(b);container.append(card);}
 const baseRenderPlanManual=renderPlan;renderPlan=function(p){baseRenderPlanManual(p);manualSuggestionCard(p,$('route'));};
-const oldMapResult=v6RenderMapResult;v6RenderMapResult=function(p){oldMapResult(p);manualSuggestionCard(p,$('v6MapResult'));renderModeBars();if(p&&!p.error&&p.best?.steps?.length){collapse.open=false;const card=$('v6MapResult');card.scrollIntoView({block:'nearest',behavior:'smooth'});}};
-const oldSwitch=switchTab;switchTab=function(id,restore=false){oldSwitch(id,restore);if(id==='plan'){tripFold.open=!lastPlan||!!lastPlan.error;const active=qdates.querySelector('[aria-pressed="true"],.primary,.active');if(active)active.scrollIntoView({block:'nearest',inline:'center'});}if(id==='map'&&!restore)pageScroller().scrollTop=0;};
+const oldMapResult=v6RenderMapResult;v6RenderMapResult=function(p){
+ oldMapResult(p);const card=$('v6MapResult');
+ if(p&&!p.error&&p.best&&!p.best.steps.length){
+  const reached=p.target&&state.done.length>=p.target&&!(state.must||[]).some(id=>!state.done.includes(id));
+  card.innerHTML=goalResult(p).replace('id="routeGoalResult"','id="mapRouteGoalResult"')+'<p class="'+(reached?'muted':'warn')+'">'+(reached?'已达到累计目标，可提高目标或切换「本次新增」继续规划。':'当天没有符合条件的未集印章，请调整日期或时间。')+'</p><button type="button" data-open-map-settings>修改路线设置</button>';
+  card.querySelector('[data-open-map-settings]').onclick=()=>{collapse.open=true;pageScroller().scrollTop=0;};
+ }
+ manualSuggestionCard(p,card);renderModeBars();
+ if(!$('map').classList.contains('hidden')){if(p&&!p.error&&p.best&&p.best.steps.length){collapse.open=false;}else{collapse.open=true;}pageScroller().scrollTop=0;}
+};
+const oldSwitch=switchTab;switchTab=function(id,restore=false){oldSwitch(id,restore);if(id==='plan'){tripFold.open=!lastPlan||!!lastPlan.error||!lastPlan.best||!lastPlan.best.steps.length;const active=qdates.querySelector('[aria-pressed="true"],.primary,.active');if(active)active.scrollIntoView({block:'nearest',inline:'center'});}if(id==='map')pageScroller().scrollTop=0;};
 // Explicitly keep routing defaults hidden, not removed.
 $('v602Strategy').value='future';$('v602MapStrategy').value='future';$('v6Ticket').value='auto';$('v6MapTicket').value='auto';const previewSync=v6Sync;v6Sync=function(){previewSync();const o=$('v6MapOrigin').selectedOptions[0]?.textContent||'不限起点',g=$('goal').value;collapse.querySelector('summary').textContent='路线设置 · '+o+' · '+(window.manualMode?'自选 '+window.manualVenues.size+' 处'+(window.manualGoal?' · '+(window.manualGoalMode==='total'?'累计':'新增')+window.manualGoal+'枚':''):g==='0'?'尽量多集':g+'枚');};refreshGoal();v6Sync();v6Map();switchTab('home');
 })();
@@ -3982,7 +3995,7 @@ decoratePrizes();checkPrizes();
  const dex=document.querySelector('#list .dex-terminal'),body=document.getElementById('pocketBody'),filters=document.getElementById('dexFilters');
  if(dex&&body&&filters){const pin=document.createElement('div');pin.className='dex-pinned';dex.insertBefore(pin,dex.querySelector('.pocket-heading'));pin.append(dex.querySelector('.pocket-heading'),dex.querySelector('.dex-progress'),filters);}
  const map=document.getElementById('map'),heading=map&&map.querySelector('.preview-map-heading'),mode=map&&map.querySelector('.route-mode-switch');
- if(heading&&mode){const pin=document.createElement('div');pin.className='map-pinned';heading.before(pin);pin.append(heading,mode);}
+ if(heading&&mode){const pin=document.createElement('div');pin.className='map-pinned';heading.before(pin);pin.append(heading,mode);const syncPin=()=>document.documentElement.style.setProperty('--map-pin-height',Math.ceil(pin.getBoundingClientRect().height)+'px');syncPin();if(typeof ResizeObserver==='function')new ResizeObserver(syncPin).observe(pin);window.addEventListener('resize',syncPin);const listBtn=pin.querySelector('.preview-listlink');if(listBtn)listBtn.onclick=()=>{const list=map.querySelector('.v6-list');if(list){list.open=true;list.scrollIntoView({block:'start',behavior:'smooth'});}};}
  const nav=document.querySelector('.bottom-nav');if(nav){const sync=()=>document.documentElement.style.setProperty('--desktop-nav-height',Math.ceil(nav.getBoundingClientRect().height)+'px');sync();if(typeof ResizeObserver==='function')new ResizeObserver(sync).observe(nav);window.addEventListener('resize',sync);}
 })();
 </script></body></html>
