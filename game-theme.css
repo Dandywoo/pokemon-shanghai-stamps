@@ -255,3 +255,30 @@ input[type=checkbox]:checked::after{content:"";position:absolute;left:4px;top:1p
 #plan #savedTrip .saved-stop>.flex:last-child{margin-top:6px}
 #plan #savedTrip .saved-stop .live-nav,#plan #savedTrip .saved-stop button[data-skip]{min-height:40px;white-space:normal;max-width:100%}
 @media(max-width:350px){#plan #savedTrip .saved-stop{padding:8px}#plan #savedTrip .saved-stop .live-check{column-gap:6px;padding:6px 4px}#plan #savedTrip .saved-stop .live-check>span{grid-template-columns:40px minmax(0,1fr);column-gap:6px}#plan #savedTrip .saved-stop .live-check>span>.v6-art{width:40px!important;height:40px!important}}
+
+
+/* v7.2.7: shared responsive form and checklist layout regression fix */
+#map input[type=checkbox],#plan input[type=checkbox],main input[type=checkbox],.dex-overlay input[type=checkbox]{
+ box-sizing:border-box!important;display:inline-block;width:22px!important;min-width:22px!important;max-width:22px!important;height:22px!important;min-height:22px!important;max-height:22px!important;flex:0 0 22px!important;padding:0!important;margin:0!important;align-self:center;vertical-align:middle;border-radius:0;appearance:none;-webkit-appearance:none;position:relative;
+}
+#map input[type=checkbox]:checked,#plan input[type=checkbox]:checked,main input[type=checkbox]:checked{background:#47775f;border-color:#365c49}
+#map input[type=checkbox]:checked::after,#plan input[type=checkbox]:checked::after,main input[type=checkbox]:checked::after{content:"";position:absolute;left:5px;top:1px;width:5px;height:10px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg)}
+#map input:not([type=checkbox]):not([type=radio]):not([type=hidden]),#plan input:not([type=checkbox]):not([type=radio]):not([type=hidden]),#map select,#plan select,main textarea{box-sizing:border-box;min-width:0;max-width:100%}
+#map input[type=radio],#plan input[type=radio]{width:20px!important;min-width:20px!important;max-width:20px!important;height:20px!important;min-height:20px!important;flex:none;padding:0!important;margin:0!important}
+.claim-option,.claim-record,.pocket-check,.manual-items label,.route-stop .chips label,.live-check,.stamp label,#plan label,#map label{min-width:0;max-width:100%;box-sizing:border-box;white-space:normal;word-break:normal;overflow-wrap:break-word;writing-mode:horizontal-tb}
+.claim-option:not([hidden]),.claim-record:not([hidden]),.pocket-check:not([hidden]),.manual-items label:not([hidden]){display:flex;align-items:center;gap:8px;min-height:40px;height:auto;text-align:left;line-height:1.45}
+.claim-option:not([hidden]){padding:6px 0;margin:4px 0}
+.claim-record>span,.stamp>div,.live-check>span,.manual-items label>span{min-width:0;max-width:100%;white-space:normal;word-break:normal;overflow-wrap:break-word}
+#plan .route-stop .chips label{max-width:100%;min-height:40px;white-space:normal;line-height:1.4;flex-wrap:wrap}
+#plan .route-stop .chips label .v6-art{flex:0 0 28px;width:28px;height:28px;object-fit:contain}
+#plan #savedTrip .saved-stop .live-check>input[type=checkbox]{width:24px!important;min-width:24px!important;max-width:24px!important;height:24px!important;min-height:24px!important;max-height:24px!important;flex:0 0 24px!important}
+#plan #savedTrip .saved-stop .live-check>input[type=checkbox]:checked::after{left:6px;top:2px;width:6px;height:12px}
+#plan #savedTrip .saved-stop .live-check>span{min-width:0;max-width:100%}
+#map .preview-main,#map .preview-time,#map .preview-goal,#plan .preview-plan-goal,#plan .v603-padding,#map .v603-padding,#plan .v6-book,#map .v6-book,.gps-origin-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+#map .preview-main>*,#map .preview-time>*,#map .preview-goal>*,#plan .preview-plan-goal>*,#plan .grid>*,#map .grid>*,#map .v6-quick>*,#map .v6-map-filters>*,.v6-book>*,.v603-padding>*,.gps-origin-actions>*{min-width:0;max-width:100%;box-sizing:border-box}
+#plan .planner-settings,#plan .planner-layout,#plan .goal-box,#plan .saved-trip,#map .preview-options,#map .preview-main,.dex-sheet,.native-sheet,.achievement-sheet,.share-sheet{min-width:0;max-width:100%;box-sizing:border-box}
+#plan .planner-settings summary,#map summary,.claim-record>span{white-space:normal;overflow-wrap:break-word;word-break:normal}
+#plan .saved-stop>.flex>*{min-width:0;max-width:100%}
+.no-flex-gap #plan #savedTrip .live-check>span{margin-left:0!important}
+@media(max-width:360px){#plan .route-stop .chips label{font-size:13px!important}#plan .saved-stop .live-check>span{font-size:14px}#map .preview-main,#plan .preview-plan-goal{column-gap:6px}}
+@media(max-width:360px){#plan #routeDetails .grid,#map .preview-time{grid-template-columns:minmax(0,1fr)}#plan #routeDetails .grid>*,#map .preview-time>*{grid-column:1/-1}#plan #routeDetails input[type=date],#plan #routeDetails input[type=time],#map .preview-time input{width:100%;min-width:0;max-width:100%}}
